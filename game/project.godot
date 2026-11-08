@@ -1,7 +1,10 @@
 ; Engine configuration file.
-; Sinoi the Fisherman — Godot 4.7 project.
-; Keep this file free of secrets: signing keys and passwords never go here
-; (see docs/BUILDING.md and the .gitignore).
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
 
@@ -12,8 +15,8 @@ config/description="An active, touch-first pixel-art fishing game set in the wor
 config/version="0.0.1"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://icon.svg"
 boot_splash/bg_color=Color(0.0627451, 0.141176, 0.2, 1)
+config/icon="res://icon.svg"
 
 [autoload]
 
@@ -30,13 +33,17 @@ window/stretch/aspect="expand"
 window/stretch/scale_mode="integer"
 window/handheld/orientation=1
 
+[dotnet]
+
+project/assembly_name="Sinoi the Fisherman"
+
 [input_devices]
 
 pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-textures/canvas_textures/default_texture_filter=0
 textures/vram_compression/import_etc2_astc=true
