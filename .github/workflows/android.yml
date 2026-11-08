@@ -1,0 +1,92 @@
+name: Android debug build
+
+# Builds a debug-signed APK for test phones and uploads it as a workflow
+# artifact (Actions tab > this run > Artifacts). Debug builds are for testing
+# only and can't go to Google Play.
+#
+# Release builds are NOT made here. The release keystore never goes into the
+# repo; see docs/BUILDING.md for signing on your own machine.
+on:
+  push:
+    branches: [main]
+    paths: ["game/**", ".github/workflows/android.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: "4.7.2"
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot and Android templates
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
+          key: godot-${{ env.GODOT_VERSION }}-android-v1
+
+      - name: Download Godot and Android templates
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p ~/godot ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable"
+          curl -sSL -o /tmp/godot.zip "$base/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d ~/godot
+          mv ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 ~/godot/godot
+          curl -sSL -o /tmp/templates.tpz "$base/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q /tmp/templates.tpz 'templates/android_*' 'templates/version.txt' -d /tmp/t
+          mv /tmp/t/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+          rm -f /tmp/godot.zip /tmp/templates.tpz
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Android build tools
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "build-tools;35.0.1" "platforms;android-35"
+
+      - name: Import project (also creates editor settings)
+        run: ~/godot/godot --headless --path game --import
+
+      - name: Point Godot at the Android SDK and JDK
+        run: |
+          settings=$(ls ~/.config/godot/editor_settings-*.tres | head -n1)
+          sed -i '/^export\/android\/android_sdk_path/d;/^export\/android\/java_sdk_path/d' "$settings"
+          printf 'export/android/android_sdk_path = "%s"\nexport/android/java_sdk_path = "%s"\n' "$ANDROID_HOME" "$JAVA_HOME" >> "$settings"
+          grep '^export/android' "$settings"
+
+      - name: Create a throwaway debug keystore
+        run: |
+          keytool -genkeypair -v -keystore "$RUNNER_TEMP/debug.keystore" -storepass android -keypass android \
+            -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 3650 \
+            -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: Export debug APK
+        env:
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: ${{ runner.temp }}/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
+        run: |
+          mkdir -p build/android
+          ~/godot/godot --headless --path game --export-debug "Android" ../build/android/sinoi-the-fisherman-debug.apk
+          test -f build/android/sinoi-the-fisherman-debug.apk
+          ls -la build/android
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sinoi-the-fisherman-debug-apk
+          path: build/android/sinoi-the-fisherman-debug.apk
+          retention-days: 30

@@ -1,0 +1,17 @@
+# Normalize text to LF (Godot writes LF on every platform)
+* text=auto eol=lf
+
+# Binary assets
+*.png      binary
+*.jpg      binary
+*.webp     binary
+*.aseprite binary
+*.ase      binary
+*.wav      binary
+*.ogg      binary
+*.mp3      binary
+*.ttf      binary
+*.otf      binary
+*.woff2    binary
+*.xcf      binary
+*.pdf      binary

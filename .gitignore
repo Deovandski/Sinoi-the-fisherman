@@ -1,0 +1,70 @@
+# ---------------------------------------------------------------------------
+# Godot
+# ---------------------------------------------------------------------------
+# Editor cache. Also holds export_credentials.cfg (keystore passwords), so it
+# must never be committed.
+.godot/
+**/.godot/
+# Android build template, installed per machine for Gradle builds
+game/android/
+# Mono/C# leftovers (the project is GDScript-only)
+.mono/
+data_*/
+mono_crash.*.json
+*.translation
+
+# Build output
+build/
+site/play/game/
+*.apk
+*.aab
+*.idsig
+*.pck
+*.zip
+*.tpz
+
+# ---------------------------------------------------------------------------
+# Secrets and credentials. Never commit these. See docs/BUILDING.md.
+# ---------------------------------------------------------------------------
+# Android signing keys and their settings
+*.keystore
+*.jks
+keystore.properties
+signing.properties
+release-keystore*
+# Godot export credentials written outside .godot by some setups
+export_credentials.cfg
+# Google Play / Google Cloud service accounts, API keys
+*service-account*.json
+*-credentials.json
+play-store-*.json
+google-services.json
+client_secret*.json
+# Generic secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+*.key
+secrets/
+credentials/
+
+# ---------------------------------------------------------------------------
+# Editors and OS
+# ---------------------------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Aseprite backups
+*.aseprite~
+*.ase~
+
+# Local scratch
+.claude-access-test.txt

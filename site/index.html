@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sinoi the Fisherman — a touch-first pixel fishing game</title>
+  <meta name="description" content="Sinoi the Fisherman is an open-source, active, touch-first pixel-art fishing game set in the world of the #HusbandOutWorld series. Free, no ads, no in-app purchases. In pre-production.">
+  <meta property="og:title" content="Sinoi the Fisherman">
+  <meta property="og:description" content="An open-source, touch-first pixel-art fishing game set in the world of #HusbandOutWorld. In pre-production.">
+  <meta property="og:image" content="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="./"><img src="icon.png" alt="">Sinoi the Fisherman</a>
+      <nav>
+        <a href="play/">Play</a>
+        <a href="#about">About</a>
+        <a href="#saves">Saves</a>
+        <a href="#docs">Docs</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://github.com/Deovandski/Sinoi-the-fisherman">GitHub</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <span class="badge">Pre-production · production starts Q1 2027</span>
+      <h1>Sinoi the Fisherman</h1>
+      <p class="lead">An active, touch-first pixel-art fishing game set in the world of the #HusbandOutWorld series. Fight every fish with taps, slides, flicks and two-finger moves. Free, no ads, no in-app purchases, and open source.</p>
+      <div class="actions">
+        <a class="btn" href="play/">Play the prototype</a>
+        <a class="btn ghost" href="https://github.com/Deovandski/Sinoi-the-fisherman">Source on GitHub</a>
+      </div>
+      <div class="touch-note" role="note">
+        <span aria-hidden="true">👆</span>
+        <div><strong>Made for touch screens.</strong> The game is designed first for phones and tablets, and later sections need up to two fingers at once. A mouse works for trying the prototype, but it can't do multi-finger moves.</div>
+      </div>
+    </div>
+
+    <section id="about">
+      <h2>What it is</h2>
+      <p class="lede">A short-session fishing game you give your full attention for a few minutes, then put down. No idling, no timers, no gacha: every catch is earned by playing.</p>
+      <div class="grid">
+        <div class="card"><h3>The fight box</h3><p>Fish are fought on a small trackpad-like box: trace the fish, tap and release on cue, flick against runs, spin to reel. A shadow copy above the box lets you see past your fingers.</p></div>
+        <div class="card"><h3>Bait and tackle</h3><p>Inspired by Stardew Valley's tackle system: the right bait decides what bites, and the right tackle is how you beat the hardest fish.</p></div>
+        <div class="card"><h3>The world of Vraki</h3><p>Fish the docks of Sanbi, the man-eating Fihi of Lukewarm Lake and the deep waters of the True Sanbi King, using the canon lore of the #HusbandOutWorld series.</p></div>
+        <div class="card"><h3>Android first, web too</h3><p>One Godot project builds both the Android app and the browser version you can play on this site.</p></div>
+      </div>
+    </section>
+
+    <section id="status">
+      <h2>Where it stands</h2>
+      <p class="lede">Right now this is a pre-production build: a title screen, placeholder catches, JSON save export and import, and a two-finger touch test of the fight box. The real game, with art by the project's illustrator, starts in Q1 2027.</p>
+      <ul class="plain">
+        <li><strong>Now:</strong> research, design white paper, art requirements, build pipeline.</li>
+        <li><strong>Q1 2027:</strong> prototype of the fishing fight on real phones, with placeholder art.</li>
+        <li><strong>Later:</strong> first region (Sanbi), playtesting with friends, then a Google Play release.</li>
+      </ul>
+    </section>
+
+    <section id="saves">
+      <h2>Your saves</h2>
+      <p class="lede">The game saves automatically in your browser (or on your phone). Saves never leave your device unless you export them.</p>
+      <div class="grid">
+        <div class="card"><h3>Export</h3><p>Press <em>Export save</em> to download your save as a small <code>.json</code> file. Keep it as a backup or move it to another device.</p></div>
+        <div class="card"><h3>Import</h3><p>Press <em>Import save</em> and pick a save file. The game checks it before loading, and refuses files from newer versions.</p></div>
+        <div class="card"><h3>Clearing your browser</h3><p>Clearing site data for this page deletes the browser save. Export first if you want to keep it.</p></div>
+      </div>
+    </section>
+
+    <section id="docs">
+      <h2>Docs and lore</h2>
+      <p class="lede">This is an open-source project, built in the open with Claude agents under the direction of the author. Everything that shapes the game is in the repository.</p>
+      <ul class="plain">
+        <li><a href="https://github.com/Deovandski/Sinoi-the-fisherman/tree/main/docs/white-paper">White paper (draft research and design direction)</a></li>
+        <li><a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/docs/art/illustrator-brief.md">Illustrator brief: sprite sizes, animation, Godot export rules</a></li>
+        <li><a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/docs/BUILDING.md">Building the web and Android versions</a></li>
+        <li><a href="https://github.com/Deovandski/Vraki-West-March-Campaign-D-D">Vraki West March Campaign: World Lore summaries</a></li>
+        <li><a href="https://github.com/Deovandski/HusbandOutWorld">#HusbandOutWorld: the full series source files</a></li>
+        <li><a href="https://husbandoutworld.com/">husbandoutworld.com</a></li>
+      </ul>
+    </section>
+
+    <div class="support">
+      <p>Brought to you by Deovandski, author of the #HusbandOutWorld series and CEO/Founder of Wizard Deo Solutions. Have fun! If you want to support me, buy the eBooks on Amazon, or host a West March D&amp;D campaign using the World Lore.</p>
+      <div class="actions">
+        <a class="btn" href="https://www.amazon.com/dp/B0BT5XM4QC">eBooks on Amazon</a>
+        <a class="btn" href="https://github.com/Deovandski/Vraki-West-March-Campaign-D-D">Host a West March campaign</a>
+      </div>
+    </div>
+
+    <footer>
+      <p>No cookies, no analytics, no ads. <a href="privacy.html">Privacy</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/LICENSE">License</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/AI-DISCLOSURE.md">AI disclosure</a></p>
+      <p>Game code © Deovandski Skibinski Junior, MIT license. #HusbandOutWorld, its world and characters © Deovandski Skibinski Junior. A Husband Out of This World and #HusbandOutWorld are trademarks of Deovandski Skibinski Junior.</p>
+    </footer>
+  </div>
+</body>
+</html>
