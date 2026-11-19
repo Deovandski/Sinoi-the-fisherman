@@ -20,6 +20,7 @@ const PLACEHOLDER_FISH := [
 
 var _stats: Label
 var _status: Label
+var _update_button: Button
 var _rng := RandomNumberGenerator.new()
 
 
@@ -29,6 +30,7 @@ func _ready() -> void:
 	_build()
 	SaveManager.changed.connect(_refresh)
 	SaveManager.message.connect(_show_status)
+	_watch_for_web_update()
 	_refresh()
 
 
@@ -63,6 +65,10 @@ func _build() -> void:
 	center.add_child(column)
 
 	column.add_child(_spacer(8))
+	# Shown only when the installed web app (PWA) has downloaded a new version.
+	_update_button = _button("New version ready: tap to update", _on_update_pressed)
+	_update_button.visible = false
+	column.add_child(_update_button)
 	column.add_child(_label("Sinoi the Fisherman", 16, Color("f3e3b3")))
 	column.add_child(_label("Pre-production build " + str(ProjectSettings.get_setting("application/config/version")), 7, Color("9fc3d6")))
 	column.add_child(_label("Made for touch screens. A mouse works for testing.", 7, Color("c9dbe4")))
@@ -130,6 +136,44 @@ func _spacer(height: int) -> Control:
 func _refresh() -> void:
 	var catches: Array = SaveManager.data.get("catches", [])
 	_stats.text = "Pearls: %d   Catches: %d" % [int(SaveManager.data.get("pearls", 0)), catches.size()]
+
+
+## Web/PWA only: the service worker downloads a new build in the background
+## and waits. Offer a button instead of reloading under the player.
+func _watch_for_web_update() -> void:
+	if not OS.has_feature("web"):
+		return
+	JavaScriptBridge.pwa_update_available.connect(_show_update_button)
+	if JavaScriptBridge.pwa_needs_update():
+		_show_update_button()
+	# Browsers don't reliably re-check the service worker when an installed
+	# app opens, so check after launch (at 5 s and 30 s), whenever the app
+	# comes back to the foreground, and every 10 minutes while it's open.
+	# Offline, the check fails quietly.
+	JavaScriptBridge.eval("""
+		if ('serviceWorker' in navigator && !window.sinoiUpdateTimer) {
+			var sinoiCheckForUpdate = function () {
+				navigator.serviceWorker.getRegistration()
+					.then(function (r) { return r ? r.update() : null; })
+					.catch(function () {});
+			};
+			setTimeout(sinoiCheckForUpdate, 5000);
+			setTimeout(sinoiCheckForUpdate, 30000);
+			window.sinoiUpdateTimer = setInterval(sinoiCheckForUpdate, 600000);
+			document.addEventListener('visibilitychange', function () {
+				if (document.visibilityState === 'visible') { sinoiCheckForUpdate(); }
+			});
+		}
+	""", true)
+
+
+func _show_update_button() -> void:
+	_update_button.visible = true
+
+
+func _on_update_pressed() -> void:
+	SaveManager.save_local()
+	JavaScriptBridge.pwa_update()
 
 
 func _show_status(text: String) -> void:

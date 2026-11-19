@@ -1,7 +1,9 @@
 name: Website and web build
 
-# Exports the Godot project for the web, puts it under site/play/game/ and
-# deploys site/ to GitHub Pages.
+# Exports the Godot project for the web as an installable app (PWA) into
+# site/play/, finishes it with tools/web_postexport.py, and deploys site/ to
+# GitHub Pages. Every export gets a new service-worker cache version, so
+# installed players are offered the update in-game.
 # One-time setup: repo Settings > Pages > Build and deployment > Source = "GitHub Actions".
 on:
   push:
@@ -58,12 +60,17 @@ jobs:
       - name: Run tests
         run: ~/godot/godot --headless --path game -s res://tests/test_save_manager.gd
 
-      - name: Export web build
+      - name: Export web build (installable PWA at /play/)
         run: |
-          mkdir -p site/play/game
-          ~/godot/godot --headless --path game --export-release "Web" ../site/play/game/index.html
-          test -f site/play/game/index.wasm
-          ls -la site/play/game
+          mkdir -p site/play
+          ~/godot/godot --headless --path game --export-release "Web" ../site/play/index.html
+          python3 tools/web_postexport.py site/play
+          for f in index.html index.wasm index.pck index.manifest.json index.service.worker.js \
+                   index.offline.html index.144x144.png index.180x180.png index.512x512.png; do
+            test -f "site/play/$f" || { echo "::error::missing site/play/$f"; exit 1; }
+          done
+          grep -o "CACHE_VERSION = '[^']*'" site/play/index.service.worker.js
+          ls -la site/play
 
       - uses: actions/configure-pages@v5
         if: github.event_name != 'pull_request'

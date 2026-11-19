@@ -21,7 +21,8 @@ The current build is a pre-production shell that proves the pipeline:
 - a title screen with a placeholder **Cast** button that adds random catches;
 - a **fight-box touch test**: interactive pad, shadow pad, two-finger tracking and a catch meter;
 - **JSON save export and import** on the web (download / file picker) and on Android (system file picker, with a clipboard fallback);
-- automatic local saving (browser storage on the web, private app storage on Android).
+- automatic local saving (browser storage on the web, private app storage on Android);
+- **install as an app** from the browser (a PWA): it opens straight into the game, works with no signal after the first load, and offers an in-game button when a new version is ready.
 
 ## Repository layout
 
@@ -30,12 +31,13 @@ game/                 Godot 4.7 project (GDScript)
   scenes/             scenes (.tscn)
   scripts/            game scripts; scripts/autoload/save_manager.gd handles saves
   tests/              headless tests, run in CI
-site/                 the website (GitHub Pages); CI adds the web build at site/play/game/
+site/                 the website (GitHub Pages); CI exports the game into site/play/ (installable app)
 docs/
   white-paper/        research and design direction (the white paper in progress)
   art/                illustrator brief: sprite sizes, animation, Godot export rules
   BUILDING.md         how to build, test and sign the web and Android versions
   SAVE_FORMAT.md      the JSON save format
+tools/                web_postexport.py: finishes the PWA export (manifest, offline cache)
 .github/workflows/    web build + Pages deploy, Android debug APK
 ```
 
@@ -45,7 +47,7 @@ You need [Godot 4.7](https://godotengine.org) (standard build, not .NET).
 
 - **Run:** open `game/project.godot` in Godot and press F5.
 - **Test:** `godot --headless --path game -s res://tests/test_save_manager.gd`
-- **Web build:** `godot --headless --path game --export-release "Web" ../build/web/index.html`, then serve `build/web/` with any static server.
+- **Web build:** `mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play`, then serve `site/` with any static server.
 - **Android:** see [docs/BUILDING.md](docs/BUILDING.md) for the Android SDK, JDK 17 and signing setup. Every push to `main` also builds a debug APK (Actions tab > *Android debug build* > Artifacts).
 
 ## Documentation
