@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sinoi the Fisherman — connect once</title>
+	<style>
+		html { background: #10243a; color: #eef6fa; }
+		body {
+			font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+			margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+			text-align: center; padding: 2rem; box-sizing: border-box;
+		}
+		h1 { color: #f3e3b3; font-size: 1.6rem; margin: 0 0 1rem; }
+		p { max-width: 24rem; margin: 0 auto 1rem; line-height: 1.5; color: #c9dbe4; }
+		button {
+			margin-top: 1.5rem; padding: .8rem 2rem; border: 0; border-radius: 10px;
+			background: #f3e3b3; color: #10202b; font: inherit; font-weight: 800;
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<h1>Connect once to download the game</h1>
+		<p>Sinoi the Fisherman needs an internet connection the first time, to download the game (about 10 MB).</p>
+		<p>After that it works with no signal, and your save stays on this device.</p>
+		<button type="button">Try again</button>
+	</main>
+	<script>
+		document.querySelector('button').addEventListener('click', () => window.location.reload());
+	</script>
+</body>
+</html>

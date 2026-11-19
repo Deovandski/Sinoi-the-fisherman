@@ -24,10 +24,10 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 ```
 godot --headless --path game --import                                   # first run / after adding assets
 godot --headless --path game -s res://tests/test_save_manager.gd        # tests (must pass)
-godot --headless --path game --export-release "Web" ../build/web/index.html
+mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play
 ```
 
-CI: `.github/workflows/pages.yml` (tests + web export + Pages), `.github/workflows/android.yml` (debug APK artifact).
+CI: `.github/workflows/pages.yml` (tests + web export as an installable PWA + Pages), `.github/workflows/android.yml` (debug APK artifact).
 
 ## Style
 

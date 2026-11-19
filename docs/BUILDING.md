@@ -21,16 +21,27 @@ godot --headless --path game --import                              # import asse
 godot --headless --path game -s res://tests/test_save_manager.gd   # tests; exit code 1 on failure
 ```
 
-## Web build
+## Web build (installable app)
 
 ```
-godot --headless --path game --export-release "Web" ../build/web/index.html
-cd build/web && python3 -m http.server 8000                        # open http://localhost:8000
+mkdir -p site/play
+godot --headless --path game --export-release "Web" ../site/play/index.html
+python3 tools/web_postexport.py site/play
+cd site && python3 -m http.server 8000                             # open http://localhost:8000/play/
 ```
 
 - The `Web` preset is **single-threaded** (`variant/thread_support=false`), so it runs on GitHub Pages and any static host without special headers.
-- CI exports into `site/play/game/`; `site/play/index.html` frames it in a portrait stage. Locally exported files under `build/` and `site/play/game/` are ignored by git.
+- It's a **PWA** (Progressive Web App): Godot writes `index.manifest.json`, `index.service.worker.js`, `index.offline.html` and the 144, 180 and 512 px icons from `game/web/`. Options: fullscreen, portrait, theme `#10243a`, offline page `game/web/offline.html`. `game/web/` has a `.gdignore`, so Godot doesn't import those files as game assets.
+- `tools/web_postexport.py` must run after every export. It adds the short name, id, scope, description and theme color to the manifest, and patches the service worker so that one online visit caches the whole game (engine and data included) and the `/play/` folder URL works offline.
+- **Updates:** every export gets a new cache version. The game checks for a new version 5 and 30 seconds after launch, whenever it returns to the foreground, and every 10 minutes. When one has downloaded, the title screen shows *New version ready: tap to update*, which saves and reloads into the new build. Nothing progresses while the app is closed; only the files are cached.
+- `site/play/` is generated (by CI or locally) and ignored by git.
 - The engine download is about 10 MB gzipped; the first load can take a few seconds on phones.
+
+### Testing the PWA
+
+- Chrome DevTools > Application > Manifest at `/play/`: no installability errors.
+- Load `/play/` once online, then turn the connection off (DevTools > Network > Offline) and reload: the game must start.
+- Install it (browser menu > *Install app* / *Add to Home screen*) and check the fight-box touch test with two fingers.
 
 ## Android debug build (test phones)
 

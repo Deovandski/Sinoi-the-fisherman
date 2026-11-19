@@ -6,6 +6,7 @@ Sinoi the Fisherman collects no personal data. There are no accounts, no cookies
 
 - Your save is stored only on your device: in the app's private storage on Android, or in the website's browser storage (IndexedDB) on the web.
 - Nothing is sent to us or anyone else. The game works offline.
+- **Installed web app (PWA):** if you install the browser version or play it once, your browser keeps a copy of the game's files (the engine, game data, icons and an offline page, about 40 MB) so it can start with no signal. These files are stored only on your device, are never sent anywhere, and contain no personal data. The app only checks the website for a newer version of those files. Uninstalling the app or clearing this site's data removes them, along with the browser save.
 - When you **export** a save, the game writes a JSON file where you choose (or to your downloads, or to your clipboard). When you **import** one, it reads only the file you pick.
 - The Android app asks for no permissions.
 - Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.
@@ -20,4 +21,4 @@ If you install the app from Google Play, Google handles the download and may col
 
 Questions: open an [issue](https://github.com/Deovandski/Sinoi-the-fisherman/issues).
 
-Last updated November 8, 2026. Copyright (c) 2026, Deovandski Skibinski Junior.
+Last updated November 19, 2026. Copyright (c) 2026, Deovandski Skibinski Junior.
