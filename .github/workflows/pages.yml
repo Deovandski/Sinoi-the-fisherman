@@ -69,6 +69,7 @@ jobs:
                    index.offline.html index.144x144.png index.180x180.png index.512x512.png; do
             test -f "site/play/$f" || { echo "::error::missing site/play/$f"; exit 1; }
           done
+          test -f site/manifest.webmanifest || { echo "::error::missing site/manifest.webmanifest"; exit 1; }
           grep -o "CACHE_VERSION = '[^']*'" site/play/index.service.worker.js
           ls -la site/play
 

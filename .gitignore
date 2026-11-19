@@ -17,6 +17,7 @@ mono_crash.*.json
 build/
 # The web export (installable PWA) is generated into site/play/ by CI
 site/play/
+site/manifest.webmanifest
 *.apk
 *.aab
 *.idsig
