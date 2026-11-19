@@ -15,15 +15,26 @@ Run after every web export:
 3. Service worker: Godot caches the page as "index.html", so opening the
    folder URL (/play/) with no signal found nothing and failed. Navigations
    now fall back to the cached index.html.
+4. Landing page: writes site/manifest.webmanifest, the same app as seen from
+   the site root, so "Install" also works from the landing page. Both
+   manifests share one id and one scope (the whole site), so installing from
+   either page gives the same app, which opens straight into the game.
 """
 import json
 import pathlib
 import sys
 
+# The id is resolved against the site's origin (deovandski.github.io), which
+# other Deovandski sites share, so it must be specific to this game. Never
+# change it once players have installed the app: a new id is a new app.
+APP_ID = "/Sinoi-the-fisherman/"
+
 MANIFEST_EXTRA = {
     "short_name": "Sinoi",
-    "id": "./",
-    "scope": "./",
+    "id": APP_ID,
+    # The app covers the whole site (landing page + game), so the landing
+    # page can offer the install and links between them stay in the app.
+    "scope": "../",
     "description": "An active, touch-first pixel-art fishing game set in the world of #HusbandOutWorld.",
     "theme_color": "#10243a",
     "lang": "en",
@@ -40,12 +51,24 @@ SW_PATCHES = [
 ]
 
 
-def patch_manifest(path: pathlib.Path) -> None:
+def patch_manifest(path: pathlib.Path) -> dict:
     manifest = json.loads(path.read_text(encoding="utf-8"))
-    for key, value in MANIFEST_EXTRA.items():
-        manifest.setdefault(key, value)
+    manifest.update(MANIFEST_EXTRA)
     path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"manifest: {', '.join(sorted(manifest))}")
+    return manifest
+
+
+def write_site_manifest(play_manifest: dict, play_dir: pathlib.Path) -> None:
+    """Same app, with URLs relative to the site root instead of /play/."""
+    prefix = play_dir.name + "/"
+    site = dict(play_manifest)
+    site["start_url"] = prefix + play_manifest["start_url"].removeprefix("./")
+    site["scope"] = "./"
+    site["icons"] = [dict(icon, src=prefix + icon["src"]) for icon in play_manifest["icons"]]
+    out = play_dir.parent / "manifest.webmanifest"
+    out.write_text(json.dumps(site, indent=2) + "\n", encoding="utf-8")
+    print(f"site manifest: {out} (start_url {site['start_url']})")
 
 
 def patch_service_worker(path: pathlib.Path) -> None:
@@ -63,7 +86,8 @@ def patch_service_worker(path: pathlib.Path) -> None:
 
 def main(folder: str) -> None:
     base = pathlib.Path(folder)
-    patch_manifest(base / "index.manifest.json")
+    manifest = patch_manifest(base / "index.manifest.json")
+    write_site_manifest(manifest, base)
     patch_service_worker(base / "index.service.worker.js")
 
 
