@@ -70,6 +70,13 @@ jobs:
             test -f "site/play/$f" || { echo "::error::missing site/play/$f"; exit 1; }
           done
           test -f site/manifest.webmanifest || { echo "::error::missing site/manifest.webmanifest"; exit 1; }
+
+      - name: Build llms-full.txt (text of every page, for AI readers)
+        run: |
+          python3 tools/build_llms_full.py site
+          for f in llms.txt llms-full.txt sitemap.xml; do
+            test -s "site/$f" || { echo "::error::missing site/$f"; exit 1; }
+          done
           grep -o "CACHE_VERSION = '[^']*'" site/play/index.service.worker.js
           ls -la site/play
 

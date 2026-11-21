@@ -19,6 +19,9 @@ Run after every web export:
    the site root, so "Install" also works from the landing page. Both
    manifests share one id and one scope (the whole site), so installing from
    either page gives the same app, which opens straight into the game.
+5. Play page: replaces Godot's bare <noscript> line with a message (the game needs JavaScript and
+   WebGL) with a link home, so readers that don't run scripts see what the
+   page is.
 """
 import json
 import pathlib
@@ -84,11 +87,35 @@ def patch_service_worker(path: pathlib.Path) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+NOSCRIPT_TEXT = (
+    '<p style="color:#eef6fa;font-family:system-ui,sans-serif;padding:1rem">'
+    "Sinoi the Fisherman is an active, touch-first pixel-art fishing game set in the world of "
+    "#HusbandOutWorld. This page runs the game, which needs JavaScript and WebGL. "
+    '<a style="color:#f3e3b3" href="../">About the game, install steps and docs</a>.'
+    "</p>"
+)
+
+
+GODOT_NOSCRIPT = "Your browser does not support JavaScript."
+
+
+def patch_play_page(path: pathlib.Path) -> None:
+    text = path.read_text(encoding="utf-8")
+    if "touch-first pixel-art fishing game" in text.split("<noscript>", 1)[-1][:600]:
+        print("play page: <noscript> message already set")
+        return
+    if text.count(GODOT_NOSCRIPT) != 1:
+        sys.exit(f"play page: expected Godot's '{GODOT_NOSCRIPT}' in {path}; Godot's template changed, update this script")
+    path.write_text(text.replace(GODOT_NOSCRIPT, NOSCRIPT_TEXT, 1), encoding="utf-8")
+    print("play page: replaced Godot's <noscript> line with a description and a link home")
+
+
 def main(folder: str) -> None:
     base = pathlib.Path(folder)
     manifest = patch_manifest(base / "index.manifest.json")
     write_site_manifest(manifest, base)
     patch_service_worker(base / "index.service.worker.js")
+    patch_play_page(base / "index.html")
 
 
 if __name__ == "__main__":
