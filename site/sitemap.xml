@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-written. Add a <url> when a page is added to site/ (see docs/BUILDING.md). -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/play/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/privacy.html</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/llms.txt</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/llms-full.txt</loc></url>
+</urlset>

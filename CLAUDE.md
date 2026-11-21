@@ -26,12 +26,17 @@ On the website (`site/`, not the game), every picture opens bigger when pressed,
 - The viewer shows the date under the caption when it knows one: `data-date="YYYY-MM-DD"` on the picture, or a `YYYY-MM-DD` at the start of its file name.
 - Opt out with `data-no-zoom`. A new page in `site/` that shows pictures loads the viewer the same way `index.html` does.
 
+## Website pages for AI readers
+
+A new page in `site/` also needs: an entry in `site/sitemap.xml` and `site/llms.txt` (both hand-written), an entry in `PAGES` in `tools/build_llms_full.py`, and in its head a `<meta name="description">`, `<link rel="canonical">`, `<link rel="alternate" type="text/markdown" href="llms.txt">` and the sitemap link. See `docs/BUILDING.md`.
+
 ## Commands
 
 ```
 godot --headless --path game --import                                   # first run / after adding assets
 godot --headless --path game -s res://tests/test_save_manager.gd        # tests (must pass)
 mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play
+python3 tools/build_llms_full.py site                                   # after the export
 ```
 
 CI: `.github/workflows/pages.yml` (tests + web export as an installable PWA + Pages), `.github/workflows/android.yml` (debug APK artifact).

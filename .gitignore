@@ -18,6 +18,7 @@ build/
 # The web export (installable PWA) is generated into site/play/ by CI
 site/play/
 site/manifest.webmanifest
+site/llms-full.txt
 *.apk
 *.aab
 *.idsig

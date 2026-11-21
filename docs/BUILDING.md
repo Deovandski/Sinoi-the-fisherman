@@ -40,6 +40,13 @@ cd site && python3 -m http.server 8000                             # open http:/
 - `site/play/` and `site/manifest.webmanifest` are generated (by CI or locally) and ignored by git.
 - The engine download is about 10 MB gzipped; the first load can take a few seconds on phones.
 
+### Pages for AI readers and search engines
+
+- `site/llms.txt` (an index in the [llms.txt](https://llmstxt.org/) format) and `site/sitemap.xml` are **hand-written**. Update both when a page is added to `site/` or a doc moves.
+- `site/llms-full.txt` is **generated** at deploy time by `tools/build_llms_full.py` from the pages listed in its `PAGES` list (text only: no navigation, scripts or photo viewer). Add new pages to that list. Locally: `python3 tools/build_llms_full.py site` after the web export.
+- Every page's head carries `<link rel="canonical">`, `<link rel="alternate" type="text/markdown" href="llms.txt">` and the sitemap link; the Play page gets them from the Web preset's `html/head_include`, and `tools/web_postexport.py` replaces Godot's bare `<noscript>` line with a description and a link home.
+- A project site's own `robots.txt` is ignored (crawlers only read the domain root), so the sitemap has to be submitted by hand: Bing Webmaster Tools and Google Search Console.
+
 ### Testing the PWA
 
 - Chrome DevTools > Application > Manifest at `/` and at `/play/`: no installability errors, and the same *Computed App ID*.
