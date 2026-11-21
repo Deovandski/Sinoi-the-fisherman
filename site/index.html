@@ -15,6 +15,7 @@
   <link rel="apple-touch-icon" href="play/index.180x180.png">
   <meta name="apple-mobile-web-app-title" content="Sinoi">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="photo-viewer.css">
 </head>
 <body>
   <div class="wrap">
@@ -113,5 +114,15 @@
       <p>Game code © Deovandski Skibinski Junior, MIT license. #HusbandOutWorld, its world and characters © Deovandski Skibinski Junior. A Husband Out of This World and #HusbandOutWorld are trademarks of Deovandski Skibinski Junior.</p>
     </footer>
   </div>
+
+  <!-- Every picture opens bigger here ("Pictures are clickable" in CLAUDE.md; photo-viewer.js). -->
+  <dialog id="photo-viewer" class="photo-viewer" aria-label="Picture">
+    <span class="pv-enlarge" hidden>Enlarge</span>
+    <button type="button" class="pv-close" aria-label="Close">×</button>
+    <button type="button" class="pv-prev" aria-label="Previous picture" hidden>‹</button>
+    <figure class="pv-fig"><img alt=""><figcaption class="pv-cap"><span class="pv-text"></span><time class="pv-date" hidden></time></figcaption></figure>
+    <button type="button" class="pv-next" aria-label="Next picture" hidden>›</button>
+  </dialog>
+  <script src="photo-viewer.js" defer></script>
 </body>
 </html>
