@@ -74,7 +74,7 @@ jobs:
       - name: Build llms-full.txt (text of every page, for AI readers)
         run: |
           python3 tools/build_llms_full.py site
-          for f in llms.txt llms-full.txt sitemap.xml; do
+          for f in llms.txt llms-full.txt sitemap.xml google0c08003a2b869d98.html; do
             test -s "site/$f" || { echo "::error::missing site/$f"; exit 1; }
           done
           grep -o "CACHE_VERSION = '[^']*'" site/play/index.service.worker.js
