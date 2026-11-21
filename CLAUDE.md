@@ -19,6 +19,13 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 - **Fish names:** real fish, translated into two languages, chopped and joined (tuna: *maguro* + *atum* = Magatum). Canon fish (Sanbi, Fihi, Ptaina, True Sanbi King) keep their names.
 - Keep the support text and Amazon link (`https://www.amazon.com/dp/B0BT5XM4QC`) wherever the credits appear.
 
+## Website pictures are clickable
+
+On the website (`site/`, not the game), every picture opens bigger when pressed, in the one photo viewer (`site/photo-viewer.js`, `site/photo-viewer.css`, and the `<dialog id="photo-viewer">` in `site/index.html`). It's the same standard as Deovandski/Deovandski, Deovandski-repo-template, HusbandOutWorld and Vraki-West-March-Campaign-D-D.
+- Any `<img>` with alt text opens by itself, and so does a link straight to an image file. Give screenshots and art real alt text; `alt=""` means decorative, and those don't open.
+- The viewer shows the date under the caption when it knows one: `data-date="YYYY-MM-DD"` on the picture, or a `YYYY-MM-DD` at the start of its file name.
+- Opt out with `data-no-zoom`. A new page in `site/` that shows pictures loads the viewer the same way `index.html` does.
+
 ## Commands
 
 ```
