@@ -32,6 +32,7 @@ game/                 Godot 4.7 project (GDScript)
   scripts/            game scripts; scripts/autoload/save_manager.gd handles saves
   tests/              headless tests, run in CI
 site/                 the website (GitHub Pages); CI exports the game into site/play/ (installable app)
+  google0c08003a2b869d98.html  Google Search Console verification: never remove or edit it
 docs/
   white-paper/        research and design direction (the white paper in progress)
   art/                illustrator brief: sprite sizes, animation, Godot export rules
@@ -49,6 +50,10 @@ You need [Godot 4.7](https://godotengine.org) (standard build, not .NET).
 - **Test:** `godot --headless --path game -s res://tests/test_save_manager.gd`
 - **Web build:** `mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play`, then serve `site/` with any static server.
 - **Android:** see [docs/BUILDING.md](docs/BUILDING.md) for the Android SDK, JDK 17 and signing setup. Every push to `main` also builds a debug APK (Actions tab > *Android debug build* > Artifacts).
+
+### Google Search Console file
+
+`site/google0c08003a2b869d98.html` proves to Google Search Console that this site is ours. **Never remove, rename or edit it.** Google re-checks it, and if it's gone the site stops being verified. CI fails the deploy if it's missing.
 
 ## Documentation
 
