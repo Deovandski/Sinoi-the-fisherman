@@ -136,14 +136,16 @@ func _award() -> Dictionary:
 	var fish := _fight.fish
 	var reward := CatchReward.roll(fish, _streak, _fight.fight_accuracy(), _rng)
 	SaveManager.data.pearls = int(SaveManager.data.pearls) + int(reward.pearls)
-	SaveManager.data.catches.append({
+	var entry := {
 		"fish": fish.id,
 		"pearls": reward.pearls,
 		"quality": reward.quality,
 		"size_cm": reward.size_cm,
 		"streak": _streak,
 		"caught_at": Time.get_datetime_string_from_system(true),
-	})
+	}
+	SaveManager.data.catches.append(entry)
+	Journal.record(SaveManager.data.journal, entry)
 	var record: Dictionary = _records.get(fish.id, {"best_size_cm": 0.0, "best_quality": 0})
 	record.best_size_cm = maxf(float(record.best_size_cm), float(reward.size_cm))
 	record.best_quality = maxi(int(record.best_quality), int(reward.quality))

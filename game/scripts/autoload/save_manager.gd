@@ -13,7 +13,7 @@ signal changed
 signal message(text: String)
 
 const FORMAT := "sinoi-save"
-const VERSION := 6
+const VERSION := 7
 const MAX_IMPORT_BYTES := 1_000_000
 
 var save_path := "user://save.json"
@@ -40,6 +40,8 @@ static func default_data() -> Dictionary:
 		"updated_at": now,
 		"pearls": 0,
 		"catches": [],
+		# One entry per fish species caught (see Journal.record()).
+		"journal": {},
 		"settings": {
 			"timing_forgiveness": 0,
 			"left_handed": false,
@@ -137,6 +139,9 @@ func _migrate(save: Dictionary, from_version: int) -> Dictionary:
 				if typeof(fish[id]) == TYPE_DICTIONARY:
 					fish[id]["best_size_cm"] = float(fish[id].get("best_size_cm", 0.0))
 					fish[id]["best_quality"] = int(fish[id].get("best_quality", 0))
+	if from_version < 7:
+		# v7 adds the journal, built from the catch log so far.
+		out["journal"] = Journal.rebuild(out.get("catches", []) if typeof(out.get("catches")) == TYPE_ARRAY else [])
 	return out
 
 

@@ -20,6 +20,7 @@ The current build is a pre-production shell that proves the pipeline:
 
 - a **fish test**: pick any fish in the game from a drop-down and fight it. Each fish fights in one or more **sections** (a segmented meter); each section is a fight-box mode with its own difficulty range. Strong sections give the next a head start, and a catch streak earns better quality, bigger fish and bonus pearls, all saved (see [chapter 06](docs/white-paper/06-fish-fights.md));
 - a **fight-box playground** with nine modes to try and rank (Slide Guide, Shake, Tap Tempo, Reel Spin, Hookset, Hold Hop, Lost Ref, Beat Notes, Twin Drift), picked from a drop-down at the top. A **difficulty slider** (0 easy to 10 hard) sets how hard each mode plays. Each has an interactive pad, a shadow pad, a catch meter, results kept in the save, and a **Copy** button that puts your results on the clipboard to send back (see [chapter 04](docs/white-paper/04-fight-box-modes.md));
+- a **journal** of every fish caught: how many, the biggest catch and the average payoff in pearls;
 - **JSON save export and import** on the web (download / file picker) and on Android (system file picker, with a clipboard fallback);
 - automatic local saving (browser storage on the web, private app storage on Android);
 - **install as an app** from the browser (a PWA): it opens straight into the game, works with no signal after the first load, and offers an in-game button when a new version is ready.

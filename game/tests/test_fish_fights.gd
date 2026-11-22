@@ -17,6 +17,7 @@ func _init() -> void:
 	_test_bell_curve()
 	_test_carry_over()
 	_test_rewards()
+	_test_journal()
 	_test_every_fish_plays()
 	if _failures == 0:
 		print("All fish fight tests passed.")
@@ -150,6 +151,23 @@ func _test_rewards() -> void:
 	fight.add(0.8)
 	fight.add_judgement(Vector2(1, 4))
 	_check(is_equal_approx(fight.fight_accuracy(), 0.5), "rewards: fight accuracy spans every section")
+
+
+func _test_journal() -> void:
+	var journal := {}
+	Journal.record(journal, {"fish": "magatum", "pearls": 6, "quality": 0, "size_cm": 90.0, "caught_at": "2026-11-22T10:00:00"})
+	Journal.record(journal, {"fish": "magatum", "pearls": 14, "quality": 2, "size_cm": 142.5, "caught_at": "2026-11-22T10:05:00"})
+	Journal.record(journal, {"fish": "magatum", "pearls": 10, "quality": 3, "size_cm": 120.0, "caught_at": "2026-11-22T10:09:00"})
+	Journal.record(journal, {"fish": "karkoi", "pearls": 3, "quality": 0, "size_cm": 40.0, "caught_at": "2026-11-22T10:10:00"})
+	var m: Dictionary = journal.magatum
+	_check(int(m.caught) == 3 and journal.size() == 2, "journal: one entry per fish, counting catches")
+	_check(is_equal_approx(float(m.biggest_cm), 142.5) and int(m.biggest_quality) == 2, "journal: keeps the biggest catch and its quality")
+	_check(int(m.best_quality) == 3, "journal: keeps the best quality separately")
+	_check(is_equal_approx(Journal.average_pearls(m), 10.0), "journal: average payoff in pearls")
+	_check(m.first_caught_at == "2026-11-22T10:00:00" and m.last_caught_at == "2026-11-22T10:09:00", "journal: first and last catch times")
+	var rebuilt := Journal.rebuild([{"fish": "magatum", "pearls": 6, "size_cm": 90.0}, {"fish": "magatum", "pearls": 14, "size_cm": 142.5}, "junk"])
+	_check(int(rebuilt.magatum.caught) == 2 and is_equal_approx(Journal.average_pearls(rebuilt.magatum), 10.0), "journal: rebuilds from a catch log, skipping bad entries")
+	_check(Journal.average_pearls({}) == 0.0, "journal: an empty entry averages 0")
 
 
 func _test_escape() -> void:

@@ -31,6 +31,16 @@ Decided by Deovandski (2026-11-22): **a streak earns higher quality, bigger fish
 - The catch banner shows it all ("Caught Magatum! / Great, 142.0 cm, +14 pearls (+40%) / Streak 5 (best 5)"). Each catch in the save records its quality, size and streak, and each fish keeps its best size and quality.
 - A catch adds the fish and a random reward from its pearl range to the save (what the old Cast button did), so the title screen's Pearls and Catches keep counting.
 
+## Journal
+
+Decided by Deovandski (2026-11-22): **the game keeps a journal with every fish caught: how many, the biggest catch, and the average payoff in pearls.**
+
+![The title screen with the new Journal button after importing a sample save, and the Journal: Karkoi and Magatum caught with their counts, biggest catch and average payoff; the two fish not caught yet show "???".](img/2026-11-22-journal.png)
+
+- **Title screen → Journal** lists every fish in `fish.json` order. A caught fish shows how many were caught, the biggest catch (size and that catch's quality) and the average pearls per catch. Fish not caught yet show "???". The top line counts species found and total catches.
+- The journal is saved as its own section (`journal`, save format v7): one entry per fish with the count, total pearls, biggest size and its quality, best quality, and first and last catch times. Keeping totals (rather than reading the catch log each time) keeps the journal right even if the catch log is trimmed later. Older saves get a journal built from their catch log.
+- Fish-test catches fill it for now; real fishing will use the same `Journal.record()`.
+
 ## The data
 
 Every fish is in [`game/data/fish.json`](../../game/data/fish.json), easiest first:
@@ -85,7 +95,7 @@ fish | sections | caught | lost | avg catch s | accuracy % | best
 Magatum | Hookset 3-5, Reel Spin 4-6, Tap Tempo 4-6 (bell) | 1 | 3 | 41.2 | 57 | Great, 142.0 cm
 ```
 
-- Results per fish and the streak are saved (`playtest.fish` and `playtest.streak`, save format v6, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)). **Reset save** clears them.
+- Results per fish and the streak are saved (`playtest.fish` and `playtest.streak`, save format v7, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)). **Reset save** clears them.
 
 ## Code
 
@@ -93,8 +103,9 @@ Magatum | Hookset 3-5, Reel Spin 4-6, Tap Tempo 4-6 (bell) | 1 | 3 | 41.2 | 57 |
 - `scripts/fight/fish_fight.gd` — sections, segment fills, difficulty curves, carry-over, catch and escape.
 - `scripts/fight/fish_catalog.gd` — reads `fish.json`.
 - `scripts/fight/catch_reward.gd` — rolls a catch's quality, size and pearls from the streak and accuracy.
+- `scripts/journal.gd` — records catches into the journal and works out averages; `scripts/journal_screen.gd` + `scenes/journal.tscn` show it.
 - `scripts/fish_test.gd` + `scenes/fish_test.tscn` — the screen.
-- `tests/test_fish_fights.gd` — data checks, section flow, climb and bell curves, carry-over, streak rewards, escape, and every fish's sections running.
+- `tests/test_fish_fights.gd` — data checks, section flow, climb and bell curves, carry-over, streak rewards, the journal, escape, and every fish's sections running.
 
 ## Answered (2026-11-22)
 
@@ -104,8 +115,9 @@ Magatum | Hookset 3-5, Reel Spin 4-6, Tap Tempo 4-6 (bell) | 1 | 3 | 41.2 | 57 |
 
 - **Streak rewards:** higher quality, bigger fish and bonus pearls.
 - **Later sections more forgiving?** No: walls of difficulty push players toward better gear; skilled players can crank through anyway.
+- **Do quality and size matter beyond pearls?** Yes, in the journal: every fish caught records how many, the biggest catch and the average payoff.
 
 ## Open questions
 
-- Should quality and size matter beyond pearls later (journal records, quests, selling prices by size)?
+- Should the journal show more later (best quality, first catch date, region, lore text once regions exist)?
 - Fish beyond these four (canon Fihi, Ptaina, True Sanbi King, and new two-language fish) wait for the region and fish lists.

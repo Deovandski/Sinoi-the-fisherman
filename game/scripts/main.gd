@@ -67,7 +67,10 @@ func _build() -> void:
 	_stats = _label("", 9, Color("ffffff"))
 	column.add_child(_stats)
 
-	column.add_child(_button("Fish test: fight a fish", _on_fish_test))
+	column.add_child(_row([
+		_button("Fish test", _on_fish_test),
+		_button("Journal", func(): get_tree().change_scene_to_file("res://scenes/journal.tscn")),
+	]))
 	column.add_child(_button("Fight box: try the modes", _on_touch_test))
 	column.add_child(_row([
 		_button("Export save", SaveManager.export_save),

@@ -18,12 +18,12 @@ Decided by Deovandski, 2026-11-22:
 - **Heading from alpha into beta:** prepare to **lock the save format for 1.0**: review every key, remove placeholders, write the final version of this page, and test migrations from every alpha version.
 - **From 1.0 on:** the format is locked; changes must be additive and always migrate.
 
-## Version 6 (current)
+## Version 7 (current)
 
 ```json
 {
   "format": "sinoi-save",
-  "version": 6,
+  "version": 7,
   "game_version": "0.0.1",
   "created_at": "2026-11-08T13:00:00",
   "updated_at": "2026-11-08T13:05:12",
@@ -31,6 +31,9 @@ Decided by Deovandski, 2026-11-22:
   "catches": [
     { "fish": "magatum", "pearls": 14, "quality": 2, "size_cm": 142.0, "streak": 4, "caught_at": "2026-11-08T13:04:50" }
   ],
+  "journal": {
+    "magatum": { "caught": 1, "pearls_total": 14, "biggest_cm": 142.0, "biggest_quality": 2, "best_quality": 2, "first_caught_at": "2026-11-08T13:04:50", "last_caught_at": "2026-11-08T13:04:50" }
+  },
   "settings": {
     "timing_forgiveness": 0,
     "left_handed": false
@@ -61,6 +64,11 @@ Decided by Deovandski, 2026-11-22:
 | `created_at`, `updated_at` | string | UTC timestamps, ISO 8601 without zone. |
 | `pearls` | int | Money, in pearls (the base coin of Vraki). |
 | `catches` | array | Catch log, filled by the fish test for now. Each entry: `fish` (id), `pearls` earned, `quality` (tier index into `rewards.quality_names` in `fish.json`: 0 Normal … 3 Prime), `size_cm`, `streak` (catches already in a row when it was caught) and `caught_at`. |
+| `journal` | object | The fishing journal, one entry per fish id caught. Average payoff = `pearls_total` ÷ `caught`. |
+| `journal.<id>.caught`, `.pearls_total` | int | How many of that fish were caught, and the pearls they paid in total. |
+| `journal.<id>.biggest_cm`, `.biggest_quality` | float, int | The biggest catch and that catch's quality tier. |
+| `journal.<id>.best_quality` | int | The best quality tier caught. |
+| `journal.<id>.first_caught_at`, `.last_caught_at` | string | When the first and latest were caught. |
 | `settings.timing_forgiveness` | int | Accessibility timing window (0 = default). |
 | `settings.left_handed` | bool | Mirror the fight box. |
 | `playtest.fight_modes` | object | Pre-production fight-box playtests, keyed by mode id (`game/data/fight_modes.json`). Only modes that were played or rated appear. |
@@ -82,10 +90,11 @@ Decided by Deovandski, 2026-11-22:
 | 4 | Drops the "How hard?" `feel` ratings (the difficulty slider replaced them) and adds `playtest.fish` for the fish test. |
 | 5 | Adds `playtest.streak` (fish-test catch streak). |
 | 6 | Catches record `quality`, `size_cm` and `streak` (older catches get 0); `playtest.fish` entries gain `best_size_cm` and `best_quality`. |
+| 7 | Adds the `journal`, built from the catch log when an older save loads. |
 
 ## Import rules
 
-- Must parse as a JSON object, under 1 MB, with `format` = `sinoi-save` and a `version` from 1 to the current version (6).
+- Must parse as a JSON object, under 1 MB, with `format` = `sinoi-save` and a `version` from 1 to the current version (7).
 - Missing keys are filled with defaults. Values of the wrong type fall back to the default. Unknown keys are kept, so newer fields survive a round trip through an older build of the same version.
 - A rejected import leaves the current save untouched.
 
