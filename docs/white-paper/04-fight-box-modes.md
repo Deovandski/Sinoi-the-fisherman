@@ -10,7 +10,7 @@ On the touch-test fight box, add a carousel at the very top to pick between figh
 2. **Two-finger slides**: index and middle finger each keep a box that moves up, down, left and right in its own area, at varying speed. → **Twin Drift**
 3. **Rhythm, closer to osu! / Project Diva**: the player sees the "notes" (taps and drags) ahead of time and matches them. → **Beat Notes**
 4. **Fast tapping**: tap faster, slower or in a rhythm; where you tap in the box doesn't matter. → **Tap Tempo**
-5. **Flip**: the screen inverts and the player uses the top box instead of the bottom one. → **Flip**
+5. **Flip**: the screen inverts and the player uses the top box instead of the bottom one. → first built as **Flip**, then redesigned by Deovandski as **Lost Ref** (below)
 6. **Shake the phone**, falling back to rubbing the screen when there is no accelerometer. → **Shake**
 7. Any other modes worth testing. → Claude added **Reel Spin** and **Hookset** (the "spin" and "flick" from the [mechanic vocabulary](02-design-direction.md#mechanic-vocabulary-proposal)).
 
@@ -29,7 +29,7 @@ Slide Guide | 1 | 4 | 1 | 7.9 | 81 | 1
 Twin Drift | 5 | 1 | 3 | 18.2 | 52 | 4
 ```
 
-Results and ratings are kept only until the app closes: they are not part of the save file (changing the save format needs a version bump, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)). The modes, their order and every tuning number live in [`game/data/fight_modes.json`](../../game/data/fight_modes.json), so balancing doesn't need code changes.
+Results and ratings are kept in the save file (`playtest.fight_modes`, save format v2, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)), so they add up over several sessions and travel with an exported save. **Reset save** on the title screen clears them. The modes, their order and every tuning number live in [`game/data/fight_modes.json`](../../game/data/fight_modes.json), so balancing doesn't need code changes.
 
 ## Research: what similar games do
 
@@ -40,7 +40,7 @@ Mechanics only, never names or assets (as decided in chapter 02).
 | [osu!](https://osu.ppy.sh/wiki/en/Beatmap/Approach_rate), from the DS game Osu! Tatakae! Ouendan | Circles to tap, sliders to follow, spinners to spin. Notes fade in ahead of time: 1.8 s at AR0 down to 0.45 s at AR10, 1.2 s at AR5. [Hit windows](https://osu.ppy.sh/wiki/en/Beatmap/Overall_difficulty) shrink with Overall Difficulty: 80 − 6×OD ms for a 300, 140 − 8×OD for a 100, 200 − 10×OD for a 50. | Beat Notes (1.2 s preview, perfect / good / ok windows), Reel Spin (the spinner) |
 | [Elite Beat Agents / Ouendan](https://en.wikipedia.org/wiki/Elite_Beat_Agents) | Numbered hit markers in sequence; phrase markers (hold and follow a ball, sometimes reversing); spin markers. | Numbered circles and drag notes in Beat Notes |
 | [Project Diva](https://projectdiva.wiki/wiki/Game_Mechanics_(Arcade)) | COOL / FINE / SAFE / SAD / WORST grades; hold notes on harder songs; [a gauge that fills on COOL and FINE and drains on SAD and WORST](https://www.hxchector.com/hatsune-miku-project-diva-f-2nd-guide). | The catch meter works the same way: good hits fill, misses drain |
-| [Phigros](https://zh.moegirl.org.cn/en/Phigros) (mobile) | Tap, hold, drag and flick notes; perfect is ±80 ms for taps and holds, ±100 ms for drags, ±140 ms for flicks. The judgement line moves and rotates. | Flicks get a wider window than taps (Hookset). A moving or rotating pad is a later twist, related to Flip |
+| [Phigros](https://zh.moegirl.org.cn/en/Phigros) (mobile) | Tap, hold, drag and flick notes; perfect is ±80 ms for taps and holds, ±100 ms for drags, ±140 ms for flicks. The judgement line moves and rotates. | Flicks get a wider window than taps (Hookset). A moving or rotating pad is a possible later twist |
 | [Rhythm Heaven (DS)](https://en.wikipedia.org/wiki/Rhythm_Heaven_(video_game)) | Tap, hold, slide and flick with the stylus. The flick took months to get right, and pairing it with sound made the timing readable ([Iwata Asks](https://iwataasks.nintendo.com/interviews/ds/rhythm-heaven/0/2)). Glee Club: hold, then lift on cue. | Hookset's flick and sound cue, Hold Hop's lift on cue, Tap Tempo's call and response |
 | [WarioWare: Touched!](https://www.mariowiki.com/List_of_WarioWare:_Touched!_microgames) | 180 touch microgames (rub, spin, slice) with one-word orders like "Rotate!". | Rub as the Shake fallback; one- or two-word cues under the meter |
 | [Taiko no Tatsujin](https://tvtropes.org/pmwiki/pmwiki.php/Videogame/TaikoDrumMaster) | Drumrolls (hit as often as you can) and balloon notes (hit a set number of times). | Tap Tempo's "Faster!" phase |
@@ -61,7 +61,7 @@ Mechanics only, never names or assets (as decided in chapter 02).
 
 The carousel lists them in Claude's predicted order, easiest first. "Guess" is that prediction, 1 (easy) to 5 (hard).
 
-![The nine modes in the web build, mid-play: Slide Guide, Shake (rub fallback), Tap Tempo; Reel Spin, Hookset, Hold Hop; Beat Notes, Flip (warning), Twin Drift. The top box is the shadow pad, the bottom box the real pad.](img/2026-11-21-fight-box-modes.png)
+![The nine modes in the web build, mid-play: Slide Guide, Shake (rub fallback), Tap Tempo; Reel Spin, Hookset, Hold Hop; Lost Ref (bottom box out), Beat Notes, Twin Drift. The top box is the shadow pad, the bottom box the real pad.](img/2026-11-21-fight-box-modes.png)
 
 | # | Mode | What the player does | Fingers | Guess |
 | --- | --- | --- | --- | --- |
@@ -71,8 +71,8 @@ The carousel lists them in Claude's predicted order, easiest first. "Guess" is t
 | 4 | **Reel Spin** | Circle clockwise inside a speed band to reel; when the fish runs, ease off or the line snaps. | 1 | 2 |
 | 5 | **Hookset** | When the ring closes on the arrow, flick that way. On an X, don't flick. | 1 | 3 |
 | 6 | **Hold Hop** | Press a small spot as its ring closes, hold until it fills, lift on LIFT, hop to the next (shown faintly). | 1 | 3 |
-| 7 | **Beat Notes** | Tap numbered circles as their rings close; drag notes: hold and follow the ball. Metronome on. | 1–2 | 4 |
-| 8 | **Flip** | Slide Guide, but every 6–10 s the boxes swap and turn upside down: play in the top box, read the bottom one. | 1 | 4 |
+| 7 | **Lost Ref** | Slide Guide, but every 6–10 s the bottom box goes out (red, arrow up): play in the top box, the only one left, until the arrow sends you back down. | 1 | 3 |
+| 8 | **Beat Notes** | Tap numbered circles as their rings close; drag notes: hold and follow the ball. Metronome on. | 1–2 | 4 |
 | 9 | **Twin Drift** | Index and middle each keep a square that drifts in its half of the pad, at different speeds. | 2 | 5 |
 
 ### Details and tuning
@@ -86,7 +86,7 @@ All numbers are the starting values in `fight_modes.json`. Meter changes are fra
 - **Hookset.** The ring closes over 1.0 s at first and 0.6 s after 40 s; diagonals join after 16 s. Perfect ±0.10 s, good ±0.22 s, late or early up to 0.38 s. A flick is at least 16 px at 160 px/s or faster. X decoys (20%) start after 12 s.
 - **Hold Hop.** Spot radius 7 px plus 4 px of slack. The ring closes in 0.9 s; press perfect ±0.12 s, OK ±0.25 s. Hold 0.8–1.6 s, lift perfect ±0.12 s, OK ±0.25 s. Aim only scales the press reward (100% centred, 75% inside, 45% in the slack); a press outside the slack costs just 0.02. Pressing early, lifting early, or missing the spot costs 0.12, lifting late about 0.1; more than 0.3 s outside the spot breaks the hold (0.12).
 - **Beat Notes.** 96 BPM, preview 1.2 s, circle radius 10 px, drag follow radius 16 px. Perfect ±60 ms, good ±120 ms, OK ±180 ms; a tap on a circle earlier than that (within 350 ms) is an "Early" miss, like osu!'s. The chart is endless: sparse and quarter-note bars first, drags after 20 s, half-beats after 32 s. Dropping a drag costs 0.06.
-- **Flip.** Wraps Slide Guide (`"inner"` can name another mode). A 1.2 s warning blinks the borders red and counts down. Turned upside down, the hand reaching for the top box covers the bottom (shadow) box: that is the extra difficulty.
+- **Lost Ref** (Deovandski's design, 2026-11-22; replaces Flip). Wraps Slide Guide (`"inner"` can name another mode). After 6–10 s of normal play: (1) both boxes pulse for 1.2 s; (2) the bottom box goes out, red with an arrow pointing up, and the player plays in the top box, the only one left, for 4–6 s; (3) the top box flashes yellow and the red bottom box shows an arrow pointing down: for 1 s the player is back in the bottom box with no reference; (4) the top box returns as the reference. Fingers in the old box stop counting when play moves; a finger slid into the new box starts counting without lifting. The challenge is losing the reference box, not reading a turned picture.
 - **Twin Drift.** Squares 20 px wide; each has its own speed curve, so they drift in and out of step. Both covered fills 0.10/s; one covered drains slowly (0.03/s); none drains 0.10/s. With two fingers, the left finger counts for the left square.
 
 ## Predicted ranking (replace with playtest results)
@@ -99,8 +99,8 @@ All numbers are the starting values in `fight_modes.json`. Meter changes are fra
 | 4 | Reel Spin | Continuous, but needs a feel for speed and quick reactions to runs. |
 | 5 | Hookset | Timing plus direction, and decoys punish reflex flicks. |
 | 6 | Hold Hop | Tight aim, two timed moments per spot, and real punishment for timing errors. |
-| 7 | Beat Notes | Reading ahead, timing, aim and drags all at once; rhythm-game players will find it easier than others. |
-| 8 | Flip | Slide Guide plus a reorientation every few seconds, with the hand covering the picture. |
+| 7 | Lost Ref | Slide Guide plus two box changes per cycle; in the top box your own hand covers the picture, and the second back in the bottom box has no reference at all. |
+| 8 | Beat Notes | Reading ahead, timing, aim and drags all at once; rhythm-game players will find it easier than others. |
 | 9 | Twin Drift | Two independent targets with one hand fights finger enslaving directly. |
 
 Playtest results go here:
@@ -109,24 +109,24 @@ Playtest results go here:
 | --- | --- | --- | --- | --- | --- | --- |
 | (to fill in) | | | | | | |
 
-## Interpretations to confirm
+## Interpretations and answers
 
-Where the brief left room, Claude made a call. Each needs a yes, no or change from Deovandski; record the answer in the [ideas log](05-ideas-log.md).
+Where the brief left room, Claude made a call; Deovandski's answers (2026-11-22) are recorded here and in the [ideas log](05-ideas-log.md).
 
-- **Flip:** read as "swap the boxes and turn both upside down, every 6–10 seconds, with a warning". Other readings: mirror only (left-right), or ask the player to physically turn the phone.
-- **Hold Hop:** gave the press a timing (a closing ring, like osu!) so that "the touch part is more punitive" has something to judge; a press outside the spot is only a small penalty.
-- **Tap Tempo:** "more rhythmically" became call and response (the fish taps a bar, the player repeats it).
+- **Flip → Lost Ref:** Claude first read "the screen inverts" as swapping the boxes and turning both upside down. Deovandski: it's less of a flip and more "you lost the reference box". Rebuilt as Lost Ref (above).
+- **Hold Hop:** the press got a timing (a closing ring, like osu!) so that "the touch part is more punitive" has something to judge; a press outside the spot is only a small penalty. Deovandski will check it in playtests.
+- **Tap Tempo:** "more rhythmically" became call and response (the fish taps a bar, the player repeats it). Confirmed.
+- **Ratings are saved** (save format v2). Deovandski: change the save format freely until alpha (see [SAVE_FORMAT.md](../SAVE_FORMAT.md)).
 - **Shake:** works in the Android app and in Chrome on Android. iPhone browsers need a permission prompt that isn't built (Android is the target).
-- **Ratings aren't saved.** Saving them means a save-format change; worth it only if testers need to rate over several sessions.
 - **Sound:** placeholder beeps made in code (metronome, hit, miss, catch) until real audio exists. The rhythm modes rely on them.
 
 ## How the modes could fit the game (proposal)
 
-- A fight becomes a short sequence of **segments**, each a mode: common fish use one or two easy modes, harder fish chain more, legendaries add Flip twists and two-finger segments (matching the difficulty ladder in chapter 02).
+- A fight becomes a short sequence of **segments**, each a mode: common fish use one or two easy modes, harder fish chain more, legendaries add Lost Ref twists and two-finger segments (matching the difficulty ladder in chapter 02).
 - **Tackle edits the tuning** instead of adding rules: a Cork Bobber widens radii and windows, a Trap Bobber slows drains, a Lead Bobber removes speed wobble, a Barbed Hook adds slack. That's why every number is in the data file.
 - **Lore fish** map onto modes: Sanbi decoys are Hookset's X; Fihi shocks fit Hold Hop (lift when shocked); Ptaina's stun could freeze the pad mid-Beat Notes.
 - Modes that rank too hard or feel bad get cut or kept for legendaries only; the ideas log records which and why.
 
 ## Art and sound needs (later)
 
-The prototypes draw everything in code. Final art needs: ring, spot and square sprites; arrow and X cues; a reel with a handle; a tension gauge; hit and miss bursts; a flip warning. Sound needs a metronome, hit and miss sounds, a reel click and a line snap. These will be added to the [illustrator brief](../art/illustrator-brief.md) once the modes that survive playtesting are known.
+The prototypes draw everything in code. Final art needs: ring, spot and square sprites; arrow and X cues; a reel with a handle; a tension gauge; hit and miss bursts; the Lost Ref red-out, arrows and pulse. Sound needs a metronome, hit and miss sounds, a reel click and a line snap. These will be added to the [illustrator brief](../art/illustrator-brief.md) once the modes that survive playtesting are known.

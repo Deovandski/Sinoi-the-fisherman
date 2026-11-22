@@ -45,6 +45,22 @@ func _init() -> void:
 	_check(int(other.data.pearls) == 0, "wrong-typed value falls back to the default")
 	_check(other.data.has("settings") and other.data.settings.has("left_handed"), "missing keys are filled")
 
+	# Version 1 saves migrate to version 2 (playtest results added, data kept).
+	var v1: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 1, "pearls": 9}')
+	_check(v1.ok, "a version 1 save is accepted")
+	_check(int(other.data.version) == SaveManagerScript.VERSION, "a version 1 save is upgraded to the current version")
+	_check(int(other.data.pearls) == 9, "migration keeps existing data")
+	_check(other.data.has("playtest") and other.data.playtest.fight_modes.is_empty(), "migration adds empty fight-box playtest results")
+
+	# Fight-box playtest results survive a round trip.
+	sm.data.playtest.fight_modes["hold_hop"] = {"feel": 3, "catches": 2, "escapes": 1, "catch_seconds": 21.5, "good": 8.0, "judged": 10.0}
+	var round_trip: Node = SaveManagerScript.new()
+	_check(round_trip.apply_json(sm.to_json()).ok, "save with playtest results is accepted")
+	_check(int(round_trip.data.playtest.fight_modes.hold_hop.feel) == 3, "playtest ratings survive the round trip")
+	var restored := FightSession.from_dict(round_trip.data.playtest.fight_modes.hold_hop)
+	_check(restored.catches == 2 and is_equal_approx(restored.average_catch_time(), 10.75), "playtest totals restore into a session")
+	round_trip.free()
+
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(sm.save_path))
 	sm.free()
 	other.free()

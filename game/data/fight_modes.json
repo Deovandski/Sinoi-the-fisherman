@@ -56,6 +56,15 @@
 			"tuning": {"radius": 7, "slack": 4, "approach": 0.9, "perfect": 0.12, "ok": 0.25, "hold_min": 0.8, "hold_max": 1.6, "leave_limit": 0.3, "press_gain": 0.07, "hold_fill": 0.06, "release_gain": 0.07, "timing_miss": 0.12, "slip": 0.12, "stray": 0.02}
 		},
 		{
+			"id": "lost_ref",
+			"name": "Lost Ref",
+			"script": "res://scripts/fight/modes/lost_ref.gd",
+			"fingers": 1,
+			"guess": 3,
+			"hint": "Slide Guide, but the bottom box sometimes goes out. When it turns red, play in the top box. When the arrow points down, go back.",
+			"tuning": {"inner": "slide_guide", "every_min": 6.0, "every_max": 10.0, "warn": 1.2, "top_min": 4.0, "top_max": 6.0, "back": 1.0}
+		},
+		{
 			"id": "beat_notes",
 			"name": "Beat Notes",
 			"script": "res://scripts/fight/modes/beat_notes.gd",
@@ -63,15 +72,6 @@
 			"guess": 4,
 			"hint": "Tap each circle as its ring closes, in number order. Drag circles: hold and follow the ball.",
 			"tuning": {"bpm": 96, "preempt": 1.2, "radius": 10, "follow": 16, "perfect": 0.06, "good": 0.12, "ok": 0.18, "early": 0.35, "gain": 0.05, "tick": 0.01, "miss": 0.08, "break": 0.06, "offset_ms": 0, "ramp_time": 20.0}
-		},
-		{
-			"id": "flip",
-			"name": "Flip",
-			"script": "res://scripts/fight/modes/flip.gd",
-			"fingers": 1,
-			"guess": 4,
-			"hint": "Slide Guide, but the boxes swap and turn upside down. When they flip, play in the TOP box.",
-			"tuning": {"inner": "slide_guide", "every_min": 6.0, "every_max": 10.0, "warn": 1.2}
 		},
 		{
 			"id": "twin_drift",

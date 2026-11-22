@@ -19,7 +19,7 @@ An active, touch-first pixel-art fishing game set in the world of the [#HusbandO
 The current build is a pre-production shell that proves the pipeline:
 
 - a title screen with a placeholder **Cast** button that adds random catches;
-- a **fight-box playground** with nine modes to try and rank (Slide Guide, Shake, Tap Tempo, Reel Spin, Hookset, Hold Hop, Beat Notes, Flip, Twin Drift), picked from a carousel at the top. Each has an interactive pad, a shadow pad, a catch meter, a "How hard?" rating and a **Copy** button that puts your results on the clipboard to send back (see [chapter 04](docs/white-paper/04-fight-box-modes.md));
+- a **fight-box playground** with nine modes to try and rank (Slide Guide, Shake, Tap Tempo, Reel Spin, Hookset, Hold Hop, Lost Ref, Beat Notes, Twin Drift), picked from a carousel at the top. Each has an interactive pad, a shadow pad, a catch meter, a "How hard?" rating kept in the save, and a **Copy** button that puts your results on the clipboard to send back (see [chapter 04](docs/white-paper/04-fight-box-modes.md));
 - **JSON save export and import** on the web (download / file picker) and on Android (system file picker, with a clipboard fallback);
 - automatic local saving (browser storage on the web, private app storage on Android);
 - **install as an app** from the browser (a PWA): it opens straight into the game, works with no signal after the first load, and offers an in-game button when a new version is ready.

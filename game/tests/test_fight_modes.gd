@@ -18,7 +18,7 @@ func _init() -> void:
 	_test_twin_drift()
 	_test_beat_notes()
 	_test_tap_tempo()
-	_test_flip()
+	_test_lost_ref()
 	_test_shake_rub()
 	_test_reel_spin()
 	_test_flick_hookset()
@@ -41,7 +41,7 @@ func _test_catalog() -> void:
 		_check(int(e.fingers) >= 1 and int(e.fingers) <= 2, "%s uses 1 or 2 fingers" % e.id)
 		_check(int(e.guess) >= last_guess, "%s is in easy-to-hard order" % e.id)
 		last_guess = int(e.guess)
-	for id in ["slide_guide", "hold_hop", "twin_drift", "beat_notes", "tap_tempo", "flip", "shake_rub"]:
+	for id in ["slide_guide", "hold_hop", "twin_drift", "beat_notes", "tap_tempo", "lost_ref", "shake_rub"]:
 		_check(ids.has(id), "catalog has %s" % id)
 
 
@@ -187,22 +187,25 @@ func _test_tap_tempo() -> void:
 	_check(silent_total < -0.1, "tap tempo: missing beats drains it")
 
 
-func _test_flip() -> void:
-	var mode := FightCatalog.create("flip", SIDE, {"seed": 8, "every_min": 2.0, "every_max": 2.0})
-	_check(not mode.is_flipped(), "flip: starts the right way up")
-	var saw_warning := false
-	while mode.time < 2.1:
-		mode.step(DT, {})
-		saw_warning = saw_warning or mode.flip_warning() >= 0.0
-	_check(saw_warning, "flip: warns before flipping")
-	_check(mode.is_flipped(), "flip: flips after the interval")
-	while mode.time < 4.2:
-		mode.step(DT, {})
-	_check(not mode.is_flipped(), "flip: flips back")
-	var gained := 0.0
-	for f in 120:
-		gained += mode.step(DT, {0: mode.inner.target()})
-	_check(gained > 0.0, "flip: playing the inner mode still fills the meter")
+func _test_lost_ref() -> void:
+	var mode := FightCatalog.create("lost_ref", SIDE, {"seed": 8, "every_min": 2.0, "every_max": 2.0, "warn": 1.0, "top_min": 3.0, "top_max": 3.0, "back": 1.0})
+	var P := FightMode.Pads
+	_check(mode.pads() == P.NORMAL, "lost ref: starts with both boxes working")
+	var seen: Array = [mode.pads()]
+	var gained_top := 0.0
+	var cued := true
+	while mode.time < 7.5:
+		var fingers := {0: mode.inner.target()}
+		var change := mode.step(DT, fingers)
+		if mode.pads() == P.TOP_ONLY:
+			gained_top += change
+		if mode.pads() != P.NORMAL and mode.cue == "":
+			cued = false
+		if mode.pads() != seen[-1]:
+			seen.append(mode.pads())
+	_check(seen.slice(0, 5) == [P.NORMAL, P.WARN_UP, P.TOP_ONLY, P.BACK_DOWN, P.NORMAL], "lost ref: warn, top box only, back down, normal, in that order")
+	_check(gained_top > 0.0, "lost ref: playing in the top box still fills the meter")
+	_check(cued, "lost ref: every box change comes with a cue")
 
 
 func _test_shake_rub() -> void:

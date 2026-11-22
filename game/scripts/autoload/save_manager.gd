@@ -13,7 +13,7 @@ signal changed
 signal message(text: String)
 
 const FORMAT := "sinoi-save"
-const VERSION := 1
+const VERSION := 2
 const MAX_IMPORT_BYTES := 1_000_000
 
 var save_path := "user://save.json"
@@ -43,6 +43,11 @@ static func default_data() -> Dictionary:
 		"settings": {
 			"timing_forgiveness": 0,
 			"left_handed": false,
+		},
+		# Pre-production playtests: per fight-box mode, the tester's totals and
+		# "How hard?" rating (see FightSession.to_dict()).
+		"playtest": {
+			"fight_modes": {},
 		},
 	}
 
@@ -82,9 +87,9 @@ func _fail(text: String) -> Dictionary:
 ## Upgrades older saves one version at a time.
 func _migrate(save: Dictionary, from_version: int) -> Dictionary:
 	var out := save.duplicate(true)
-	# Example for later:
-	# if from_version < 2:
-	#     out["bag"] = []
+	if from_version < 2:
+		# v2 adds the fight-box playtest results.
+		out["playtest"] = {"fight_modes": {}}
 	return out
 
 

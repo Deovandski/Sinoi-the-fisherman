@@ -9,7 +9,8 @@ extends Control
 ## - the catch meter and the mode's live cue sit between them;
 ## - under the real pad, testers rate how hard a mode felt (1-5) and copy
 ##   their results to send back.
-## The Flip mode swaps the pads and turns them upside down.
+## The Lost Ref mode takes the top (reference) box away for a while: the
+## bottom box goes out and the player plays in the top box instead.
 ##
 ## Modes live in scripts/fight/modes/; this script only routes input, runs
 ## the meter (FightSession) and draws the frame around them.
@@ -38,8 +39,8 @@ var _side := 120.0
 
 var _carousel: ModeCarousel
 var _stats: Label
-var _shadow_view: Control
-var _active_view: Control
+var _top_view: Control
+var _bottom_view: Control
 var _overlay: Control
 var _feel_row: HBoxContainer
 var _feel_buttons: Array[Button] = []
@@ -48,6 +49,8 @@ var _feel_buttons: Array[Button] = []
 func _ready() -> void:
 	theme = UiTheme.build()
 	_entries = FightCatalog.entries()
+	_load_results()
+	tree_exiting.connect(_store_results)
 	_sounds = Blip.build_all()
 	for i in 4:
 		var player := AudioStreamPlayer.new()
@@ -63,8 +66,8 @@ func _ready() -> void:
 # --- UI ------------------------------------------------------------------------
 
 func _build_ui() -> void:
-	_shadow_view = _make_view(true)
-	_active_view = _make_view(false)
+	_top_view = _make_view(true)
+	_bottom_view = _make_view(false)
 
 	_carousel = ModeCarousel.new()
 	var names := PackedStringArray()
@@ -148,30 +151,25 @@ func _bottom_rect() -> Rect2:
 
 
 func _active_rect() -> Rect2:
-	return _top_rect() if _flipped() else _bottom_rect()
+	return _top_rect() if _pads() == FightMode.Pads.TOP_ONLY else _bottom_rect()
 
 
-func _shadow_rect() -> Rect2:
-	return _bottom_rect() if _flipped() else _top_rect()
-
-
-func _flipped() -> bool:
-	return _mode != null and _mode.is_flipped()
+func _pads() -> FightMode.Pads:
+	return _mode.pads() if _mode != null else FightMode.Pads.NORMAL
 
 
 func _place_views() -> void:
-	for pair in [[_shadow_view, _shadow_rect()], [_active_view, _active_rect()]]:
-		var view: Control = pair[0]
-		var rect: Rect2 = pair[1]
-		view.position = rect.position
-		view.size = rect.size
-		view.pivot_offset = rect.size / 2.0
-		view.rotation = PI if _flipped() else 0.0
+	_top_view.position = _top_rect().position
+	_top_view.size = _top_rect().size
+	_bottom_view.position = _bottom_rect().position
+	_bottom_view.size = _bottom_rect().size
 
 
 # --- Modes -----------------------------------------------------------------------
 
 func _select(index: int) -> void:
+	if _mode != null:
+		_store_results()
 	_index = index
 	var e: Dictionary = _entries[index]
 	_mode = FightCatalog.create(e.id, _side)
@@ -194,7 +192,7 @@ func _session() -> FightSession:
 func _process(delta: float) -> void:
 	if _mode == null:
 		return
-	var was_flipped := _flipped()
+	var was_active := _active_rect()
 	if _mode.uses_motion():
 		_mode.motion(_sensor.read(), _sensor.available())
 	if _intro_left > 0.0:
@@ -211,12 +209,12 @@ func _process(delta: float) -> void:
 	for sound in _mode.sounds:
 		_play(sound)
 	_mode.sounds.clear()
-	if _flipped() != was_flipped:
-		_place_views()
+	if _active_rect() != was_active:
+		_release_pad_touches()
 	_stats.text = _stats_text()
 	queue_redraw()
-	_shadow_view.queue_redraw()
-	_active_view.queue_redraw()
+	_top_view.queue_redraw()
+	_bottom_view.queue_redraw()
 	_overlay.queue_redraw()
 
 
@@ -225,11 +223,13 @@ func _apply(change: float) -> void:
 		return
 	match _session().add(change):
 		1:
-			_show_banner("Caught! %.1f s" % _session().catch_times[-1])
+			_show_banner("Caught! %.1f s" % _session().last_catch_time)
 			_play("catch")
+			_store_results()
 		-1:
 			_show_banner("It got away")
 			_play("miss")
+			_store_results()
 
 
 func _show_banner(text: String) -> void:
@@ -274,13 +274,28 @@ func _input(event: InputEvent) -> void:
 				_apply(_mode.touch(event.index, _to_pad(at), false))
 			_touches.erase(event.index)
 	elif event is InputEventScreenDrag:
-		_touches[event.index] = (make_input_local(event) as InputEventScreenDrag).position
+		var to: Vector2 = (make_input_local(event) as InputEventScreenDrag).position
+		_touches[event.index] = to
+		# A finger slid into the box being played (Lost Ref sends players
+		# between boxes) starts counting without having to lift first.
+		if not _pad_touches.has(event.index) and _intro_left <= 0.0 and _active_rect().has_point(to) \
+				and _pad_touches.size() < _mode.max_fingers():
+			_pad_touches[event.index] = true
+			_apply(_mode.touch(event.index, _to_pad(to), true))
 
 
-## Screen position -> pad space, undoing the Flip mode's half turn.
+## Screen position -> pad space of the box being played.
 func _to_pad(at: Vector2) -> Vector2:
-	var local := at - _active_rect().position
-	return Vector2(_side, _side) - local if _flipped() else local
+	return at - _active_rect().position
+
+
+## When play moves to the other box, fingers in the old box stop counting:
+## the player lifts and puts them down in the new box.
+func _release_pad_touches() -> void:
+	for index in _pad_touches.keys():
+		if _touches.has(index):
+			_apply(_mode.touch(index, _to_pad(_touches[index]), false))
+	_pad_touches.clear()
 
 
 # --- Feel ratings and results ----------------------------------------------------------
@@ -289,6 +304,27 @@ func _on_feel(n: int) -> void:
 	_session().feel = n
 	for i in _feel_buttons.size():
 		_feel_buttons[i].set_pressed_no_signal(i + 1 == n)
+	_store_results()
+
+
+## Results and ratings live in the save (playtest.fight_modes), so they add
+## up over several sessions. "Reset save" on the title screen clears them.
+func _load_results() -> void:
+	var saved: Dictionary = SaveManager.data.get("playtest", {}).get("fight_modes", {})
+	for id in saved:
+		if typeof(saved[id]) == TYPE_DICTIONARY:
+			_sessions[id] = FightSession.from_dict(saved[id])
+
+
+func _store_results() -> void:
+	if not SaveManager.data.has("playtest"):
+		return
+	var out := {}
+	for id in _sessions:
+		if _sessions[id].played():
+			out[id] = _sessions[id].to_dict()
+	SaveManager.data.playtest.fight_modes = out
+	SaveManager.save_local()
 
 
 func _copy_results() -> void:
@@ -329,27 +365,65 @@ func _draw() -> void:
 		FightMode.text(self, Vector2(size.x / 2.0, meter.end.y + 7.0), _mode.cue, Color("f3e3b3"), 8)
 
 
-func _draw_view(view: Control, shadow: bool) -> void:
+func _draw_view(view: Control, top: bool) -> void:
 	var rect := Rect2(Vector2.ZERO, view.size)
-	view.draw_rect(rect, Color("16324a") if shadow else Color("102536"))
-	if _mode != null:
-		_mode.draw_pad(view, shadow)
-	# Fingers: real dots on the real pad, ghosts on the shadow.
+	var pads := _pads()
+	var blink := int(Time.get_ticks_msec() / 150) % 2 == 0
+	view.draw_rect(rect, Color("16324a") if top else Color("102536"))
+	var out := not top and pads == FightMode.Pads.TOP_ONLY      # bottom box red, arrow up
+	var flashing := top and pads == FightMode.Pads.BACK_DOWN    # top box flashes yellow
+	if _mode != null and not out and not flashing:
+		# The top box always shows the full picture (it's the reference, or the
+		# only box during TOP_ONLY); the bottom box shows light outlines.
+		_mode.draw_pad(view, top)
+	if not out:
+		_draw_fingers(view, rect, top)
+	if out or (not top and pads == FightMode.Pads.BACK_DOWN):
+		view.draw_rect(rect, Color(0.94, 0.28, 0.44, 0.55 if out else 0.3))
+		_draw_arrow(view, rect.get_center(), -1.0 if out else 1.0)
+	if flashing:
+		view.draw_rect(rect, Color(1, 0.82, 0.4, 0.45 if blink else 0.15))
+	var border := Color("6fa3c0") if top else Color("3d6680")
+	var width := 1.0
+	if pads == FightMode.Pads.WARN_UP:
+		# Both boxes pulse before the bottom one goes out.
+		var pulse := 0.5 + 0.5 * sin(Time.get_ticks_msec() / 1000.0 * TAU * 3.0)
+		border = Color("3d6680").lerp(Color("ef476f"), pulse)
+		width = 1.0 + roundf(pulse * 2.0)
+		view.draw_rect(rect, Color(1, 1, 1, 0.08 * pulse))
+	elif out:
+		border = Color("ef476f")
+	elif flashing:
+		border = Color("ffd166")
+	view.draw_rect(rect.grow(-(width - 1.0) / 2.0), border, false, width)
+
+
+## Ghost fingers on the reference box, real dots on the box being played.
+func _draw_fingers(view: Control, rect: Rect2, top: bool) -> void:
+	var playing := (top and _pads() == FightMode.Pads.TOP_ONLY) or (not top and _pads() != FightMode.Pads.TOP_ONLY)
 	var i := 0
 	for index in _touches:
 		var counted := _pad_touches.has(index)
-		if shadow and not counted:
+		if not playing and not counted:
 			continue
 		var color: Color = FINGER_COLORS[mini(i, FINGER_COLORS.size() - 1)] if counted else Color(1, 1, 1, 0.35)
-		var at := _to_pad(_touches[index])
+		var at: Vector2 = _to_pad(_touches[index]) if counted or not playing else _touches[index] - view.position
 		if rect.grow(6.0).has_point(at):
-			view.draw_circle(at, 4.0 if shadow else 5.0, Color(color, 0.8) if shadow else color)
+			view.draw_circle(at, 5.0 if playing else 4.0, color if playing else Color(color, 0.8))
 		if counted:
 			i += 1
-	var border := Color("6fa3c0") if shadow else Color("3d6680")
-	if _mode != null and _mode.flip_warning() >= 0.0 and int(Time.get_ticks_msec() / 150) % 2 == 0:
-		border = Color("ef476f")
-	view.draw_rect(rect, border, false, 1.0)
+
+
+## A big arrow telling the player which box to move to (dir -1 up, 1 down).
+func _draw_arrow(view: Control, at: Vector2, dir: float) -> void:
+	var s := _side * 0.16
+	var bob := sin(Time.get_ticks_msec() / 1000.0 * TAU * 2.0) * 3.0 * dir
+	var tip := at + Vector2(0, dir * s * 1.1 + bob)
+	var base_y := tip.y - dir * s
+	var color := Color("eef6fa")
+	view.draw_colored_polygon(PackedVector2Array([tip, Vector2(at.x - s, base_y), Vector2(at.x + s, base_y)]), color)
+	var tail_y := base_y - dir * s * 1.2
+	view.draw_rect(Rect2(at.x - s * 0.25, minf(base_y, tail_y), s * 0.5, absf(tail_y - base_y)), color)
 
 
 func _draw_overlay() -> void:

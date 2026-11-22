@@ -37,14 +37,16 @@ Status: **Kept** (in the design), **Cut** (rejected), **Testing** (prototype exi
 | 2026-11-08 | Installable web app (PWA) with offline play | Deo (issue #4) | Kept | Play the browser build like an app, even with no signal | [BUILDING](../BUILDING.md) |
 | 2026-11-21 | Carousel of fight-box modes on the touch test | Deo (issue #1) | Kept | Try many modes side by side and rank them from easy to hard | [04](04-fight-box-modes.md) |
 | 2026-11-21 | Slide Guide (the first touch-test prototype) | Deo | Testing | Baseline the other modes are compared against | [04](04-fight-box-modes.md) |
-| 2026-11-21 | Hold Hop (press, hold, lift, hop; timing punished more than aim) | Deo | Testing | Ranking pending playtests | [04](04-fight-box-modes.md) |
+| 2026-11-21 | Hold Hop (press, hold, lift, hop; timing punished more than aim) | Deo | Testing | Ranking pending playtests. Claude added a closing ring to time the press; Deo will check it in playtests (2026-11-22) | [04](04-fight-box-modes.md) |
 | 2026-11-21 | Twin Drift (index + middle each keep a moving square, varying speed) | Deo | Testing | Ranking pending playtests | [04](04-fight-box-modes.md) |
 | 2026-11-21 | Beat Notes (osu! / Project Diva rhythm, notes shown ahead) | Deo | Testing | Ranking pending playtests | [04](04-fight-box-modes.md) |
-| 2026-11-21 | Tap Tempo (faster, slower, rhythm; position doesn't matter) | Deo | Testing | Ranking pending playtests | [04](04-fight-box-modes.md) |
-| 2026-11-21 | Flip (boxes swap and turn upside down; play in the top box) | Deo | Testing | Claude's reading of "the screen inverts" needs confirming | [04](04-fight-box-modes.md) |
+| 2026-11-21 | Tap Tempo (faster, slower, rhythm; position doesn't matter) | Deo | Testing | Ranking pending playtests. Rhythm as call and response (the fish taps a bar, you repeat it): confirmed by Deo (2026-11-22) | [04](04-fight-box-modes.md) |
+| 2026-11-21 | Flip, as Claude read it (boxes swap and turn upside down every few seconds) | Deo, Claude | Replaced | Not what Deo meant: "less of a flip, more 'you lost the ref box'". Replaced by Lost Ref | [04](04-fight-box-modes.md) |
+| 2026-11-22 | Lost Ref (boxes pulse, bottom box goes out red with an arrow up, play in the top box only; then the top flashes yellow, arrow down, a second in the bottom box with no reference, then normal) | Deo | Testing | The challenge Deo wants is losing the reference box, so the player has no second box to read | [04](04-fight-box-modes.md) |
 | 2026-11-21 | Shake the phone, rub fallback without a sensor | Deo | Testing | Ranking pending playtests | [04](04-fight-box-modes.md) |
 | 2026-11-21 | Reel Spin (circle to reel, ease off on runs) | Claude | Testing | The "spin" from the mechanic vocabulary; a reel is the most fishing-like gesture | [04](04-fight-box-modes.md) |
 | 2026-11-21 | Hookset (flick on the ring the way the arrow points; X = don't) | Claude | Testing | The "flick" from the mechanic vocabulary, as the bite; tests the Sanbi decoy idea | [04](04-fight-box-modes.md) |
 | 2026-11-21 | Tilt steering as a main input | Claude | Cut | Research found touch performs best and tilt only comes close; motion stays a side flavour (Shake) | [04](04-fight-box-modes.md) |
-| 2026-11-21 | Save the testers' "How hard?" ratings | Claude | Open | Not saved for now (it would change the save format); Copy covers it. Deo to decide if it's needed | [04](04-fight-box-modes.md) |
+| 2026-11-21 | Save the testers' "How hard?" ratings | Claude | Kept | Deo said go ahead (2026-11-22): ratings and results now add up over sessions (save format v2) | [04](04-fight-box-modes.md), [SAVE_FORMAT](../SAVE_FORMAT.md) |
+| 2026-11-22 | Save format policy: change freely until alpha, prepare to lock it for 1.0 heading into beta | Deo | Kept | No players' progress to protect before alpha *(inferred)*; 1.0 players need saves that keep working | [SAVE_FORMAT](../SAVE_FORMAT.md) |
 | 2026-11-21 | Fights as sequences of mode segments; tackle edits the tuning numbers | Claude | Open | Proposal; depends on which modes survive playtests | [04](04-fight-box-modes.md) |

@@ -1,8 +1,8 @@
 class_name FightSession
 extends RefCounted
 ## The catch meter and the running stats for one mode in the touch test.
-## Stats live only for the session (nothing is saved), so testers copy them
-## with the "Copy" button.
+## Totals and the tester's rating are kept in the save file (playtest
+## section, save format v2) so they add up over several sessions.
 
 const START := 0.25
 
@@ -13,8 +13,27 @@ var good := 0.0
 var judged := 0.0
 ## How hard the tester said it felt, 1..5 (0 = not rated yet).
 var feel := 0
-var catch_times: Array[float] = []
+## Total seconds spent on caught fish, and the last catch's time.
+var catch_seconds := 0.0
+var last_catch_time := 0.0
 var _since := 0.0
+
+
+static func from_dict(d: Dictionary) -> FightSession:
+	var s := FightSession.new()
+	s.feel = clampi(int(d.get("feel", 0)), 0, 5)
+	s.catches = maxi(int(d.get("catches", 0)), 0)
+	s.escapes = maxi(int(d.get("escapes", 0)), 0)
+	s.catch_seconds = maxf(float(d.get("catch_seconds", 0.0)), 0.0)
+	s.good = maxf(float(d.get("good", 0.0)), 0.0)
+	s.judged = maxf(float(d.get("judged", 0.0)), 0.0)
+	return s
+
+
+## What goes into the save (see docs/SAVE_FORMAT.md, playtest.fight_modes).
+func to_dict() -> Dictionary:
+	return {"feel": feel, "catches": catches, "escapes": escapes,
+		"catch_seconds": snappedf(catch_seconds, 0.01), "good": snappedf(good, 0.001), "judged": snappedf(judged, 0.001)}
 
 
 func tick(delta: float) -> void:
@@ -26,7 +45,8 @@ func add(change: float) -> int:
 	progress += change
 	if progress >= 1.0:
 		catches += 1
-		catch_times.append(_since)
+		last_catch_time = _since
+		catch_seconds += _since
 		_restart()
 		return 1
 	if progress <= 0.0:
@@ -46,12 +66,7 @@ func accuracy() -> float:
 
 
 func average_catch_time() -> float:
-	if catch_times.is_empty():
-		return 0.0
-	var total := 0.0
-	for t in catch_times:
-		total += t
-	return total / catch_times.size()
+	return catch_seconds / catches if catches > 0 else 0.0
 
 
 func played() -> bool:

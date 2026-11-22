@@ -4,12 +4,20 @@ extends RefCounted
 ## the catch meter and the stats; a mode only judges input and draws.
 ##
 ## Coordinates are pad space: (0, 0) is the pad's top-left corner and both
-## axes run to `side`. The host converts touches into pad space (and handles
-## the Flip mode's 180-degree turn), so modes never see screen positions.
+## axes run to `side`. The host converts touches into pad space (from
+## whichever box is the playing one), so modes never see screen positions.
 ##
 ## Meter changes are fractions of the catch meter: it starts at 0.25, the
 ## fish is caught at 1.0 and gets away at 0. Tuning numbers come from
 ## data/fight_modes.json so they can be balanced without touching code.
+
+## Which box is live. Only the Lost Ref mode changes it.
+## NORMAL: play in the bottom box, read the top one. WARN_UP: both boxes
+## pulse, the bottom is about to go out. TOP_ONLY: the bottom box is out
+## (red, arrow up); play in the top box, the only one left. BACK_DOWN: for a
+## second the top box flashes yellow and the bottom (still red, arrow down)
+## is live again; then the top box returns as the reference.
+enum Pads { NORMAL, WARN_UP, TOP_ONLY, BACK_DOWN }
 
 const GOLD := Color("ffd166")
 const GREEN := Color("06d6a0")
@@ -57,14 +65,9 @@ func uses_motion() -> bool:
 	return false
 
 
-## True while the boxes are flipped (only the Flip mode).
-func is_flipped() -> bool:
-	return false
-
-
-## Seconds until the next flip, or -1 when no flip is coming soon.
-func flip_warning() -> float:
-	return -1.0
+## Which box is live right now (see Pads).
+func pads() -> Pads:
+	return Pads.NORMAL
 
 
 func _start() -> void:

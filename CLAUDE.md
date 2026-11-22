@@ -15,7 +15,7 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 - **Never commit secrets:** keystores, `export_credentials.cfg`, passwords, service-account JSON, `.env`. CI builds debug APKs only.
 - **Touch first:** every interaction must work with touch; the fight box uses at most 2 fingers (index + middle of one hand) and must also work one-handed at the start. Mouse emulates one finger for testing.
 - **Pixel rules:** base resolution 180 x 320 portrait, `canvas_items` stretch, integer scale, aspect `expand`, Nearest filtering. Draw at 1x.
-- **Saves:** any change to save data bumps `SaveManager.VERSION`, adds a `_migrate()` step, updates `docs/SAVE_FORMAT.md` and the tests.
+- **Saves:** any change to save data bumps `SaveManager.VERSION`, adds a `_migrate()` step, updates `docs/SAVE_FORMAT.md` and the tests. Until alpha the format can change freely; heading into beta we prepare to lock it for 1.0 (policy in `docs/SAVE_FORMAT.md`).
 - **Fish names:** real fish, translated into two languages, chopped and joined (tuna: *maguro* + *atum* = Magatum). Canon fish (Sanbi, Fihi, Ptaina, True Sanbi King) keep their names.
 - **Never remove, rename or edit `site/google0c08003a2b869d98.html`:** it's the Google Search Console verification file. Google re-checks it, and removing it un-verifies the site.
 - Keep the support text and Amazon link (`https://www.amazon.com/dp/B0BT5XM4QC`) wherever the credits appear.
