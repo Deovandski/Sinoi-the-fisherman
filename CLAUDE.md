@@ -20,9 +20,21 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 - **Never remove, rename or edit `site/google0c08003a2b869d98.html`:** it's the Google Search Console verification file. Google re-checks it, and removing it un-verifies the site.
 - Keep the support text and Amazon link (`https://www.amazon.com/dp/B0BT5XM4QC`) wherever the credits appear.
 
+## One source
+
+Anything shown in two places (the same text, widget or game on two pages, or in the game and on the website) comes from one source, never a pasted copy. If a copy really has to stay, say why in the PR and get Deo's OK.
+- Credits, support text, links and the one-line description: `game/data/credits.json`. The game reads it; `tools/web_postexport.py` uses it for the play page; `tools/sync_site.py` writes the landing page's support block.
+- Website footer: `tools/site_parts/footer.html`, written into every page by `tools/sync_site.py`. Edit pieces between `<!-- one-source:NAME -->` markers only through their source, then run `python3 tools/sync_site.py` (CI runs `--check`).
+- Fish, modes and currency: `game/data/*.json`. `site/llms-full.txt` is generated from the pages. `site/llms.txt` and `site/sitemap.xml` stay hand-written and change with the pages.
+- One copy of the game: the website's `/play/` is the only web build.
+
+## Fresh after every deploy
+
+The game's offline worker is network first (`tools/web_postexport.py`): pages and game files come from the network with `cache: 'no-cache'`, and the saved copy is used only offline. Keep it that way. A file may be served saved-copy-first only if its name changes with every build. After touching the worker or the export, run `python3 tools/check_fresh_deploy.py site` (CI runs it too).
+
 ## Nudge the lore, don't dump it
 
-In-game lore (journal teasers, notices, descriptions) should make curious players want more, then point them to the series' website (`lore_link` in `game/data/fish.json`, https://husbandoutworld.com/).
+In-game lore (journal teasers, notices, descriptions) should make curious players want more, then point them to the series' website (`links.series` in `game/data/credits.json`, https://husbandoutworld.com/).
 - Keep it to a line or two: a hook, a name, a hint. Never a summary of the story.
 - Facts come from the series and the World Lore (`Deovandski/HusbandOutWorld`, `Deovandski/Vraki-West-March-Campaign-D-D`); the series wins. New fish get flavour tied to canon places, not new canon.
 - No spoilers from unreleased story notes. When unsure whether something may be revealed, ask Deo.
@@ -54,6 +66,8 @@ godot --headless --path game -s res://tests/test_fight_modes.gd
 godot --headless --path game -s res://tests/test_fish_fights.gd
 mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play
 python3 tools/build_llms_full.py site                                   # after the export
+python3 tools/check_fresh_deploy.py site                                # fake deploy: fresh page/script, offline (needs playwright + Chrome)
+python3 tools/sync_site.py                                              # after editing credits.json or tools/site_parts/
 ```
 
 CI: `.github/workflows/pages.yml` (tests + web export as an installable PWA + Pages), `.github/workflows/android.yml` (debug APK artifact).

@@ -1,0 +1,11 @@
+{
+	"_about": "One source for the credits and the game's one-line description. Read by the game (title screen, journal links), by tools/web_postexport.py (play page meta description, manifest, <noscript>) and by tools/sync_site.py (the support block on the landing page). Edit here, then run python3 tools/sync_site.py. See CLAUDE.md, 'One source'.",
+	"name": "Sinoi the Fisherman",
+	"tagline": "An active, touch-first pixel-art fishing game set in the world of #HusbandOutWorld.",
+	"support_text": "Brought to you by Deovandski, author of the #HusbandOutWorld series and CEO/Founder of Wizard Deo Solutions. Have fun! If you want to support me, buy the eBooks on Amazon, or host a West March D&D campaign using the World Lore.",
+	"links": {
+		"amazon": "https://www.amazon.com/dp/B0BT5XM4QC",
+		"world_lore": "https://github.com/Deovandski/Vraki-West-March-Campaign-D-D",
+		"series": "https://husbandoutworld.com/"
+	}
+}

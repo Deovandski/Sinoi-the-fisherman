@@ -35,16 +35,24 @@ cd site && python3 -m http.server 8000                             # open http:/
 - `tools/web_postexport.py` must run after every export. It:
   - adds the short name, id, scope, description and theme color to the manifest;
   - writes `site/manifest.webmanifest`, the same app seen from the landing page, so *Install* works on `/` as well as `/play/`. Both share the id `/Sinoi-the-fisherman/` and the whole site as scope, so either page installs the same app, which opens into the game. **Never change the id**: a new id makes installed players' app a different app;
-  - patches the service worker so that one online visit caches the whole game (engine and data included) and the `/play/` folder URL works offline.
-- **Updates:** every export gets a new cache version. The game checks for a new version 5 and 30 seconds after launch, whenever it returns to the foreground, and every 10 minutes. When one has downloaded, the title screen shows *New version ready: tap to update*, which saves and reloads into the new build. Nothing progresses while the app is closed; only the files are cached.
+  - makes the service worker **network first** (issue #18): the page and every game file are fetched with `cache: 'no-cache'` (a cheap "not modified" when nothing changed), and the saved copy is used only offline (or, for the page, after 4 seconds). One online visit still caches the whole game, and the `/play/` folder URL works offline;
+  - loads `index.js` as `index.js?v=<CACHE_VERSION>`, so a new page never runs the browser's in-memory copy of an old script;
+  - takes the play page's meta description, the manifest description and the `<noscript>` text from `game/data/credits.json`.
+- **Updates:** every export gets a new `CACHE_VERSION` (Godot stamps the time). The first visit after a deploy runs the new game, because pages and game files come from the network first. The new worker takes over at once and drops the old saved copies. Nothing progresses while the app is closed; only the files are cached. (Workers installed before issue #18 were cache first: on those, the title screen's *New version ready: tap to update* button appears once, then never again.)
+- **Fake-deploy check:** `python3 tools/check_fresh_deploy.py site` (after the export) serves the site like GitHub Pages, installs the worker in headless Chrome, changes the page, the script and the worker, and checks the first visit picks them up, the saved copies update, offline still works and the landing page isn't controlled by the game's worker. CI runs it on every build; it needs `pip install playwright` and Chrome.
+- The worker's scope is `play/` only: the landing page and `privacy.html` are plain pages. GitHub Pages lets browsers keep any page for up to 10 minutes, which we can't change.
 - `site/play/` and `site/manifest.webmanifest` are generated (by CI or locally) and ignored by git.
 - The engine download is about 10 MB gzipped; the first load can take a few seconds on phones.
+
+### Shared pieces (one source)
+
+- The landing page's support block and every page's footer are rebuilt from one source by `python3 tools/sync_site.py`: the support text and links from `game/data/credits.json` (the same file the game's title screen reads), the footer from `tools/site_parts/footer.html`. The pieces sit between `<!-- one-source:NAME -->` markers; don't edit them in the page. CI fails if they're out of date (`--check`).
 
 ### Pages for AI readers and search engines
 
 - `site/llms.txt` (an index in the [llms.txt](https://llmstxt.org/) format) and `site/sitemap.xml` are **hand-written**. Update both when a page is added to `site/` or a doc moves.
 - `site/llms-full.txt` is **generated** at deploy time by `tools/build_llms_full.py` from the pages listed in its `PAGES` list (text only: no navigation, scripts or photo viewer). Add new pages to that list. Locally: `python3 tools/build_llms_full.py site` after the web export.
-- Every page's head carries `<link rel="canonical">`, `<link rel="alternate" type="text/markdown" href="llms.txt">` and the sitemap link; the Play page gets them from the Web preset's `html/head_include`, and `tools/web_postexport.py` replaces Godot's bare `<noscript>` line with a description and a link home.
+- Every page's head carries `<link rel="canonical">`, `<link rel="alternate" type="text/markdown" href="llms.txt">` and the sitemap link; the Play page gets them from the Web preset's `html/head_include`, and `tools/web_postexport.py` adds its meta description and replaces Godot's bare `<noscript>` line with a description and a link home.
 - A project site's own `robots.txt` is ignored (crawlers only read the domain root), so the sitemap has to be submitted by hand: Bing Webmaster Tools and Google Search Console.
 
 ### Testing the PWA

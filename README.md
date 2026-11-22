@@ -41,7 +41,8 @@ docs/
   art/                illustrator brief: sprite sizes, animation, Godot export rules
   BUILDING.md         how to build, test and sign the web and Android versions
   SAVE_FORMAT.md      the JSON save format
-tools/                web_postexport.py: finishes the PWA export (manifest, offline cache)
+tools/                web_postexport.py: finishes the PWA export (manifest, network-first offline worker);
+                      check_fresh_deploy.py: fake-deploy test; sync_site.py: shared site pieces from one source
 .github/workflows/    web build + Pages deploy, Android debug APK
 ```
 
