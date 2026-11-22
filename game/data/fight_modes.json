@@ -1,0 +1,86 @@
+{
+	"_about": "Fight-box modes for the touch test, in predicted order from easiest to hardest. 'guess' is the predicted difficulty (1 easy .. 5 hard) until playtests rank them. 'tuning' numbers are read by the mode script; meter changes are fractions of the catch meter (start 0.25, catch at 1.0, escape at 0). See docs/white-paper/04-fight-box-modes.md.",
+	"modes": [
+		{
+			"id": "slide_guide",
+			"name": "Slide Guide",
+			"script": "res://scripts/fight/modes/slide_guide.gd",
+			"fingers": 1,
+			"guess": 1,
+			"hint": "Keep your finger on the moving ring. Watch the top box, play in the bottom one.",
+			"tuning": {"radius": 12, "speed": 1.0, "speed_wobble": 0.35, "fill": 0.12, "drain": 0.1}
+		},
+		{
+			"id": "shake_rub",
+			"name": "Shake",
+			"script": "res://scripts/fight/modes/shake_rub.gd",
+			"fingers": 1,
+			"guess": 1,
+			"hint": "Shake the phone on SHAKE, hold still on STILL. No motion sensor? Rub the bottom box back and forth instead.",
+			"tuning": {"shake_threshold": 7.0, "rub_speed": 200, "fill": 0.13, "still_fill": 0.05, "drain": 0.05, "too_much": 0.25, "shake_min": 2.0, "shake_max": 3.5, "still_min": 1.2, "still_max": 2.2}
+		},
+		{
+			"id": "tap_tempo",
+			"name": "Tap Tempo",
+			"script": "res://scripts/fight/modes/tap_tempo.gd",
+			"fingers": 2,
+			"guess": 2,
+			"hint": "Tap anywhere in the bottom box. Follow the cue: steady beat, faster, slower, or the rhythm shown.",
+			"tuning": {"bpm": 116, "phase_time": 6.0, "fast_rate": 6.0, "slow_low": 1.4, "slow_high": 2.6, "perfect": 0.07, "good": 0.14, "hit": 0.035, "miss": 0.03, "rate_fill": 0.1, "rate_drain": 0.06}
+		},
+		{
+			"id": "reel_spin",
+			"name": "Reel Spin",
+			"script": "res://scripts/fight/modes/reel_spin.gd",
+			"fingers": 1,
+			"guess": 2,
+			"hint": "Circle your finger clockwise to reel. When the fish runs, ease off or the line snaps.",
+			"tuning": {"band_low": 0.8, "band_high": 2.2, "run_max": 0.35, "fill": 0.09, "drain": 0.04, "tension_up": 1.2, "tension_down": 0.6, "snap": 0.25, "reel_min": 3.0, "reel_max": 5.0, "run_min": 1.5, "run_max_time": 2.5}
+		},
+		{
+			"id": "flick_hookset",
+			"name": "Hookset",
+			"script": "res://scripts/fight/modes/flick_hookset.gd",
+			"fingers": 1,
+			"guess": 3,
+			"hint": "When the ring closes, flick the way the arrow points. On an X, don't flick.",
+			"tuning": {"lead_start": 1.0, "lead_end": 0.6, "ramp_time": 40.0, "perfect": 0.1, "good": 0.22, "late": 0.38, "gain": 0.1, "miss": 0.1, "min_dist": 16, "min_speed": 160, "decoy_chance": 0.2, "decoy_after": 12.0}
+		},
+		{
+			"id": "hold_hop",
+			"name": "Hold Hop",
+			"script": "res://scripts/fight/modes/hold_hop.gd",
+			"fingers": 1,
+			"guess": 3,
+			"hint": "Press the small spot when the ring closes, hold until it fills, lift on LIFT. Timing costs more than aim.",
+			"tuning": {"radius": 7, "slack": 4, "approach": 0.9, "perfect": 0.12, "ok": 0.25, "hold_min": 0.8, "hold_max": 1.6, "leave_limit": 0.3, "press_gain": 0.07, "hold_fill": 0.06, "release_gain": 0.07, "timing_miss": 0.12, "slip": 0.12, "stray": 0.02}
+		},
+		{
+			"id": "beat_notes",
+			"name": "Beat Notes",
+			"script": "res://scripts/fight/modes/beat_notes.gd",
+			"fingers": 2,
+			"guess": 4,
+			"hint": "Tap each circle as its ring closes, in number order. Drag circles: hold and follow the ball.",
+			"tuning": {"bpm": 96, "preempt": 1.2, "radius": 10, "follow": 16, "perfect": 0.06, "good": 0.12, "ok": 0.18, "early": 0.35, "gain": 0.05, "tick": 0.01, "miss": 0.08, "break": 0.06, "offset_ms": 0, "ramp_time": 20.0}
+		},
+		{
+			"id": "flip",
+			"name": "Flip",
+			"script": "res://scripts/fight/modes/flip.gd",
+			"fingers": 1,
+			"guess": 4,
+			"hint": "Slide Guide, but the boxes swap and turn upside down. When they flip, play in the TOP box.",
+			"tuning": {"inner": "slide_guide", "every_min": 6.0, "every_max": 10.0, "warn": 1.2}
+		},
+		{
+			"id": "twin_drift",
+			"name": "Twin Drift",
+			"script": "res://scripts/fight/modes/twin_drift.gd",
+			"fingers": 2,
+			"guess": 5,
+			"hint": "Index and middle finger: keep one on each square. They drift at different speeds.",
+			"tuning": {"half": 10, "speed": 1.0, "max_dy": 30, "min_gap": 28, "fill": 0.1, "one_drain": 0.03, "drain": 0.1}
+		}
+	]
+}

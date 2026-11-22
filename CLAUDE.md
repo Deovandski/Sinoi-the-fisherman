@@ -20,6 +20,13 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 - **Never remove, rename or edit `site/google0c08003a2b869d98.html`:** it's the Google Search Console verification file. Google re-checks it, and removing it un-verifies the site.
 - Keep the support text and Amazon link (`https://www.amazon.com/dp/B0BT5XM4QC`) wherever the credits appear.
 
+## Keep the white paper's record of ideas
+
+During the research phase, every idea gets recorded, including the ones that don't make the cut.
+- Add a row to `docs/white-paper/05-ideas-log.md` whenever an idea is proposed, kept, cut, replaced or changed: date, idea, who raised it, status, **why**, and where it's described.
+- Record the reason, not just the result. If you worked the reason out yourself, mark it *(inferred)*. If you can't infer why, write **Why: ask Deo** and ask Deovandski, then fill in his answer.
+- Keep the chapters in step: a decision belongs in its chapter, and a prototype's results go back into the chapter that describes it.
+
 ## Website pictures are clickable
 
 On the website (`site/`, not the game), every picture opens bigger when pressed, in the one photo viewer (`site/photo-viewer.js`, `site/photo-viewer.css`, and the `<dialog id="photo-viewer">` in `site/index.html`). It's the same standard as Deovandski/Deovandski, Deovandski-repo-template, HusbandOutWorld and Vraki-West-March-Campaign-D-D.
@@ -36,6 +43,7 @@ A new page in `site/` also needs: an entry in `site/sitemap.xml` and `site/llms.
 ```
 godot --headless --path game --import                                   # first run / after adding assets
 godot --headless --path game -s res://tests/test_save_manager.gd        # tests (must pass)
+godot --headless --path game -s res://tests/test_fight_modes.gd
 mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play
 python3 tools/build_llms_full.py site                                   # after the export
 ```

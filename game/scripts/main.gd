@@ -78,7 +78,7 @@ func _build() -> void:
 	column.add_child(_stats)
 
 	column.add_child(_button("Cast (placeholder)", _on_cast))
-	column.add_child(_button("Touch test: fight box", _on_touch_test))
+	column.add_child(_button("Fight box: try the modes", _on_touch_test))
 	column.add_child(_row([
 		_button("Export save", SaveManager.export_save),
 		_button("Import save", SaveManager.import_save),

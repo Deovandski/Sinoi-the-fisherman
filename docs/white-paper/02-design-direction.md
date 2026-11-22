@@ -39,6 +39,8 @@ Recorded November 8, 2026 from Deovandski. Items marked **decided** are settled;
 
 ### Mechanic vocabulary (proposal)
 
+Prototypes of these, plus the modes from issue #1, are in [chapter 04](04-fight-box-modes.md).
+
 | Mechanic | Input | Fishing meaning |
 | --- | --- | --- |
 | Trace | Keep a finger on a moving marker along a path | Following the fish as it swims |

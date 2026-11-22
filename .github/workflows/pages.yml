@@ -58,7 +58,9 @@ jobs:
         run: ~/godot/godot --headless --path game --import
 
       - name: Run tests
-        run: ~/godot/godot --headless --path game -s res://tests/test_save_manager.gd
+        run: |
+          ~/godot/godot --headless --path game -s res://tests/test_save_manager.gd
+          ~/godot/godot --headless --path game -s res://tests/test_fight_modes.gd
 
       - name: Export web build (installable PWA at /play/)
         run: |
