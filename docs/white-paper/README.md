@@ -7,6 +7,8 @@ This folder is the foundation the game is built on. Deovandski Skibinski Junior 
 | [01 — Research analysis](01-research-analysis.md): market, lore, Claude's capabilities, tech stack, tools, publishing | Research, Nov 7, 2026 |
 | [02 — Design direction](02-design-direction.md): active play, the fight box, bait and tackle | Decisions, Nov 8, 2026 |
 | [03 — Plan and roles](03-plan-and-roles.md): timeline, who does what, art pipeline, playtesting | Plan, Nov 8, 2026 |
+| [04 — Fight-box modes](04-fight-box-modes.md): research on similar games, nine prototype modes, predicted ranking, how to playtest | Prototypes, Nov 21, 2026 |
+| [05 — Ideas log](05-ideas-log.md): every idea so far, kept or cut, and why | Kept up to date |
 
 Related: [illustrator brief](../art/illustrator-brief.md), [building](../BUILDING.md), [save format](../SAVE_FORMAT.md).
 

@@ -1,0 +1,77 @@
+{
+	"_about": "Fight-box modes for the touch test. Every mode can be played easy or hard: a tuning value written as [easy, hard] is blended by the difficulty (0 = easiest, 1 = hardest; the touch test's slider shows it as 0-10, default 5). A plain number stays the same at every difficulty. Later each fish will set its own difficulty per mode. Meter changes are fractions of the catch meter (start 0.25, catch at 1.0, escape at 0). See docs/white-paper/04-fight-box-modes.md.",
+	"modes": [
+		{
+			"id": "slide_guide",
+			"name": "Slide Guide",
+			"script": "res://scripts/fight/modes/slide_guide.gd",
+			"fingers": 1,
+			"hint": "Keep your finger on the moving ring. Watch the top box, play in the bottom one.",
+			"tuning": {"radius": [16, 9], "speed": [0.7, 1.4], "speed_wobble": [0.25, 0.45], "fill": [0.15, 0.1], "drain": [0.06, 0.14]}
+		},
+		{
+			"id": "shake_rub",
+			"name": "Shake",
+			"script": "res://scripts/fight/modes/shake_rub.gd",
+			"fingers": 1,
+			"hint": "Shake the phone on SHAKE, hold still on STILL. No motion sensor? Rub the bottom box back and forth instead.",
+			"tuning": {"shake_threshold": [5.0, 9.0], "rub_speed": [150, 260], "fill": [0.16, 0.11], "still_fill": 0.05, "drain": [0.03, 0.07], "too_much": [0.15, 0.35], "shake_min": 2.0, "shake_max": 3.5, "still_min": [1.0, 1.4], "still_max": [1.8, 2.6]}
+		},
+		{
+			"id": "tap_tempo",
+			"name": "Tap Tempo",
+			"script": "res://scripts/fight/modes/tap_tempo.gd",
+			"fingers": 2,
+			"hint": "Tap anywhere in the bottom box. Follow the cue: steady beat, faster, slower, or the rhythm shown.",
+			"tuning": {"bpm": [96, 136], "phase_time": 6.0, "fast_rate": [4.5, 7.5], "slow_low": [1.2, 1.6], "slow_high": [3.0, 2.3], "perfect": [0.09, 0.05], "good": [0.18, 0.11], "hit": 0.035, "miss": [0.02, 0.04], "rate_fill": 0.1, "rate_drain": [0.04, 0.08]}
+		},
+		{
+			"id": "reel_spin",
+			"name": "Reel Spin",
+			"script": "res://scripts/fight/modes/reel_spin.gd",
+			"fingers": 1,
+			"hint": "Circle your finger clockwise to reel. When the fish runs, ease off or the line snaps.",
+			"tuning": {"band_low": [0.6, 1.0], "band_high": [2.6, 1.9], "run_max": [0.5, 0.25], "fill": 0.09, "drain": [0.03, 0.05], "tension_up": [0.8, 1.6], "tension_down": [0.8, 0.5], "snap": [0.18, 0.3], "reel_min": 3.0, "reel_max": 5.0, "run_min": [1.2, 1.8], "run_max_time": [2.0, 3.0]}
+		},
+		{
+			"id": "flick_hookset",
+			"name": "Hookset",
+			"script": "res://scripts/fight/modes/flick_hookset.gd",
+			"fingers": 1,
+			"hint": "When the ring closes, flick the way the arrow points. On an X, don't flick.",
+			"tuning": {"lead_start": [1.2, 0.85], "lead_end": [0.8, 0.45], "ramp_time": 40.0, "perfect": [0.13, 0.08], "good": [0.28, 0.18], "late": [0.45, 0.3], "gain": 0.1, "miss": [0.07, 0.12], "min_dist": 16, "min_speed": [130, 190], "decoy_chance": [0.1, 0.3], "decoy_after": [20.0, 8.0]}
+		},
+		{
+			"id": "hold_hop",
+			"name": "Hold Hop",
+			"script": "res://scripts/fight/modes/hold_hop.gd",
+			"fingers": 1,
+			"hint": "Press the small spot when the ring closes, hold until it fills, lift on LIFT. Timing costs more than aim.",
+			"tuning": {"radius": [9, 6], "slack": [5, 3], "approach": [1.1, 0.7], "perfect": [0.15, 0.09], "ok": [0.3, 0.2], "hold_min": 0.8, "hold_max": 1.6, "leave_limit": [0.45, 0.2], "press_gain": 0.07, "hold_fill": 0.06, "release_gain": 0.07, "timing_miss": [0.08, 0.15], "slip": [0.08, 0.15], "stray": 0.02}
+		},
+		{
+			"id": "lost_ref",
+			"name": "Lost Ref",
+			"script": "res://scripts/fight/modes/lost_ref.gd",
+			"fingers": 1,
+			"hint": "Slide Guide, but the bottom box sometimes goes out. When it turns red, play in the top box. When the arrow points down, go back.",
+			"tuning": {"inner": "slide_guide", "every_min": [8.0, 4.0], "every_max": [12.0, 7.0], "warn": [1.6, 0.9], "top_min": [3.0, 6.0], "top_max": [4.0, 8.0], "back": [1.4, 0.7]}
+		},
+		{
+			"id": "beat_notes",
+			"name": "Beat Notes",
+			"script": "res://scripts/fight/modes/beat_notes.gd",
+			"fingers": 2,
+			"hint": "Tap each circle as its ring closes, in number order. Drag circles: hold and follow the ball.",
+			"tuning": {"bpm": [80, 120], "preempt": [1.5, 0.8], "radius": [12, 8], "follow": [19, 13], "perfect": [0.08, 0.05], "good": [0.15, 0.1], "ok": [0.22, 0.15], "early": 0.35, "gain": 0.05, "tick": 0.01, "miss": [0.06, 0.1], "break": 0.06, "offset_ms": 0, "ramp_time": [30.0, 12.0]}
+		},
+		{
+			"id": "twin_drift",
+			"name": "Twin Drift",
+			"script": "res://scripts/fight/modes/twin_drift.gd",
+			"fingers": 2,
+			"hint": "Index and middle finger: keep one on each square. They drift at different speeds.",
+			"tuning": {"half": [12, 8], "speed": [0.7, 1.4], "max_dy": [20, 34], "min_gap": 28, "fill": [0.12, 0.09], "one_drain": [0.02, 0.05], "drain": [0.07, 0.13]}
+		}
+	]
+}

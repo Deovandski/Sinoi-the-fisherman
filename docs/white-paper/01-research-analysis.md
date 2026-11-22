@@ -133,7 +133,7 @@ Phone setup: Settings > About phone > tap Build number 7 times; Developer option
 | 7 | Art pipeline | **Decided:** AI placeholders, final art by the illustrator drawn over them (chapter 03) |
 | 8 | Music | Open |
 | 9 | Placeholder travel fares | Proposed: circles x 5 pearls, in one data table |
-| 10 | Saves | **Decided:** local saves with JSON export/import (see [SAVE_FORMAT.md](../SAVE_FORMAT.md)) |
+| 10 | Saves | **Decided:** local saves with JSON export/import (see [SAVE_FORMAT.md](../SAVE_FORMAT.md)). The format may change freely until alpha, and is locked for 1.0, with the lock prepared heading into beta (2026-11-22) |
 | 11 | Spoiler limits | Open |
 | 12 | Source code | **Decided:** open source |
 | 13 | Android package name | Proposed: `com.wizarddeo.sinoithefisherman` (permanent after the first Play upload) |

@@ -39,6 +39,8 @@ Recorded November 8, 2026 from Deovandski. Items marked **decided** are settled;
 
 ### Mechanic vocabulary (proposal)
 
+Prototypes of these, plus the modes from issue #1, are in [chapter 04](04-fight-box-modes.md).
+
 | Mechanic | Input | Fishing meaning |
 | --- | --- | --- |
 | Trace | Keep a finger on a moving marker along a path | Following the fish as it swims |
@@ -87,5 +89,5 @@ Common fish: one finger, slow traces and a few taps → mid-tier: flicks and hol
 
 - **Touch latency varies by phone:** forgiving windows, calibration, and judging mostly on staying on the path rather than frame-exact timing.
 - **Box size:** small enough for index-and-middle spacing; start around 160 x 160 base pixels and confirm in playtests, including tablets.
-- **Tablets:** supported. The layout scales to wider screens, and the pad's physical size stays finger-sized rather than growing with the screen.
+- **Tablets:** supported, because a bigger screen adds little extra work: about the same as supporting a touch-screen laptop. The layout scales to wider screens, and the pad's physical size stays finger-sized rather than growing with the screen.
 - **Engine:** Godot reports each finger separately (touch index on screen-touch and screen-drag events). The pre-production touch test already tracks two fingers on web and Android.

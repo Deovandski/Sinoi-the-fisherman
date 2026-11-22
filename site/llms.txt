@@ -16,7 +16,7 @@ The current build is a pre-production shell: a title screen, placeholder catches
 ## Docs (on GitHub)
 
 - [Source code](https://github.com/Deovandski/Sinoi-the-fisherman): the Godot project, website and build workflows
-- [White paper](https://github.com/Deovandski/Sinoi-the-fisherman/tree/main/docs/white-paper): research, design direction (fight box, bait and tackle) and plan
+- [White paper](https://github.com/Deovandski/Sinoi-the-fisherman/tree/main/docs/white-paper): research, design direction (fight box, bait and tackle), plan, fight-box mode prototypes and the ideas log
 - [Illustrator brief](https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/docs/art/illustrator-brief.md): sprite sizes, animation and Godot export rules
 - [Building](https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/docs/BUILDING.md): web, installable app and Android builds
 - [Save format](https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/docs/SAVE_FORMAT.md): the JSON save contract

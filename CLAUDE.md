@@ -15,10 +15,17 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 - **Never commit secrets:** keystores, `export_credentials.cfg`, passwords, service-account JSON, `.env`. CI builds debug APKs only.
 - **Touch first:** every interaction must work with touch; the fight box uses at most 2 fingers (index + middle of one hand) and must also work one-handed at the start. Mouse emulates one finger for testing.
 - **Pixel rules:** base resolution 180 x 320 portrait, `canvas_items` stretch, integer scale, aspect `expand`, Nearest filtering. Draw at 1x.
-- **Saves:** any change to save data bumps `SaveManager.VERSION`, adds a `_migrate()` step, updates `docs/SAVE_FORMAT.md` and the tests.
+- **Saves:** any change to save data bumps `SaveManager.VERSION`, adds a `_migrate()` step, updates `docs/SAVE_FORMAT.md` and the tests. Until alpha the format can change freely; heading into beta we prepare to lock it for 1.0 (policy in `docs/SAVE_FORMAT.md`).
 - **Fish names:** real fish, translated into two languages, chopped and joined (tuna: *maguro* + *atum* = Magatum). Canon fish (Sanbi, Fihi, Ptaina, True Sanbi King) keep their names.
 - **Never remove, rename or edit `site/google0c08003a2b869d98.html`:** it's the Google Search Console verification file. Google re-checks it, and removing it un-verifies the site.
 - Keep the support text and Amazon link (`https://www.amazon.com/dp/B0BT5XM4QC`) wherever the credits appear.
+
+## Keep the white paper's record of ideas
+
+During the research phase, every idea gets recorded, including the ones that don't make the cut.
+- Add a row to `docs/white-paper/05-ideas-log.md` whenever an idea is proposed, kept, cut, replaced or changed: date, idea, who raised it, status, **why**, and where it's described.
+- Record the reason, not just the result. If you worked the reason out yourself, mark it *(inferred)*. If you can't infer why, write **Why: ask Deo** and ask Deovandski, then fill in his answer.
+- Keep the chapters in step: a decision belongs in its chapter, and a prototype's results go back into the chapter that describes it.
 
 ## Website pictures are clickable
 
@@ -36,6 +43,7 @@ A new page in `site/` also needs: an entry in `site/sitemap.xml` and `site/llms.
 ```
 godot --headless --path game --import                                   # first run / after adding assets
 godot --headless --path game -s res://tests/test_save_manager.gd        # tests (must pass)
+godot --headless --path game -s res://tests/test_fight_modes.gd
 mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play
 python3 tools/build_llms_full.py site                                   # after the export
 ```
