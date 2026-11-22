@@ -12,6 +12,8 @@ var phase_end := 0.0
 var angle := -PI / 2.0   # handle angle
 var _last_angle := 0.0
 var _has_last := false
+var _turned := 0.0                 # total angle turned, radians
+var _samples: Array[Vector2] = []  # (time, total angle) over the last 0.25 s
 
 
 func _start() -> void:
@@ -62,8 +64,10 @@ func _step(delta: float, fingers: Dictionary) -> float:
 	return change
 
 
+## Spin speed over the last quarter second of finger movement, so phones
+## (and browsers) that report touches less often than every frame still read
+## a steady speed.
 func _read_spin(delta: float, fingers: Dictionary) -> void:
-	var raw := 0.0
 	var c := center()
 	var reel := side * 0.32
 	var finger: Variant = null
@@ -72,14 +76,23 @@ func _read_spin(delta: float, fingers: Dictionary) -> void:
 		break
 	if finger != null and finger.distance_to(c) >= reel * 0.35 and finger.distance_to(c) <= reel * 1.7:
 		var a: float = (finger - c).angle()
-		if _has_last and delta > 0.0:
-			raw = wrapf(a - _last_angle, -PI, PI) / TAU / delta
+		if _has_last:
+			_turned += wrapf(a - _last_angle, -PI, PI)
 		_last_angle = a
 		_has_last = true
 		angle = a
+		_samples.append(Vector2(time, _turned))
 	else:
 		_has_last = false
-	spin = lerpf(spin, raw, 1.0 - exp(-6.0 * delta))
+		_samples.clear()
+	while _samples.size() > 1 and time - _samples[0].x > 0.25:
+		_samples.pop_front()
+	var raw := 0.0
+	if _samples.size() > 1:
+		var span: float = _samples[-1].x - _samples[0].x
+		if span > 0.05:
+			raw = (_samples[-1].y - _samples[0].y) / TAU / span
+	spin = lerpf(spin, raw, 1.0 - exp(-10.0 * delta))
 
 
 func _draw_pad(canvas: CanvasItem, shadow: bool) -> void:

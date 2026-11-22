@@ -85,6 +85,8 @@ Lore gear on top: for example an insulated line that blocks Fihi shocks, or ear-
 
 Common fish: one finger, slow traces and a few taps → mid-tier: flicks and holds, faster paths → legendaries: two-finger (index + middle) sections, orientation changes and lore twists. The tackle loadout is the intended counter to each step.
 
+**Walls of difficulty (decided, 2026-11-22).** A region whose fish are harder than the player's gear should feel like a wall that pushes them to buy better rods and tackle. Fights don't get more forgiving to smooth the wall away. A player skilled enough to crank through anyway is allowed to (carry-over between fish sections helps them, see [chapter 06](06-fish-fights.md)).
+
 ## Constraints
 
 - **Touch latency varies by phone:** forgiving windows, calibration, and judging mostly on staying on the path rather than frame-exact timing.

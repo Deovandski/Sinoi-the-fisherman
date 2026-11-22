@@ -9,23 +9,13 @@ const AMAZON_URL := "https://www.amazon.com/dp/B0BT5XM4QC"
 const WEST_MARCH_URL := "https://github.com/Deovandski/Vraki-West-March-Campaign-D-D"
 const SUPPORT_TEXT := "Brought to you by Deovandski, author of the #HusbandOutWorld series and CEO/Founder of Wizard Deo Solutions. Have fun! If you want to support me, buy the eBooks on Amazon, or host a West March D&D campaign using the World Lore."
 
-# Placeholder fish for the "Cast" button. Names follow the two-language rule
-# (see docs/white-paper/02-design-direction.md); Sanbi is canon.
-const PLACEHOLDER_FISH := [
-	{"id": "magatum", "name": "Magatum", "pearls": Vector2i(3, 8)},
-	{"id": "karkoi", "name": "Karkoi", "pearls": Vector2i(2, 5)},
-	{"id": "bagnazu", "name": "Bagnazu", "pearls": Vector2i(2, 6)},
-	{"id": "sanbi", "name": "Sanbi", "pearls": Vector2i(10, 25)},
-]
 
 var _stats: Label
 var _status: Label
 var _update_button: Button
-var _rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
-	_rng.randomize()
 	theme = UiTheme.build()
 	_build()
 	SaveManager.changed.connect(_refresh)
@@ -77,7 +67,10 @@ func _build() -> void:
 	_stats = _label("", 9, Color("ffffff"))
 	column.add_child(_stats)
 
-	column.add_child(_button("Cast (placeholder)", _on_cast))
+	column.add_child(_row([
+		_button("Fish test", _on_fish_test),
+		_button("Journal", func(): get_tree().change_scene_to_file("res://scenes/journal.tscn")),
+	]))
 	column.add_child(_button("Fight box: try the modes", _on_touch_test))
 	column.add_child(_row([
 		_button("Export save", SaveManager.export_save),
@@ -180,19 +173,8 @@ func _show_status(text: String) -> void:
 	_status.text = text
 
 
-func _on_cast() -> void:
-	var fish: Dictionary = PLACEHOLDER_FISH[_rng.randi_range(0, PLACEHOLDER_FISH.size() - 1)]
-	var range_: Vector2i = fish.pearls
-	var pearls := _rng.randi_range(range_.x, range_.y)
-	SaveManager.data.pearls = int(SaveManager.data.pearls) + pearls
-	SaveManager.data.catches.append({
-		"fish": fish.id,
-		"pearls": pearls,
-		"caught_at": Time.get_datetime_string_from_system(true),
-	})
-	SaveManager.save_local()
-	_refresh()
-	_show_status("Caught a %s! +%d pearls" % [fish.name, pearls])
+func _on_fish_test() -> void:
+	get_tree().change_scene_to_file("res://scenes/fish_test.tscn")
 
 
 func _on_touch_test() -> void:

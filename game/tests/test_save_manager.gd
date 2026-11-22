@@ -56,14 +56,45 @@ func _init() -> void:
 	var v2: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 2, "playtest": {"fight_modes": {"slide_guide": {"feel": 2, "catches": 4}}}}')
 	_check(v2.ok, "a version 2 save is accepted")
 	var moved: Dictionary = other.data.playtest.fight_modes.slide_guide
-	_check(int(moved.difficulty) == 5 and int(moved.levels["5"].feel) == 2 and int(moved.levels["5"].catches) == 4, "version 2 results move to difficulty 5")
+	_check(int(moved.difficulty) == 5 and int(moved.levels["5"].catches) == 4, "version 2 results move to difficulty 5")
+	_check(not moved.levels["5"].has("feel"), "old \"How hard?\" ratings are dropped")
+
+	# Version 3 saves lose their ratings and gain fish-test results.
+	var v3: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 3, "playtest": {"fight_modes": {"hold_hop": {"difficulty": 7, "levels": {"7": {"feel": 4, "catches": 1}}}}}}')
+	_check(v3.ok, "a version 3 save is accepted")
+	_check(int(other.data.playtest.fight_modes.hold_hop.levels["7"].catches) == 1 and not other.data.playtest.fight_modes.hold_hop.levels["7"].has("feel"), "version 3 keeps results and drops ratings")
+	_check(other.data.playtest.has("fish") and other.data.playtest.fish.is_empty(), "version 3 gains empty fish-test results")
+
+	# Version 4 saves gain an empty streak and keep fish results.
+	var v4: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 4, "playtest": {"fight_modes": {}, "fish": {"karkoi": {"catches": 3}}}}')
+	_check(v4.ok, "a version 4 save is accepted")
+	_check(int(other.data.playtest.fish.karkoi.catches) == 3, "version 4 keeps fish results")
+	_check(int(other.data.playtest.streak.current) == 0 and int(other.data.playtest.streak.best) == 0, "version 4 gains an empty streak")
+
+	# Version 5 catches gain quality, size and streak; fish results gain bests.
+	var v5: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 5, "catches": [{"fish": "karkoi", "pearls": 3, "caught_at": "2026-11-22T10:00:00"}], "playtest": {"fight_modes": {}, "fish": {"karkoi": {"catches": 1}}, "streak": {"current": 1, "best": 1}}}')
+	_check(v5.ok, "a version 5 save is accepted")
+	var old_catch: Dictionary = other.data.catches[0]
+	_check(int(old_catch.pearls) == 3 and int(old_catch.quality) == 0 and float(old_catch.size_cm) == 0.0 and int(old_catch.streak) == 0, "version 5 catches keep their data and gain quality, size and streak")
+	_check(other.data.playtest.fish.karkoi.has("best_size_cm") and other.data.playtest.fish.karkoi.has("best_quality"), "version 5 fish results gain best size and quality")
+	_check(int(other.data.journal.karkoi.caught) == 1 and int(other.data.journal.karkoi.pearls_total) == 3, "older saves get a journal built from their catch log")
+
+	# Version 6 saves get a journal from their catches.
+	var v6: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 6, "catches": [{"fish": "magatum", "pearls": 6, "quality": 1, "size_cm": 90.0, "streak": 0, "caught_at": "a"}, {"fish": "magatum", "pearls": 14, "quality": 2, "size_cm": 142.5, "streak": 1, "caught_at": "b"}]}')
+	_check(v6.ok, "a version 6 save is accepted")
+	_check(int(other.data.journal.magatum.caught) == 2 and is_equal_approx(float(other.data.journal.magatum.biggest_cm), 142.5), "version 6 journal counts catches and the biggest")
 
 	# Fight-box playtest results survive a round trip.
-	sm.data.playtest.fight_modes["hold_hop"] = {"difficulty": 7, "levels": {"7": {"feel": 3, "catches": 2, "escapes": 1, "catch_seconds": 21.5, "good": 8.0, "judged": 10.0}}}
+	sm.data.playtest.fight_modes["hold_hop"] = {"difficulty": 7, "levels": {"7": {"catches": 2, "escapes": 1, "catch_seconds": 21.5, "good": 8.0, "judged": 10.0}}}
 	var round_trip: Node = SaveManagerScript.new()
 	_check(round_trip.apply_json(sm.to_json()).ok, "save with playtest results is accepted")
 	_check(int(round_trip.data.playtest.fight_modes.hold_hop.difficulty) == 7, "the chosen difficulty survives the round trip")
-	_check(int(round_trip.data.playtest.fight_modes.hold_hop.levels["7"].feel) == 3, "playtest ratings survive the round trip")
+	sm.data.playtest.fish["sanbi"] = {"catches": 1, "escapes": 2, "catch_seconds": 40.0, "good": 5.0, "judged": 9.0}
+	sm.data.playtest.streak = {"current": 2, "best": 6}
+	sm.data.journal = {"sanbi": {"caught": 4, "pearls_total": 70, "biggest_cm": 88.2, "biggest_quality": 3, "best_quality": 3, "first_caught_at": "a", "last_caught_at": "b"}}
+	_check(round_trip.apply_json(sm.to_json()).ok and int(round_trip.data.playtest.fish.sanbi.escapes) == 2, "fish-test results survive the round trip")
+	_check(int(round_trip.data.playtest.streak.best) == 6, "the streak survives the round trip")
+	_check(int(round_trip.data.journal.sanbi.caught) == 4 and is_equal_approx(float(round_trip.data.journal.sanbi.biggest_cm), 88.2), "the journal survives the round trip")
 	var restored := FightSession.from_dict(round_trip.data.playtest.fight_modes.hold_hop.levels["7"])
 	_check(restored.catches == 2 and is_equal_approx(restored.average_catch_time(), 10.75), "playtest totals restore into a session")
 	round_trip.free()

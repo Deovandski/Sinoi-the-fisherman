@@ -21,6 +21,11 @@ func _start() -> void:
 	_until = _normal_time()
 
 
+func _difficulty_changed() -> void:
+	if inner != null:
+		inner.difficulty = difficulty
+
+
 func max_fingers() -> int:
 	return inner.max_fingers()
 

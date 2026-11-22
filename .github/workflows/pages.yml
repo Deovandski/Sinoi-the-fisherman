@@ -61,6 +61,7 @@ jobs:
         run: |
           ~/godot/godot --headless --path game -s res://tests/test_save_manager.gd
           ~/godot/godot --headless --path game -s res://tests/test_fight_modes.gd
+          ~/godot/godot --headless --path game -s res://tests/test_fish_fights.gd
 
       - name: Export web build (installable PWA at /play/)
         run: |

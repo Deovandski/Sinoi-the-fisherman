@@ -18,6 +18,23 @@ static func build() -> Theme:
 	theme.set_color("font_color", "Button", Color("eef6fa"))
 	theme.set_color("font_pressed_color", "Button", Color("f3e3b3"))
 	theme.set_font_size("font_size", "Button", 9)
+
+	# Drop-downs (fight-box and fish pickers).
+	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		theme.set_stylebox(state, "OptionButton", {"normal": normal, "hover": hover, "pressed": pressed, "disabled": normal}.get(state, _box(Color(0, 0, 0, 0), Color("f3e3b3"))))
+	theme.set_color("font_color", "OptionButton", Color("f3e3b3"))
+	theme.set_color("font_hover_color", "OptionButton", Color("ffffff"))
+	theme.set_color("font_pressed_color", "OptionButton", Color("ffd166"))
+	theme.set_font_size("font_size", "OptionButton", 8)
+	var panel := _box(Color("0d1b2a"), Color("ffd166"))
+	panel.content_margin_top = 3
+	panel.content_margin_bottom = 3
+	theme.set_stylebox("panel", "PopupMenu", panel)
+	theme.set_stylebox("hover", "PopupMenu", _box(Color("23415a"), Color("23415a")))
+	theme.set_color("font_color", "PopupMenu", Color("c9dbe4"))
+	theme.set_color("font_hover_color", "PopupMenu", Color("ffd166"))
+	theme.set_font_size("font_size", "PopupMenu", 8)
+	theme.set_constant("v_separation", "PopupMenu", 4)
 	return theme
 
 
