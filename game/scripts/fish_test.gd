@@ -7,6 +7,8 @@ extends Control
 ## no difficulty slider: difficulty is set per fish, in the data.
 ## A catch adds the fish and its pearls to the save, like the old Cast
 ## placeholder did; results per fish are kept in the save (playtest.fish).
+## A strong section hands the next one a head start, and consecutive catches
+## build a streak (kept across fish, so it can be carried to harder ones).
 
 const STAGE_TOP := 33.0
 
@@ -14,6 +16,8 @@ var _entries: Array = []
 var _index := 0
 var _fight: FishFight
 var _sessions := {}       # fish id -> FightSession (totals only)
+var _streak := 0          # catches in a row, across fish
+var _best_streak := 0
 var _rng := RandomNumberGenerator.new()
 
 var _picker: OptionButton
@@ -69,7 +73,7 @@ func _select(index: int) -> void:
 	_stage.play(_fight.make_mode(_stage.pad_side()), {
 		"title": e.name,
 		"body": "%s\n\n%s" % [e.get("description", ""), _fight.sections_summary()],
-		"footer": "%d section%s - %d to %d pearls" % [count, "" if count == 1 else "s", int(e.pearls[0]), int(e.pearls[1])],
+		"footer": "%d section%s - %s - %d-%d pearls" % [count, "" if count == 1 else "s", e.get("curve", "climb"), int(e.pearls[0]), int(e.pearls[1])],
 	})
 	_refresh_meter()
 
@@ -81,7 +85,8 @@ func _session() -> FightSession:
 func _on_ticked(delta: float, judgement: Vector2) -> void:
 	_session().tick(delta)
 	_session().add_judgement(judgement)
-	# The section gets harder as its segment fills.
+	_fight.add_judgement(judgement)
+	# Difficulty follows the fish's curve as the segment fills.
 	if _stage.mode != null:
 		_stage.mode.difficulty = _fight.difficulty()
 
@@ -91,17 +96,24 @@ func _on_changed(amount: float) -> void:
 		FishFight.Result.SECTION_DONE:
 			var name: String = FightCatalog.entry(_fight.section_mode_id()).get("name", "")
 			_stage.play(_fight.make_mode(_stage.pad_side()))
-			_stage.show_banner("Section %d/%d: %s" % [_fight.section + 1, _fight.section_count(), name])
+			var title := "Section %d/%d: %s" % [_fight.section + 1, _fight.section_count(), name]
+			if _fight.last_carry > 0.005:
+				title += "\nStrong finish! Head start +%d%%" % roundi(_fight.last_carry * 100.0)
+			_stage.show_banner(title)
 			_stage.play_sound("tock")
 		FishFight.Result.CAUGHT:
 			_session().record_catch()
 			var pearls := _award()
-			_stage.show_banner("Caught %s! +%d pearls" % [_fight.fish.name, pearls])
+			_streak += 1
+			_best_streak = maxi(_best_streak, _streak)
+			_stage.show_banner("Caught %s! +%d pearls\nStreak %d (best %d)" % [_fight.fish.name, pearls, _streak, _best_streak])
 			_stage.play_sound("catch")
 			_restart()
 		FishFight.Result.ESCAPED:
 			_session().record_escape()
-			_stage.show_banner("%s got away" % _fight.fish.name)
+			var lost := "\nStreak of %d lost" % _streak if _streak > 1 else ""
+			_streak = 0
+			_stage.show_banner("%s got away%s" % [_fight.fish.name, lost])
 			_stage.play_sound("miss")
 			_restart()
 	_refresh_meter()
@@ -136,10 +148,7 @@ func _process(_delta: float) -> void:
 	if _fight == null:
 		return
 	var s := _session()
-	var line := "Caught %d  Lost %d" % [s.catches, s.escapes]
-	if s.catches > 0:
-		line += "  %.1fs" % s.average_catch_time()
-	line += "  Lv %.1f" % (_fight.difficulty() * 10.0)
+	var line := "Won %d Lost %d Streak %d Lv %.1f" % [s.catches, s.escapes, _streak, _fight.difficulty() * 10.0]
 	_stats.text = line
 
 
@@ -148,6 +157,10 @@ func _process(_delta: float) -> void:
 ## Results per fish live in the save (playtest.fish); "Reset save" on the
 ## title screen clears them.
 func _load_results() -> void:
+	var streak: Variant = SaveManager.data.get("playtest", {}).get("streak", {})
+	if typeof(streak) == TYPE_DICTIONARY:
+		_streak = maxi(int(streak.get("current", 0)), 0)
+		_best_streak = maxi(int(streak.get("best", 0)), _streak)
 	var saved: Dictionary = SaveManager.data.get("playtest", {}).get("fish", {})
 	for id in saved:
 		if typeof(saved[id]) == TYPE_DICTIONARY:
@@ -162,17 +175,19 @@ func _store_results() -> void:
 		if _sessions[id].played():
 			out[id] = _sessions[id].to_dict()
 	SaveManager.data.playtest["fish"] = out
+	SaveManager.data.playtest["streak"] = {"current": _streak, "best": _best_streak}
 	SaveManager.save_local()
 
 
 func _copy_results() -> void:
 	var lines: Array[String] = [ResultsText.header("fish test", _stage.sensor_available()),
+		"streak: %d now, best %d" % [_streak, _best_streak],
 		"fish | sections | caught | lost | avg catch s | accuracy %"]
 	for e in _entries:
 		var s: FightSession = _sessions.get(e.id)
 		if s != null and s.played():
-			lines.append("%s | %s | %s" % [e.name, FishFight.new(e, 120.0).sections_summary(), ResultsText.totals(s)])
-	if lines.size() == 2:
+			lines.append("%s | %s (%s) | %s" % [e.name, FishFight.new(e, 120.0).sections_summary(), e.get("curve", "climb"), ResultsText.totals(s)])
+	if lines.size() == 3:
 		lines.append("(no fish fought yet)")
 	ResultsText.copy(lines)
 	_stage.show_banner("Results copied")

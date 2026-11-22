@@ -320,6 +320,11 @@ func _draw_overlay() -> void:
 		var start := "Touch the bottom box to start" if not mode.uses_motion() else "Starting in %d..." % ceili(_intro_left)
 		FightMode.text(_overlay, Vector2(card.get_center().x, card.end.y - 10.0), start, Color("f3e3b3"))
 	elif _banner_left > 0.0:
-		var strip := Rect2(card.position.x, card.get_center().y - 9.0, card.size.x, 18.0)
+		# First line large, any further lines (after "\n") smaller.
+		var lines := _banner.split("\n")
+		var height := 18.0 + 11.0 * (lines.size() - 1)
+		var strip := Rect2(card.position.x, card.get_center().y - height / 2.0, card.size.x, height)
 		_overlay.draw_rect(strip, Color(0.04, 0.09, 0.14, 0.85))
-		FightMode.text(_overlay, strip.get_center(), _banner, Color("ffd166"), 10)
+		FightMode.text(_overlay, Vector2(strip.get_center().x, strip.position.y + 9.0), lines[0], Color("ffd166"), 10)
+		for i in range(1, lines.size()):
+			FightMode.text(_overlay, Vector2(strip.get_center().x, strip.position.y + 9.0 + 11.0 * i), lines[i], Color("c9dbe4"), 7)

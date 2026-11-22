@@ -13,7 +13,7 @@ signal changed
 signal message(text: String)
 
 const FORMAT := "sinoi-save"
-const VERSION := 4
+const VERSION := 5
 const MAX_IMPORT_BYTES := 1_000_000
 
 var save_path := "user://save.json"
@@ -46,10 +46,12 @@ static func default_data() -> Dictionary:
 		},
 		# Pre-production playtests (see FightSession.to_dict()):
 		# fight_modes: per mode, the chosen difficulty and totals per level;
-		# fish: totals per fish from the fish test.
+		# fish: totals per fish from the fish test;
+		# streak: catches in a row in the fish test, now and best.
 		"playtest": {
 			"fight_modes": {},
 			"fish": {},
+			"streak": {"current": 0, "best": 0},
 		},
 	}
 
@@ -116,6 +118,9 @@ func _migrate(save: Dictionary, from_version: int) -> Dictionary:
 							levels[level].erase("feel")
 		playtest["fish"] = {}
 		out["playtest"] = playtest
+	if from_version < 5:
+		# v5 adds the fish-test catch streak.
+		out["playtest"]["streak"] = {"current": 0, "best": 0}
 	return out
 
 

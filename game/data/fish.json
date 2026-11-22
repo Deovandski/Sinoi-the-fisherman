@@ -1,11 +1,13 @@
 {
-	"_about": "Every fish in the game so far, easiest first. A fish's fight is one or more sections; each section is one fight-box mode (an id from fight_modes.json) with a difficulty range [from, to] on the 0 (easy) .. 1 (hard) scale. The section starts at 'from' and climbs to 'to' as its meter fills. Names follow the two-language rule (see CLAUDE.md); Sanbi is canon. 'pearls' is the reward range [min, max]. See docs/white-paper/06-fish-fights.md.",
+	"_about": "Every fish in the game so far, easiest first. A fish's fight is one or more sections; each section is one fight-box mode (an id from fight_modes.json) with a difficulty range [from, to] on the 0 (easy) .. 1 (hard) scale. 'curve' says how difficulty moves through a section as its meter fills: 'climb' rises from 'from' to 'to'; 'bell' rises to 'to' halfway and eases back to 'from'. 'rules' apply to every fish: each fight starts at 'start'; a finished section hands the next one a head start of up to 'carry_max', scaled by how well it was played (accuracy above 'carry_threshold'). Names follow the two-language rule (see CLAUDE.md); Sanbi is canon. 'pearls' is the reward range [min, max]. See docs/white-paper/06-fish-fights.md.",
+	"rules": {"start": 0.25, "carry_max": 0.25, "carry_threshold": 0.5},
 	"fish": [
 		{
 			"id": "karkoi",
 			"name": "Karkoi",
 			"based_on": "carp (German Karpfen + Japanese koi)",
 			"pearls": [2, 5],
+			"curve": "climb",
 			"description": "A lazy pond fish. It drifts about and gives up quickly.",
 			"sections": [
 				{"mode": "slide_guide", "difficulty": [0.1, 0.3]}
@@ -16,6 +18,7 @@
 			"name": "Bagnazu",
 			"based_on": "catfish (Portuguese bagre + Japanese namazu)",
 			"pearls": [2, 6],
+			"curve": "climb",
 			"description": "A heavy bottom-feeder. Reel it up, then keep up as it wanders.",
 			"sections": [
 				{"mode": "reel_spin", "difficulty": [0.2, 0.4]},
@@ -27,7 +30,8 @@
 			"name": "Magatum",
 			"based_on": "tuna (Japanese maguro + Portuguese atum)",
 			"pearls": [3, 8],
-			"description": "Fast and strong. Set the hook, survive its runs, then match its tail beat.",
+			"curve": "bell",
+			"description": "Fast and strong, but it burns out: each stage of the fight peaks in the middle. Set the hook, survive its runs, then match its tail beat.",
 			"sections": [
 				{"mode": "flick_hookset", "difficulty": [0.3, 0.5]},
 				{"mode": "reel_spin", "difficulty": [0.4, 0.6]},
@@ -39,6 +43,7 @@
 			"name": "Sanbi",
 			"based_on": "canon fish from #HusbandOutWorld",
 			"pearls": [10, 25],
+			"curve": "climb",
 			"description": "Placeholder fight for the canon fish. Ignore its decoys, hold steady, and keep going when you lose sight of it.",
 			"sections": [
 				{"mode": "flick_hookset", "difficulty": [0.5, 0.7]},

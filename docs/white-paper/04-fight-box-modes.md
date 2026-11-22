@@ -30,7 +30,7 @@ Slide Guide | 9 | 1 | 3 | 15.0 | 58
 Twin Drift | 2 | 1 | 3 | 18.2 | 52
 ```
 
-Results are kept in the save file per mode and per difficulty level (`playtest.fight_modes`, save format v4, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)), so they add up over several sessions and travel with an exported save. **Reset save** on the title screen clears them. The "How hard?" 1–5 rating boxes were removed (issue #16): the difficulty slider does that job, and catch time, losses and accuracy measure it. The modes, their order and every tuning number live in [`game/data/fight_modes.json`](../../game/data/fight_modes.json), so balancing doesn't need code changes.
+Results are kept in the save file per mode and per difficulty level (`playtest.fight_modes`, save format v5, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)), so they add up over several sessions and travel with an exported save. **Reset save** on the title screen clears them. The "How hard?" 1–5 rating boxes were removed (issue #16): the difficulty slider does that job, and catch time, losses and accuracy measure it. The modes, their order and every tuning number live in [`game/data/fight_modes.json`](../../game/data/fight_modes.json), so balancing doesn't need code changes.
 
 ## Research: what similar games do
 

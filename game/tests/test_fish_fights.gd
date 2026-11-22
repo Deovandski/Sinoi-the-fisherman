@@ -14,6 +14,8 @@ func _init() -> void:
 	_test_sections()
 	_test_difficulty_climbs()
 	_test_escape()
+	_test_bell_curve()
+	_test_carry_over()
 	_test_every_fish_plays()
 	if _failures == 0:
 		print("All fish fight tests passed.")
@@ -33,6 +35,7 @@ func _test_data() -> void:
 		ids[f.id] = true
 		_check(f.pearls.size() == 2 and int(f.pearls[0]) <= int(f.pearls[1]), "%s pearls are a [min, max] range" % f.id)
 		_check(f.sections.size() >= 1, "%s has at least one section" % f.id)
+		_check(str(f.get("curve", "climb")) in ["climb", "bell"], "%s curve is climb or bell" % f.id)
 		one_section = one_section or f.sections.size() == 1
 		many_sections = many_sections or f.sections.size() > 1
 		for s in f.sections:
@@ -40,6 +43,8 @@ func _test_data() -> void:
 			var r: Array = s.difficulty
 			_check(r.size() == 2 and float(r[0]) >= 0.0 and float(r[1]) <= 1.0 and float(r[0]) <= float(r[1]), "%s %s difficulty is a range inside 0..1" % [f.id, s.mode])
 	_check(one_section and many_sections, "some fish have one section, others several")
+	var rules := FishCatalog.rules()
+	_check(rules.has("start") and rules.has("carry_max") and rules.has("carry_threshold"), "fish data has the shared rules")
 	for canon in ["sanbi"]:
 		_check(ids.has(canon), "canon fish %s is in the data" % canon)
 
@@ -72,6 +77,38 @@ func _test_difficulty_climbs() -> void:
 	var lost_ref := lost.make_mode()
 	lost_ref.difficulty = 0.77
 	_check(is_equal_approx(lost_ref.inner.difficulty, 0.77), "Lost Ref passes live difficulty changes to its inner mode")
+
+
+func _test_bell_curve() -> void:
+	var fish := FishCatalog.entry("karkoi").duplicate(true)
+	fish.curve = "bell"
+	var fight := FishFight.new(fish, SIDE)
+	var r := fight.section_range()
+	_check(is_equal_approx(fight.difficulty(), r.x), "bell: starts at the low end")
+	fight.add(0.375)
+	_check(is_equal_approx(fight.difficulty(), r.y), "bell: peaks halfway")
+	fight.add(0.37)
+	_check(absf(fight.difficulty() - r.x) < 0.02, "bell: eases back near the end")
+	var climb := FishFight.new(FishCatalog.entry("karkoi"), SIDE)
+	climb.add(0.74)
+	_check(climb.difficulty() > r.y - 0.02, "climb: highest near the end")
+
+
+func _test_carry_over() -> void:
+	var strong := FishFight.new(FishCatalog.entry("bagnazu"), SIDE)
+	strong.add_judgement(Vector2(10, 10))  # perfect section
+	strong.add(0.8)
+	_check(is_equal_approx(strong.last_carry, strong.carry_max), "carry: a perfect section earns the full head start")
+	_check(is_equal_approx(strong.fills[1], strong.start + strong.carry_max), "carry: the next section starts higher")
+	var weak := FishFight.new(FishCatalog.entry("bagnazu"), SIDE)
+	weak.add_judgement(Vector2(4, 10))  # 40% accuracy, below the threshold
+	weak.add(0.8)
+	_check(weak.last_carry == 0.0 and is_equal_approx(weak.fills[1], weak.start), "carry: a weak section earns nothing")
+	var middling := FishFight.new(FishCatalog.entry("bagnazu"), SIDE)
+	middling.add_judgement(Vector2(75, 100))  # halfway between threshold and perfect
+	middling.add(0.8)
+	_check(is_equal_approx(middling.last_carry, middling.carry_max / 2.0), "carry: scales with accuracy above the threshold")
+	_check(middling.section_accuracy() == 0.0, "carry: accuracy resets for the new section")
 
 
 func _test_escape() -> void:

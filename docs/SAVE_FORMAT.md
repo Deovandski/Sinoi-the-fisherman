@@ -18,12 +18,12 @@ Decided by Deovandski, 2026-11-22:
 - **Heading from alpha into beta:** prepare to **lock the save format for 1.0**: review every key, remove placeholders, write the final version of this page, and test migrations from every alpha version.
 - **From 1.0 on:** the format is locked; changes must be additive and always migrate.
 
-## Version 4 (current)
+## Version 5 (current)
 
 ```json
 {
   "format": "sinoi-save",
-  "version": 4,
+  "version": 5,
   "game_version": "0.0.1",
   "created_at": "2026-11-08T13:00:00",
   "updated_at": "2026-11-08T13:05:12",
@@ -47,7 +47,8 @@ Decided by Deovandski, 2026-11-22:
     },
     "fish": {
       "magatum": { "catches": 1, "escapes": 3, "catch_seconds": 41.2, "good": 30.0, "judged": 52.5 }
-    }
+    },
+    "streak": { "current": 2, "best": 5 }
   }
 }
 ```
@@ -69,6 +70,7 @@ Decided by Deovandski, 2026-11-22:
 | `….levels.<level>.catch_seconds` | float | Total seconds spent on caught fish (average = this ÷ catches). |
 | `….levels.<level>.good`, `.judged` | float | Accuracy totals: accuracy = good ÷ judged. |
 | `playtest.fish` | object | Fish-test results, keyed by fish id (`game/data/fish.json`): `catches`, `escapes`, `catch_seconds`, `good`, `judged`, as above. Catches made in the fish test are also added to `catches` and `pearls`. |
+| `playtest.streak.current`, `.best` | int | Fish-test catches in a row (across fish), now and best. An escape resets `current`. |
 
 ## Version history
 
@@ -78,10 +80,11 @@ Decided by Deovandski, 2026-11-22:
 | 2 | Adds `playtest.fight_modes` (fight-box ratings and results). Version 1 saves get an empty `playtest` section. |
 | 3 | Fight-box results are split by difficulty level (`difficulty` + `levels`). Version 2 results move to level 5, the middle (they were played at the fixed tuning). |
 | 4 | Drops the "How hard?" `feel` ratings (the difficulty slider replaced them) and adds `playtest.fish` for the fish test. |
+| 5 | Adds `playtest.streak` (fish-test catch streak). |
 
 ## Import rules
 
-- Must parse as a JSON object, under 1 MB, with `format` = `sinoi-save` and a `version` from 1 to the current version (4).
+- Must parse as a JSON object, under 1 MB, with `format` = `sinoi-save` and a `version` from 1 to the current version (5).
 - Missing keys are filled with defaults. Values of the wrong type fall back to the default. Unknown keys are kept, so newer fields survive a round trip through an older build of the same version.
 - A rejected import leaves the current save untouched.
 

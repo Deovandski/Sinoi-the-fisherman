@@ -65,13 +65,21 @@ func _init() -> void:
 	_check(int(other.data.playtest.fight_modes.hold_hop.levels["7"].catches) == 1 and not other.data.playtest.fight_modes.hold_hop.levels["7"].has("feel"), "version 3 keeps results and drops ratings")
 	_check(other.data.playtest.has("fish") and other.data.playtest.fish.is_empty(), "version 3 gains empty fish-test results")
 
+	# Version 4 saves gain an empty streak and keep fish results.
+	var v4: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 4, "playtest": {"fight_modes": {}, "fish": {"karkoi": {"catches": 3}}}}')
+	_check(v4.ok, "a version 4 save is accepted")
+	_check(int(other.data.playtest.fish.karkoi.catches) == 3, "version 4 keeps fish results")
+	_check(int(other.data.playtest.streak.current) == 0 and int(other.data.playtest.streak.best) == 0, "version 4 gains an empty streak")
+
 	# Fight-box playtest results survive a round trip.
 	sm.data.playtest.fight_modes["hold_hop"] = {"difficulty": 7, "levels": {"7": {"catches": 2, "escapes": 1, "catch_seconds": 21.5, "good": 8.0, "judged": 10.0}}}
 	var round_trip: Node = SaveManagerScript.new()
 	_check(round_trip.apply_json(sm.to_json()).ok, "save with playtest results is accepted")
 	_check(int(round_trip.data.playtest.fight_modes.hold_hop.difficulty) == 7, "the chosen difficulty survives the round trip")
 	sm.data.playtest.fish["sanbi"] = {"catches": 1, "escapes": 2, "catch_seconds": 40.0, "good": 5.0, "judged": 9.0}
+	sm.data.playtest.streak = {"current": 2, "best": 6}
 	_check(round_trip.apply_json(sm.to_json()).ok and int(round_trip.data.playtest.fish.sanbi.escapes) == 2, "fish-test results survive the round trip")
+	_check(int(round_trip.data.playtest.streak.best) == 6, "the streak survives the round trip")
 	var restored := FightSession.from_dict(round_trip.data.playtest.fight_modes.hold_hop.levels["7"])
 	_check(restored.catches == 2 and is_equal_approx(restored.average_catch_time(), 10.75), "playtest totals restore into a session")
 	round_trip.free()

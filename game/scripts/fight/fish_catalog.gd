@@ -5,6 +5,13 @@ extends RefCounted
 const PATH := "res://data/fish.json"
 
 static var _entries: Array = []
+static var _rules: Dictionary = {}
+
+
+## Rules for every fish fight (start fill, carry-over), from "rules".
+static func rules() -> Dictionary:
+	entries()
+	return _rules
 
 
 static func entries() -> Array:
@@ -16,6 +23,7 @@ static func entries() -> Array:
 		var parsed: Variant = JSON.parse_string(file.get_as_text())
 		if typeof(parsed) == TYPE_DICTIONARY and parsed.has("fish"):
 			_entries = parsed.fish
+			_rules = parsed.get("rules", {})
 		else:
 			push_error("FishCatalog: %s has no 'fish' list" % PATH)
 	return _entries
