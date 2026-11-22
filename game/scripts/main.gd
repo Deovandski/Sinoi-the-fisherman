@@ -5,9 +5,8 @@ extends Control
 ## web + Android), the touch input and the JSON save/load. Real art and the
 ## fishing fight replace it once production starts.
 
-const AMAZON_URL := "https://www.amazon.com/dp/B0BT5XM4QC"
-const WEST_MARCH_URL := "https://github.com/Deovandski/Vraki-West-March-Campaign-D-D"
-const SUPPORT_TEXT := "Brought to you by Deovandski, author of the #HusbandOutWorld series and CEO/Founder of Wizard Deo Solutions. Have fun! If you want to support me, buy the eBooks on Amazon, or host a West March D&D campaign using the World Lore."
+# The support text and links come from data/credits.json, shared with the
+# website (see CLAUDE.md, "One source").
 
 
 var _stats: Label
@@ -85,10 +84,10 @@ func _build() -> void:
 	column.add_child(_status)
 
 	column.add_child(_spacer(4))
-	column.add_child(_label(SUPPORT_TEXT, 6, Color("d7e6ec")))
+	column.add_child(_label(Credits.support_text(), 6, Color("d7e6ec")))
 	column.add_child(_row([
-		_button("eBooks on Amazon", func(): OS.shell_open(AMAZON_URL)),
-		_button("World Lore", func(): OS.shell_open(WEST_MARCH_URL)),
+		_button("eBooks on Amazon", func(): OS.shell_open(Credits.link("amazon"))),
+		_button("World Lore", func(): OS.shell_open(Credits.link("world_lore"))),
 	]))
 	column.add_child(_spacer(8))
 
@@ -131,8 +130,10 @@ func _refresh() -> void:
 	_stats.text = "Pearls: %d   Catches: %d" % [int(SaveManager.data.get("pearls", 0)), catches.size()]
 
 
-## Web/PWA only: the service worker downloads a new build in the background
-## and waits. Offer a button instead of reloading under the player.
+## Web/PWA only. Since issue #18 the worker is network first and takes over at
+## once, so a new deploy simply runs on the next visit. Workers installed
+## before that were cache first and wait with the new build: for those, offer
+## a button (once) instead of reloading under the player.
 func _watch_for_web_update() -> void:
 	if not OS.has_feature("web"):
 		return

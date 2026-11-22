@@ -63,6 +63,9 @@ jobs:
           ~/godot/godot --headless --path game -s res://tests/test_fight_modes.gd
           ~/godot/godot --headless --path game -s res://tests/test_fish_fights.gd
 
+      - name: Shared site pieces match their one source
+        run: python3 tools/sync_site.py --check
+
       - name: Export web build (installable PWA at /play/)
         run: |
           mkdir -p site/play
@@ -73,6 +76,13 @@ jobs:
             test -f "site/play/$f" || { echo "::error::missing site/play/$f"; exit 1; }
           done
           test -f site/manifest.webmanifest || { echo "::error::missing site/manifest.webmanifest"; exit 1; }
+          grep -q "Sinoi: network first" site/play/index.service.worker.js || { echo "::error::service worker isn't network first"; exit 1; }
+          grep -q 'src="index.js?v=' site/play/index.html || { echo "::error::index.js isn't versioned"; exit 1; }
+
+      - name: Fake-deploy check (new page and script on the first visit, offline still works)
+        run: |
+          pip install --quiet playwright
+          python3 tools/check_fresh_deploy.py site --chrome "$(command -v google-chrome || command -v chromium)"
 
       - name: Build llms-full.txt (text of every page, for AI readers)
         run: |
