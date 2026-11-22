@@ -13,7 +13,7 @@ signal changed
 signal message(text: String)
 
 const FORMAT := "sinoi-save"
-const VERSION := 5
+const VERSION := 6
 const MAX_IMPORT_BYTES := 1_000_000
 
 var save_path := "user://save.json"
@@ -121,6 +121,22 @@ func _migrate(save: Dictionary, from_version: int) -> Dictionary:
 	if from_version < 5:
 		# v5 adds the fish-test catch streak.
 		out["playtest"]["streak"] = {"current": 0, "best": 0}
+	if from_version < 6:
+		# v6: catches record quality, size and the streak they were made on;
+		# fish-test results keep each fish's best size and quality.
+		var catches: Variant = out.get("catches", [])
+		if typeof(catches) == TYPE_ARRAY:
+			for c in catches:
+				if typeof(c) == TYPE_DICTIONARY:
+					c["quality"] = int(c.get("quality", 0))
+					c["size_cm"] = float(c.get("size_cm", 0.0))
+					c["streak"] = int(c.get("streak", 0))
+		var fish: Variant = out["playtest"].get("fish", {})
+		if typeof(fish) == TYPE_DICTIONARY:
+			for id in fish:
+				if typeof(fish[id]) == TYPE_DICTIONARY:
+					fish[id]["best_size_cm"] = float(fish[id].get("best_size_cm", 0.0))
+					fish[id]["best_quality"] = int(fish[id].get("best_quality", 0))
 	return out
 
 

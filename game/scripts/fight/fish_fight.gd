@@ -32,6 +32,8 @@ var _side := 120.0
 var _overrides := {}
 var _good := 0.0
 var _judged := 0.0
+var _fight_good := 0.0
+var _fight_judged := 0.0
 
 
 ## `overrides` go to every mode (tests use it to fix the random seed).
@@ -49,6 +51,8 @@ func _init(p_fish: Dictionary, side: float, overrides := {}) -> void:
 func restart() -> void:
 	section = 0
 	last_carry = 0.0
+	_fight_good = 0.0
+	_fight_judged = 0.0
 	fills.clear()
 	for i in section_count():
 		fills.append(start if i == 0 else 0.0)
@@ -97,6 +101,13 @@ func make_mode(side := -1.0) -> FightMode:
 func add_judgement(totals: Vector2) -> void:
 	_good += totals.x
 	_judged += totals.y
+	_fight_good += totals.x
+	_fight_judged += totals.y
+
+
+## Accuracy over the whole fight so far, 0..1 (feeds the catch's quality).
+func fight_accuracy() -> float:
+	return _fight_good / _fight_judged if _fight_judged > 0.0 else 0.0
 
 
 ## Accuracy of the current section so far, 0..1.

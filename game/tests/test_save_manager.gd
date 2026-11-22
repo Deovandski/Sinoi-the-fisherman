@@ -71,6 +71,13 @@ func _init() -> void:
 	_check(int(other.data.playtest.fish.karkoi.catches) == 3, "version 4 keeps fish results")
 	_check(int(other.data.playtest.streak.current) == 0 and int(other.data.playtest.streak.best) == 0, "version 4 gains an empty streak")
 
+	# Version 5 catches gain quality, size and streak; fish results gain bests.
+	var v5: Dictionary = other.apply_json('{"format": "sinoi-save", "version": 5, "catches": [{"fish": "karkoi", "pearls": 3, "caught_at": "2026-11-22T10:00:00"}], "playtest": {"fight_modes": {}, "fish": {"karkoi": {"catches": 1}}, "streak": {"current": 1, "best": 1}}}')
+	_check(v5.ok, "a version 5 save is accepted")
+	var old_catch: Dictionary = other.data.catches[0]
+	_check(int(old_catch.pearls) == 3 and int(old_catch.quality) == 0 and float(old_catch.size_cm) == 0.0 and int(old_catch.streak) == 0, "version 5 catches keep their data and gain quality, size and streak")
+	_check(other.data.playtest.fish.karkoi.has("best_size_cm") and other.data.playtest.fish.karkoi.has("best_quality"), "version 5 fish results gain best size and quality")
+
 	# Fight-box playtest results survive a round trip.
 	sm.data.playtest.fight_modes["hold_hop"] = {"difficulty": 7, "levels": {"7": {"catches": 2, "escapes": 1, "catch_seconds": 21.5, "good": 8.0, "judged": 10.0}}}
 	var round_trip: Node = SaveManagerScript.new()

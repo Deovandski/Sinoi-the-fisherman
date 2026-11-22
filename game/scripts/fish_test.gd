@@ -9,6 +9,8 @@ extends Control
 ## placeholder did; results per fish are kept in the save (playtest.fish).
 ## A strong section hands the next one a head start, and consecutive catches
 ## build a streak (kept across fish, so it can be carried to harder ones).
+## The streak earns higher quality, bigger fish and bonus pearls
+## (scripts/fight/catch_reward.gd).
 
 const STAGE_TOP := 33.0
 
@@ -18,6 +20,7 @@ var _fight: FishFight
 var _sessions := {}       # fish id -> FightSession (totals only)
 var _streak := 0          # catches in a row, across fish
 var _best_streak := 0
+var _records := {}        # fish id -> {"best_size_cm", "best_quality"}
 var _rng := RandomNumberGenerator.new()
 
 var _picker: OptionButton
@@ -103,10 +106,12 @@ func _on_changed(amount: float) -> void:
 			_stage.play_sound("tock")
 		FishFight.Result.CAUGHT:
 			_session().record_catch()
-			var pearls := _award()
+			var reward := _award()
 			_streak += 1
 			_best_streak = maxi(_best_streak, _streak)
-			_stage.show_banner("Caught %s! +%d pearls\nStreak %d (best %d)" % [_fight.fish.name, pearls, _streak, _best_streak])
+			var bonus := " (+%d%%)" % roundi(reward.bonus * 100.0) if reward.bonus > 0.0 else ""
+			_stage.show_banner("Caught %s!\n%s, %.1f cm, +%d pearls%s\nStreak %d (best %d)" % [
+				_fight.fish.name, reward.quality_name, reward.size_cm, reward.pearls, bonus, _streak, _best_streak])
 			_stage.play_sound("catch")
 			_restart()
 		FishFight.Result.ESCAPED:
@@ -125,17 +130,25 @@ func _restart() -> void:
 	_store_results()
 
 
-## Adds the catch and its pearls to the save, as the old Cast button did.
-func _award() -> int:
+## Rolls the catch's quality, size and pearls (the streak so far raises all
+## three) and adds it to the save, as the old Cast button did.
+func _award() -> Dictionary:
 	var fish := _fight.fish
-	var pearls := _rng.randi_range(int(fish.pearls[0]), int(fish.pearls[1]))
-	SaveManager.data.pearls = int(SaveManager.data.pearls) + pearls
+	var reward := CatchReward.roll(fish, _streak, _fight.fight_accuracy(), _rng)
+	SaveManager.data.pearls = int(SaveManager.data.pearls) + int(reward.pearls)
 	SaveManager.data.catches.append({
 		"fish": fish.id,
-		"pearls": pearls,
+		"pearls": reward.pearls,
+		"quality": reward.quality,
+		"size_cm": reward.size_cm,
+		"streak": _streak,
 		"caught_at": Time.get_datetime_string_from_system(true),
 	})
-	return pearls
+	var record: Dictionary = _records.get(fish.id, {"best_size_cm": 0.0, "best_quality": 0})
+	record.best_size_cm = maxf(float(record.best_size_cm), float(reward.size_cm))
+	record.best_quality = maxi(int(record.best_quality), int(reward.quality))
+	_records[fish.id] = record
+	return reward
 
 
 func _refresh_meter() -> void:
@@ -165,6 +178,7 @@ func _load_results() -> void:
 	for id in saved:
 		if typeof(saved[id]) == TYPE_DICTIONARY:
 			_sessions[id] = FightSession.from_dict(saved[id])
+			_records[id] = {"best_size_cm": float(saved[id].get("best_size_cm", 0.0)), "best_quality": int(saved[id].get("best_quality", 0))}
 
 
 func _store_results() -> void:
@@ -174,6 +188,7 @@ func _store_results() -> void:
 	for id in _sessions:
 		if _sessions[id].played():
 			out[id] = _sessions[id].to_dict()
+			out[id].merge(_records.get(id, {"best_size_cm": 0.0, "best_quality": 0}), true)
 	SaveManager.data.playtest["fish"] = out
 	SaveManager.data.playtest["streak"] = {"current": _streak, "best": _best_streak}
 	SaveManager.save_local()
@@ -182,11 +197,16 @@ func _store_results() -> void:
 func _copy_results() -> void:
 	var lines: Array[String] = [ResultsText.header("fish test", _stage.sensor_available()),
 		"streak: %d now, best %d" % [_streak, _best_streak],
-		"fish | sections | caught | lost | avg catch s | accuracy %"]
+		"fish | sections | caught | lost | avg catch s | accuracy % | best"]
 	for e in _entries:
 		var s: FightSession = _sessions.get(e.id)
 		if s != null and s.played():
-			lines.append("%s | %s (%s) | %s" % [e.name, FishFight.new(e, 120.0).sections_summary(), e.get("curve", "climb"), ResultsText.totals(s)])
+			var record: Dictionary = _records.get(e.id, {})
+			var best := "-"
+			if float(record.get("best_size_cm", 0.0)) > 0.0:
+				var names: Array = FishCatalog.rewards().get("quality_names", ["Normal"])
+				best = "%s, %.1f cm" % [names[clampi(int(record.best_quality), 0, names.size() - 1)], float(record.best_size_cm)]
+			lines.append("%s | %s (%s) | %s | %s" % [e.name, FishFight.new(e, 120.0).sections_summary(), e.get("curve", "climb"), ResultsText.totals(s), best])
 	if lines.size() == 3:
 		lines.append("(no fish fought yet)")
 	ResultsText.copy(lines)

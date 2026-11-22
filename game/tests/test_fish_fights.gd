@@ -16,6 +16,7 @@ func _init() -> void:
 	_test_escape()
 	_test_bell_curve()
 	_test_carry_over()
+	_test_rewards()
 	_test_every_fish_plays()
 	if _failures == 0:
 		print("All fish fight tests passed.")
@@ -36,6 +37,7 @@ func _test_data() -> void:
 		_check(f.pearls.size() == 2 and int(f.pearls[0]) <= int(f.pearls[1]), "%s pearls are a [min, max] range" % f.id)
 		_check(f.sections.size() >= 1, "%s has at least one section" % f.id)
 		_check(str(f.get("curve", "climb")) in ["climb", "bell"], "%s curve is climb or bell" % f.id)
+		_check(f.has("size_cm") and f.size_cm.size() == 2 and float(f.size_cm[0]) > 0.0 and float(f.size_cm[0]) < float(f.size_cm[1]), "%s has a size range in cm" % f.id)
 		one_section = one_section or f.sections.size() == 1
 		many_sections = many_sections or f.sections.size() > 1
 		for s in f.sections:
@@ -45,6 +47,8 @@ func _test_data() -> void:
 	_check(one_section and many_sections, "some fish have one section, others several")
 	var rules := FishCatalog.rules()
 	_check(rules.has("start") and rules.has("carry_max") and rules.has("carry_threshold"), "fish data has the shared rules")
+	var rewards := FishCatalog.rewards()
+	_check(rewards.get("quality_names", []).size() >= 2 and rewards.quality_names.size() == rewards.get("quality_pearls", []).size(), "rewards name every quality tier and give each a pearl multiplier")
 	for canon in ["sanbi"]:
 		_check(ids.has(canon), "canon fish %s is in the data" % canon)
 
@@ -109,6 +113,43 @@ func _test_carry_over() -> void:
 	middling.add(0.8)
 	_check(is_equal_approx(middling.last_carry, middling.carry_max / 2.0), "carry: scales with accuracy above the threshold")
 	_check(middling.section_accuracy() == 0.0, "carry: accuracy resets for the new section")
+
+
+## Averages over many rolls: a long streak beats no streak on quality, size
+## and pearls, and every roll stays inside its limits.
+func _test_rewards() -> void:
+	var fish := FishCatalog.entry("magatum")
+	var rewards := FishCatalog.rewards()
+	var top: int = rewards.quality_names.size() - 1
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	var totals := {}
+	var in_limits := true
+	for streak in [0, 8]:
+		var q := 0.0
+		var size := 0.0
+		var pearls := 0.0
+		for i in 400:
+			var r := CatchReward.roll(fish, streak, 0.6, rng)
+			q += r.quality
+			size += r.size_cm
+			pearls += r.pearls
+			if r.quality < 0 or r.quality > top or r.size_cm < float(fish.size_cm[0]) or r.size_cm > float(fish.size_cm[1]) or r.bonus > float(rewards.pearls_streak_cap):
+				in_limits = false
+		totals[streak] = Vector3(q, size, pearls) / 400.0
+	_check(in_limits, "rewards: quality, size and bonus stay inside their limits")
+	_check(totals[8].x > totals[0].x + 0.5, "rewards: a streak raises quality")
+	_check(totals[8].y > totals[0].y + 10.0, "rewards: a streak raises size")
+	_check(totals[8].z > totals[0].z * 1.5, "rewards: a streak earns bonus pearls")
+	var no_streak := CatchReward.roll(fish, 0, 0.0, rng)
+	_check(no_streak.bonus == 0.0 and no_streak.pearls >= int(fish.pearls[0]), "rewards: no streak, no bonus")
+	var capped := CatchReward.roll(fish, 50, 1.0, rng)
+	_check(capped.quality == top and is_equal_approx(capped.bonus, float(rewards.pearls_streak_cap)), "rewards: very long streaks hit the top tier and the bonus cap")
+	var fight := FishFight.new(fish, SIDE)
+	fight.add_judgement(Vector2(3, 4))
+	fight.add(0.8)
+	fight.add_judgement(Vector2(1, 4))
+	_check(is_equal_approx(fight.fight_accuracy(), 0.5), "rewards: fight accuracy spans every section")
 
 
 func _test_escape() -> void:

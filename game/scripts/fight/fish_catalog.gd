@@ -6,6 +6,13 @@ const PATH := "res://data/fish.json"
 
 static var _entries: Array = []
 static var _rules: Dictionary = {}
+static var _rewards: Dictionary = {}
+
+
+## What a catch earns (quality tiers, size and pearl bonuses), from "rewards".
+static func rewards() -> Dictionary:
+	entries()
+	return _rewards
 
 
 ## Rules for every fish fight (start fill, carry-over), from "rules".
@@ -24,6 +31,7 @@ static func entries() -> Array:
 		if typeof(parsed) == TYPE_DICTIONARY and parsed.has("fish"):
 			_entries = parsed.fish
 			_rules = parsed.get("rules", {})
+			_rewards = parsed.get("rewards", {})
 		else:
 			push_error("FishCatalog: %s has no 'fish' list" % PATH)
 	return _entries
