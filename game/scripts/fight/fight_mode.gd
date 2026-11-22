@@ -10,6 +10,10 @@ extends RefCounted
 ## Meter changes are fractions of the catch meter: it starts at 0.25, the
 ## fish is caught at 1.0 and gets away at 0. Tuning numbers come from
 ## data/fight_modes.json so they can be balanced without touching code.
+##
+## Every mode can be easy or hard. `difficulty` runs from 0 (easiest) to 1
+## (hardest); a tuning value written as [easy, hard] is blended by it, so
+## each fish can later pick its own difficulty per mode.
 
 ## Which box is live. Only the Lost Ref mode changes it.
 ## NORMAL: play in the bottom box, read the top one. WARN_UP: both boxes
@@ -30,6 +34,8 @@ const POP_TIME := 0.6
 var id := ""
 var tuning := {}
 var side := 120.0
+## 0 = easiest, 1 = hardest (the touch test's slider shows 0-10).
+var difficulty := 0.5
 var time := 0.0
 ## Short live instruction shown under the meter ("Faster!", "Lift!").
 var cue := ""
@@ -42,10 +48,11 @@ var _judged := 0.0
 var _pops: Array = []  # [position, text, color, time left]
 
 
-func setup(p_id: String, p_tuning: Dictionary, p_side: float) -> void:
+func setup(p_id: String, p_tuning: Dictionary, p_side: float, p_difficulty := 0.5) -> void:
 	id = p_id
 	tuning = p_tuning
 	side = p_side
+	difficulty = clampf(p_difficulty, 0.0, 1.0)
 	if tuning.has("seed"):
 		rng.seed = int(tuning.seed)
 	else:
@@ -137,8 +144,13 @@ func sfx(sound: String) -> void:
 	sounds.append(sound)
 
 
+## A tuning number at the current difficulty: plain numbers as they are,
+## [easy, hard] pairs blended by `difficulty`.
 func num(key: String, fallback: float) -> float:
-	return float(tuning.get(key, fallback))
+	var value: Variant = tuning.get(key, fallback)
+	if value is Array and value.size() == 2:
+		return lerpf(float(value[0]), float(value[1]), difficulty)
+	return float(value)
 
 
 func center() -> Vector2:

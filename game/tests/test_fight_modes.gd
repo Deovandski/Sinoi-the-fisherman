@@ -23,6 +23,7 @@ func _init() -> void:
 	_test_reel_spin()
 	_test_flick_hookset()
 	_test_session()
+	_test_difficulty()
 	if _failures == 0:
 		print("All fight mode tests passed.")
 	quit(1 if _failures > 0 else 0)
@@ -32,15 +33,19 @@ func _test_catalog() -> void:
 	var entries := FightCatalog.entries()
 	_check(entries.size() >= 9, "catalog lists at least 9 modes")
 	var ids := {}
-	var last_guess := 0
 	for e in entries:
-		for key in ["id", "name", "script", "fingers", "guess", "hint", "tuning"]:
+		for key in ["id", "name", "script", "fingers", "hint", "tuning"]:
 			_check(e.has(key), "%s has '%s'" % [e.get("id", "?"), key])
 		_check(not ids.has(e.id), "%s id is unique" % e.id)
 		ids[e.id] = true
 		_check(int(e.fingers) >= 1 and int(e.fingers) <= 2, "%s uses 1 or 2 fingers" % e.id)
-		_check(int(e.guess) >= last_guess, "%s is in easy-to-hard order" % e.id)
-		last_guess = int(e.guess)
+		var pairs := 0
+		for key in e.tuning:
+			var v: Variant = e.tuning[key]
+			if v is Array:
+				pairs += 1
+				_check(v.size() == 2 and typeof(v[0]) in [TYPE_INT, TYPE_FLOAT] and typeof(v[1]) in [TYPE_INT, TYPE_FLOAT], "%s %s is an [easy, hard] pair of numbers" % [e.id, key])
+		_check(pairs >= 3, "%s has at least 3 values that change with difficulty" % e.id)
 	for id in ["slide_guide", "hold_hop", "twin_drift", "beat_notes", "tap_tempo", "lost_ref", "shake_rub"]:
 		_check(ids.has(id), "catalog has %s" % id)
 
@@ -281,6 +286,32 @@ func _test_flick_hookset() -> void:
 	for f in 60:
 		slow.step(DT, {0: start})
 	_check(slow.touch(0, start + slow.cue_dir * 30.0, false) == 0.0, "hookset: a slow drag is not a flick")
+
+
+func _test_difficulty() -> void:
+	var easy := FightCatalog.create("slide_guide", SIDE, {"seed": 1}, 0.0)
+	var middle := FightCatalog.create("slide_guide", SIDE, {"seed": 1}, 0.5)
+	var hard := FightCatalog.create("slide_guide", SIDE, {"seed": 1}, 1.0)
+	_check(is_equal_approx(easy.num("radius", 0), 16.0) and is_equal_approx(hard.num("radius", 0), 9.0), "difficulty: [easy, hard] pairs give the ends at 0 and 1")
+	_check(is_equal_approx(middle.num("radius", 0), 12.5), "difficulty: the middle blends the pair")
+	_check(is_equal_approx(easy.num("missing", 3.0), 3.0), "difficulty: missing keys use the fallback")
+	# A finger trailing 12 px behind the ring: still on it when easy, off it when hard.
+	var easy_total := 0.0
+	var hard_total := 0.0
+	for f in 300:
+		easy_total += easy.step(DT, {0: easy.target() + Vector2(12, 0)})
+		hard_total += hard.step(DT, {0: hard.target() + Vector2(12, 0)})
+	_check(easy_total > 0.0 and hard_total < 0.0, "difficulty: the same play passes on easy and fails on hard")
+	var lost_ref := FightCatalog.create("lost_ref", SIDE, {"seed": 2}, 0.9)
+	_check(is_equal_approx(lost_ref.inner.difficulty, 0.9), "difficulty: Lost Ref passes its difficulty to the inner mode")
+	# Every mode runs at both ends without errors.
+	for e in FightCatalog.entries():
+		for d in [0.0, 1.0]:
+			var mode := FightCatalog.create(e.id, SIDE, {"seed": 4}, d)
+			var total := 0.0
+			for f in 600:
+				total += mode.step(DT, {0: Vector2(60, 60)} if f % 40 < 20 else {})
+			_check(is_finite(total), "%s runs at difficulty %d" % [e.id, int(d * 10)])
 
 
 func _test_session() -> void:

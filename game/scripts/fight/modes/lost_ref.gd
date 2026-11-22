@@ -17,7 +17,7 @@ var _until := 0.0
 
 
 func _start() -> void:
-	inner = FightCatalog.create(str(tuning.get("inner", "slide_guide")), side, {"seed": rng.randi()})
+	inner = FightCatalog.create(str(tuning.get("inner", "slide_guide")), side, {"seed": rng.randi()}, difficulty)
 	_until = _normal_time()
 
 

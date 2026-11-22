@@ -28,9 +28,10 @@ static func entry(id: String) -> Dictionary:
 	return {}
 
 
-## Builds and sets up the mode `id` for a pad of `side` pixels. `overrides`
-## replace tuning values (tests use it to fix the random seed).
-static func create(id: String, side: float, overrides := {}) -> FightMode:
+## Builds and sets up the mode `id` for a pad of `side` pixels at
+## `difficulty` (0 easiest .. 1 hardest). `overrides` replace tuning values
+## (tests use it to fix the random seed).
+static func create(id: String, side: float, overrides := {}, difficulty := 0.5) -> FightMode:
 	var e := entry(id)
 	if e.is_empty():
 		push_error("FightCatalog: unknown mode '%s'" % id)
@@ -38,5 +39,5 @@ static func create(id: String, side: float, overrides := {}) -> FightMode:
 	var mode: FightMode = load(e.script).new()
 	var tuning: Dictionary = e.get("tuning", {}).duplicate()
 	tuning.merge(overrides, true)
-	mode.setup(id, tuning, side)
+	mode.setup(id, tuning, side, difficulty)
 	return mode

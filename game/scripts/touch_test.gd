@@ -2,8 +2,9 @@ extends Control
 ## Fight-box touch test: a playground for the fight-box modes.
 ##
 ## Layout (decided in docs/white-paper/02-design-direction.md):
-## - a carousel at the very top picks the mode (data/fight_modes.json, in
-##   predicted order from easiest to hardest);
+## - a carousel at the very top picks the mode (data/fight_modes.json);
+## - under it, a difficulty slider (0 easy .. 10 hard) sets how hard that
+##   mode plays; each mode remembers its own level (later, each fish sets it);
 ## - the shadow pad (top) shows the full picture and ghost fingers;
 ## - the real pad (bottom) is where fingers go, with light outlines only;
 ## - the catch meter and the mode's live cue sit between them;
@@ -18,14 +19,16 @@ extends Control
 const INTRO_TIME := 3.0
 const BANNER_TIME := 1.2
 const FINGER_COLORS := [Color("ffd166"), Color("06d6a0"), Color("ef476f"), Color("118ab2"), Color("ffffff")]
-const PAD_TOP := 34.0
+const PAD_TOP := 46.0
+const DEFAULT_LEVEL := 5
 const MIDDLE := 22.0
 const BOTTOM_ROW := 16.0
 
 var _entries: Array = []
 var _index := 0
 var _mode: FightMode
-var _sessions := {}       # mode id -> FightSession
+var _sessions := {}       # mode id -> {difficulty level -> FightSession}
+var _levels := {}         # mode id -> difficulty level (0..10)
 var _touches := {}        # touch index -> position in this control
 var _pad_touches := {}    # touch indexes that started in the real pad (in order)
 var _intro_left := 0.0
@@ -38,6 +41,7 @@ var _next_player := 0
 var _side := 120.0
 
 var _carousel: ModeCarousel
+var _slider: DifficultySlider
 var _stats: Label
 var _top_view: Control
 var _bottom_view: Control
@@ -77,8 +81,12 @@ func _build_ui() -> void:
 	_carousel.selected.connect(_select)
 	add_child(_carousel)
 
+	_slider = DifficultySlider.new()
+	_slider.changed.connect(_on_difficulty)
+	add_child(_slider)
+
 	var row := HBoxContainer.new()
-	row.position = Vector2(2, 18)
+	row.position = Vector2(2, 31)
 	row.add_theme_constant_override("separation", 6)
 	add_child(row)
 	row.add_child(_small_button("< Back", func(): get_tree().change_scene_to_file("res://scenes/main.tscn")))
@@ -135,6 +143,8 @@ func _layout() -> void:
 	_side = floorf(minf(size.x - 16.0, (size.y - PAD_TOP - MIDDLE - BOTTOM_ROW - 2.0) / 2.0))
 	_carousel.position = Vector2(2, 2)
 	_carousel.size = Vector2(size.x - 4.0, 14)
+	_slider.position = Vector2(2, 17)
+	_slider.size = Vector2(size.x - 4.0, 12)
 	_feel_row.position = Vector2(_top_rect().position.x, _bottom_rect().end.y + 3.0)
 	_feel_row.size = Vector2(_side, 13)
 	if _mode != null:
@@ -172,10 +182,14 @@ func _select(index: int) -> void:
 		_store_results()
 	_index = index
 	var e: Dictionary = _entries[index]
-	_mode = FightCatalog.create(e.id, _side)
+	var level := _level()
+	_mode = FightCatalog.create(e.id, _side, {}, level / float(DifficultySlider.MAX))
 	if not _sessions.has(e.id):
-		_sessions[e.id] = FightSession.new()
+		_sessions[e.id] = {}
+	if not _sessions[e.id].has(level):
+		_sessions[e.id][level] = FightSession.new()
 	_session().progress = FightSession.START
+	_slider.set_level(level)
 	_pad_touches.clear()
 	_intro_left = INTRO_TIME
 	_banner_left = 0.0
@@ -186,7 +200,22 @@ func _select(index: int) -> void:
 
 
 func _session() -> FightSession:
-	return _sessions[_entries[_index].id]
+	return _sessions[_entries[_index].id][_level()]
+
+
+func _level() -> int:
+	return int(_levels.get(_entries[_index].id, DEFAULT_LEVEL))
+
+
+## The slider moved: restart the fight at the new level (the old level's
+## results are kept separately).
+func _on_difficulty(level: int) -> void:
+	if level == _level():
+		return
+	_store_results()
+	_levels[_entries[_index].id] = level
+	_select(_index)
+	_store_results()
 
 
 func _process(delta: float) -> void:
@@ -307,13 +336,22 @@ func _on_feel(n: int) -> void:
 	_store_results()
 
 
-## Results and ratings live in the save (playtest.fight_modes), so they add
-## up over several sessions. "Reset save" on the title screen clears them.
+## Results and ratings live in the save (playtest.fight_modes, format v3),
+## per mode and per difficulty level, so they add up over several sessions.
+## "Reset save" on the title screen clears them.
 func _load_results() -> void:
 	var saved: Dictionary = SaveManager.data.get("playtest", {}).get("fight_modes", {})
 	for id in saved:
-		if typeof(saved[id]) == TYPE_DICTIONARY:
-			_sessions[id] = FightSession.from_dict(saved[id])
+		var entry: Variant = saved[id]
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		_levels[id] = clampi(int(entry.get("difficulty", DEFAULT_LEVEL)), 0, DifficultySlider.MAX)
+		_sessions[id] = {}
+		var levels: Variant = entry.get("levels", {})
+		if typeof(levels) == TYPE_DICTIONARY:
+			for key in levels:
+				if typeof(levels[key]) == TYPE_DICTIONARY and str(key).is_valid_int():
+					_sessions[id][clampi(int(key), 0, DifficultySlider.MAX)] = FightSession.from_dict(levels[key])
 
 
 func _store_results() -> void:
@@ -321,8 +359,12 @@ func _store_results() -> void:
 		return
 	var out := {}
 	for id in _sessions:
-		if _sessions[id].played():
-			out[id] = _sessions[id].to_dict()
+		var levels := {}
+		for level in _sessions[id]:
+			if _sessions[id][level].played():
+				levels[str(level)] = _sessions[id][level].to_dict()
+		if not levels.is_empty() or _levels.has(id):
+			out[id] = {"difficulty": int(_levels.get(id, DEFAULT_LEVEL)), "levels": levels}
 	SaveManager.data.playtest.fight_modes = out
 	SaveManager.save_local()
 
@@ -333,16 +375,20 @@ func _copy_results() -> void:
 		ProjectSettings.get_setting("application/config/version"), OS.get_name(),
 		DisplayServer.screen_get_size().x, DisplayServer.screen_get_size().y,
 		"yes" if _sensor.available() else "no"])
-	lines.append("mode | guess | caught | lost | avg catch s | accuracy % | felt (1-5)")
+	lines.append("mode | difficulty (0-10) | caught | lost | avg catch s | accuracy % | felt (1-5)")
 	var any := false
 	for e in _entries:
-		var s: FightSession = _sessions.get(e.id)
-		if s == null or not s.played():
-			continue
-		any = true
-		lines.append("%s | %d | %d | %d | %s | %d | %s" % [e.name, int(e.guess), s.catches, s.escapes,
-			("%.1f" % s.average_catch_time()) if s.catches > 0 else "-",
-			roundi(s.accuracy() * 100.0), str(s.feel) if s.feel > 0 else "-"])
+		var by_level: Dictionary = _sessions.get(e.id, {})
+		var keys := by_level.keys()
+		keys.sort()
+		for level in keys:
+			var s: FightSession = by_level[level]
+			if not s.played():
+				continue
+			any = true
+			lines.append("%s | %d | %d | %d | %s | %d | %s" % [e.name, level, s.catches, s.escapes,
+				("%.1f" % s.average_catch_time()) if s.catches > 0 else "-",
+				roundi(s.accuracy() * 100.0), str(s.feel) if s.feel > 0 else "-"])
 	if not any:
 		lines.append("(no modes played yet)")
 	var text := "\n".join(lines)
@@ -438,7 +484,7 @@ func _draw_overlay() -> void:
 		FightMode.text(_overlay, Vector2(card.get_center().x, card.position.y + 10.0), e.name, Color("ffd166"), 10)
 		_overlay.draw_multiline_string(font, card.position + Vector2(6, 26), e.hint, HORIZONTAL_ALIGNMENT_CENTER, card.size.x - 12.0, 7, -1, Color("eef6fa"))
 		var fingers := "1 finger" if int(e.fingers) == 1 else "%d fingers" % int(e.fingers)
-		FightMode.text(_overlay, Vector2(card.get_center().x, card.end.y - 22.0), "Difficulty guess %d/5 - %s" % [int(e.guess), fingers], Color("9fc3d6"))
+		FightMode.text(_overlay, Vector2(card.get_center().x, card.end.y - 22.0), "Difficulty %d/10 - %s" % [_level(), fingers], Color("9fc3d6"))
 		var start := "Touch the bottom box to start" if not _mode.uses_motion() else "Starting in %d..." % ceili(_intro_left)
 		FightMode.text(_overlay, Vector2(card.get_center().x, card.end.y - 10.0), start, Color("f3e3b3"))
 	elif _banner_left > 0.0:

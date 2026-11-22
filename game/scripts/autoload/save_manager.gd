@@ -13,7 +13,7 @@ signal changed
 signal message(text: String)
 
 const FORMAT := "sinoi-save"
-const VERSION := 2
+const VERSION := 3
 const MAX_IMPORT_BYTES := 1_000_000
 
 var save_path := "user://save.json"
@@ -44,8 +44,9 @@ static func default_data() -> Dictionary:
 			"timing_forgiveness": 0,
 			"left_handed": false,
 		},
-		# Pre-production playtests: per fight-box mode, the tester's totals and
-		# "How hard?" rating (see FightSession.to_dict()).
+		# Pre-production playtests: per fight-box mode, the chosen difficulty
+		# and, per difficulty level, the tester's totals and "How hard?"
+		# rating (see FightSession.to_dict()).
 		"playtest": {
 			"fight_modes": {},
 		},
@@ -90,6 +91,16 @@ func _migrate(save: Dictionary, from_version: int) -> Dictionary:
 	if from_version < 2:
 		# v2 adds the fight-box playtest results.
 		out["playtest"] = {"fight_modes": {}}
+	if from_version < 3:
+		# v3 splits results by difficulty level. v2 results were played at the
+		# fixed tuning, which is today's middle level (5).
+		var modes: Variant = out.get("playtest", {}).get("fight_modes", {})
+		var upgraded := {}
+		if typeof(modes) == TYPE_DICTIONARY:
+			for id in modes:
+				if typeof(modes[id]) == TYPE_DICTIONARY:
+					upgraded[id] = {"difficulty": 5, "levels": {"5": modes[id]}}
+		out["playtest"] = {"fight_modes": upgraded}
 	return out
 
 
