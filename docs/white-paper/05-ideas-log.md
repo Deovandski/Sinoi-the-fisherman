@@ -22,7 +22,7 @@ Status: **Kept** (in the design), **Cut** (rejected), **Testing** (prototype exi
 | 2026-11-08 | Fight box as a trackpad with osu!-style slides, taps, releases and flicks | Deo | Kept | Varied, active input with room for multi-finger play | [02](02-design-direction.md) |
 | 2026-11-08 | osu! and Project Diva as inspiration | Deo | Kept | For the fight input and the forgiveness settings; mechanics only, never names or assets | [02](02-design-direction.md) |
 | 2026-11-08 | One finger at the start, up to two (index + middle of one hand) | Deo | Kept | Easy start; the second finger is the late-game skill | [02](02-design-direction.md) |
-| 2026-11-08 | Two hands and tablets | Deo | Kept | Allowed and supported, never required. **Why tablets: ask Deo** | [02](02-design-direction.md) |
+| 2026-11-08 | Two hands and tablets | Deo | Kept | Allowed and supported, never required. Tablets because a bigger screen adds little extra work: about the same as supporting a touch-screen laptop (Deo, 2026-11-22) | [02](02-design-direction.md) |
 | 2026-11-08 | Portrait orientation | Claude, Deo | Kept | One-handed play on a phone held normally *(inferred)* | [01](01-research-analysis.md) |
 | 2026-11-08 | Two pads: real pad below, shadow pad above | Deo | Kept | Fingers cover the real pad, so the player watches the shadow | [02](02-design-direction.md) |
 | 2026-11-08 | Timing-forgiveness settings with a warning ("Use this for accessibility, not to cheese the game!...") | Deo | Kept | Accessibility; hard fish should be beaten with bait and tackle, not settings | [02](02-design-direction.md) |
@@ -30,7 +30,7 @@ Status: **Kept** (in the design), **Cut** (rejected), **Testing** (prototype exi
 | 2026-11-08 | Lore fish as pattern twists (Sanbi decoys, Ptaina stun, Fihi shocks) | Claude | Open | Proposal; Hookset's X decoy is a first test of the Sanbi idea | [02](02-design-direction.md), [04](04-fight-box-modes.md) |
 | 2026-11-08 | AI placeholder art, then the illustrator draws over it | Deo | Kept | Lets the game be built before final art; placeholders follow the brief so final art drops in | [03](03-plan-and-roles.md) |
 | 2026-11-08 | Dedicated test phone for the illustrator | Deo | Kept | Developer mode and USB debugging weaken a phone's security, so not her main phone | [03](03-plan-and-roles.md) |
-| 2026-11-08 | Open source (MIT code, CC BY-NC-SA docs) | Deo | Kept | Deo's call. **Why: ask Deo** | [03](03-plan-and-roles.md) |
+| 2026-11-08 | Open source (MIT code, CC BY-NC-SA docs) | Deo | Kept | A technical portfolio for Deo, and the project itself is free advertising for the #HusbandOutWorld series (Deo, 2026-11-22) | [03](03-plan-and-roles.md) |
 | 2026-11-08 | Local saves with JSON export and import | Deo | Kept | Players can move or back up saves with no account or server | [SAVE_FORMAT](../SAVE_FORMAT.md) |
 | 2026-11-08 | One Godot project for the web and Android builds | Deo | Kept | One codebase; the website build lets anyone try it with no install | [BUILDING](../BUILDING.md) |
 | 2026-11-08 | Support banner always on vs. on a credits screen | Claude | Open | An always-on banner may make Google Play label the game "Contains ads" | [01](01-research-analysis.md) |

@@ -33,4 +33,4 @@ Placeholders must already follow the brief's final specs (canvas sizes, anchor p
 
 ## Open source
 
-The project is open source: code under MIT, docs and original content under CC BY-NC-SA 4.0 (see [LICENSE](../../LICENSE)). Secrets (signing keys, store credentials) never enter the repository.
+The project is open source because it doubles as Deovandski's technical portfolio and as free advertising for the #HusbandOutWorld series. Code is under MIT, docs and original content under CC BY-NC-SA 4.0 (see [LICENSE](../../LICENSE)). Secrets (signing keys, store credentials) never enter the repository.
