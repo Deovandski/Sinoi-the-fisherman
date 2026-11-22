@@ -1,5 +1,7 @@
 {
 	"_about": "Every fish in the game so far, easiest first. A fish's fight is one or more sections; each section is one fight-box mode (an id from fight_modes.json) with a difficulty range [from, to] on the 0 (easy) .. 1 (hard) scale. 'curve' says how difficulty moves through a section as its meter fills: 'climb' rises from 'from' to 'to'; 'bell' rises to 'to' halfway and eases back to 'from'. 'rules' apply to every fish: each fight starts at 'start'; a finished section hands the next one a head start of up to 'carry_max', scaled by how well it was played (accuracy above 'carry_threshold'). Names follow the two-language rule (see CLAUDE.md); Sanbi is canon. 'pearls' is the reward range [min, max]. See docs/white-paper/06-fish-fights.md.",
+	"_about_lore": "'region' is where the fish is found (canon places from the World Lore; placeholders until the West March travel map sets fish per region). 'lore' is a one- or two-line teaser shown in the journal: it nudges at the lore without dumping it, so curious players follow 'lore_link' to the website. Facts must come from the series; new fish get flavour tied to canon places, not new canon. See CLAUDE.md, 'Nudge the lore'.",
+	"lore_link": "https://husbandoutworld.com/",
 	"rules": {"start": 0.25, "carry_max": 0.25, "carry_threshold": 0.5},
 	"_about_rewards": "What a catch earns. Quality: a roll of 0..1, plus 'quality_per_streak' for every catch already in the streak, plus up to 'quality_accuracy' for accuracy above 50%; the whole part picks a tier (capped at the last). Size: rolled in the fish's 'size_cm' range, pushed toward the top by 'size_per_streak' per streak catch. Pearls: rolled in the fish's range, times the tier's 'quality_pearls' multiplier, plus 'pearls_per_streak' per streak catch (capped at 'pearls_streak_cap').",
 	"rewards": {
@@ -19,6 +21,8 @@
 			"pearls": [2, 5],
 			"size_cm": [25, 80],
 			"curve": "climb",
+			"region": "Deltacross",
+			"lore": "Thick around the Deltacross ferry, where a crossing costs 2 pearls and drinks float by in cocona shells.",
 			"description": "A lazy pond fish. It drifts about and gives up quickly.",
 			"sections": [
 				{"mode": "slide_guide", "difficulty": [0.1, 0.3]}
@@ -31,6 +35,8 @@
 			"pearls": [2, 6],
 			"size_cm": [30, 120],
 			"curve": "climb",
+			"region": "Sanbi swamps",
+			"lore": "Lurks in Sanbi's swamps, where Cruros harvest the very pearls in your pocket. Mind the Crocus.",
 			"description": "A heavy bottom-feeder. Reel it up, then keep up as it wanders.",
 			"sections": [
 				{"mode": "reel_spin", "difficulty": [0.2, 0.4]},
@@ -44,6 +50,8 @@
 			"pearls": [3, 8],
 			"size_cm": [60, 200],
 			"curve": "bell",
+			"region": "Fostwater",
+			"lore": "Runs where Fostwater's harbor glows, right where salt water meets fresh.",
 			"description": "Fast and strong, but it burns out: each stage of the fight peaks in the middle. Set the hook, survive its runs, then match its tail beat.",
 			"sections": [
 				{"mode": "flick_hookset", "difficulty": [0.3, 0.5]},
@@ -58,6 +66,8 @@
 			"pearls": [10, 25],
 			"size_cm": [40, 90],
 			"curve": "climb",
+			"region": "Sanbi Dockyard",
+			"lore": "It takes a strong fisher to land two a day, unless you're from the one family the True Sanbi King blessed. Ask the docks about their daily prayer dance.",
 			"description": "Placeholder fight for the canon fish. Ignore its decoys, hold steady, and keep going when you lose sight of it.",
 			"sections": [
 				{"mode": "flick_hookset", "difficulty": [0.5, 0.7]},

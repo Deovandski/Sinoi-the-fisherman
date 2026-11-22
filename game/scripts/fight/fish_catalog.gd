@@ -7,6 +7,13 @@ const PATH := "res://data/fish.json"
 static var _entries: Array = []
 static var _rules: Dictionary = {}
 static var _rewards: Dictionary = {}
+static var _lore_link := ""
+
+
+## Where the journal's "Read more" sends curious players.
+static func lore_link() -> String:
+	entries()
+	return _lore_link
 
 
 ## What a catch earns (quality tiers, size and pearl bonuses), from "rewards".
@@ -32,6 +39,7 @@ static func entries() -> Array:
 			_entries = parsed.fish
 			_rules = parsed.get("rules", {})
 			_rewards = parsed.get("rewards", {})
+			_lore_link = str(parsed.get("lore_link", ""))
 		else:
 			push_error("FishCatalog: %s has no 'fish' list" % PATH)
 	return _entries

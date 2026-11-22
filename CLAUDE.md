@@ -20,6 +20,13 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 - **Never remove, rename or edit `site/google0c08003a2b869d98.html`:** it's the Google Search Console verification file. Google re-checks it, and removing it un-verifies the site.
 - Keep the support text and Amazon link (`https://www.amazon.com/dp/B0BT5XM4QC`) wherever the credits appear.
 
+## Nudge the lore, don't dump it
+
+In-game lore (journal teasers, notices, descriptions) should make curious players want more, then point them to the series' website (`lore_link` in `game/data/fish.json`, https://husbandoutworld.com/).
+- Keep it to a line or two: a hook, a name, a hint. Never a summary of the story.
+- Facts come from the series and the World Lore (`Deovandski/HusbandOutWorld`, `Deovandski/Vraki-West-March-Campaign-D-D`); the series wins. New fish get flavour tied to canon places, not new canon.
+- No spoilers from unreleased story notes. When unsure whether something may be revealed, ask Deo.
+
 ## Keep the white paper's record of ideas
 
 During the research phase, every idea gets recorded, including the ones that don't make the cut.

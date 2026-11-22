@@ -1,0 +1,9 @@
+{
+	"_about": "The ball currency of #HusbandOutWorld (World Lore: Money, Prices & Economy). Marble-sized gemstone balls; the game counts everything in pearls and shows bigger amounts in higher balls. Largest first.",
+	"balls": [
+		{"name": "sapphire", "pearls": 5000},
+		{"name": "aquamarine", "pearls": 500},
+		{"name": "amethyst", "pearls": 50},
+		{"name": "pearl", "pearls": 1}
+	]
+}

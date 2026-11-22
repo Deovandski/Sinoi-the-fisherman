@@ -18,6 +18,7 @@ func _init() -> void:
 	_test_carry_over()
 	_test_rewards()
 	_test_journal()
+	_test_balls()
 	_test_every_fish_plays()
 	if _failures == 0:
 		print("All fish fight tests passed.")
@@ -39,6 +40,9 @@ func _test_data() -> void:
 		_check(f.sections.size() >= 1, "%s has at least one section" % f.id)
 		_check(str(f.get("curve", "climb")) in ["climb", "bell"], "%s curve is climb or bell" % f.id)
 		_check(f.has("size_cm") and f.size_cm.size() == 2 and float(f.size_cm[0]) > 0.0 and float(f.size_cm[0]) < float(f.size_cm[1]), "%s has a size range in cm" % f.id)
+		_check(str(f.get("region", "")) != "", "%s has a region" % f.id)
+		var lore := str(f.get("lore", ""))
+		_check(lore != "" and lore.length() <= 160, "%s has a short lore teaser (a nudge, not a dump)" % f.id)
 		one_section = one_section or f.sections.size() == 1
 		many_sections = many_sections or f.sections.size() > 1
 		for s in f.sections:
@@ -48,6 +52,7 @@ func _test_data() -> void:
 	_check(one_section and many_sections, "some fish have one section, others several")
 	var rules := FishCatalog.rules()
 	_check(rules.has("start") and rules.has("carry_max") and rules.has("carry_threshold"), "fish data has the shared rules")
+	_check(FishCatalog.lore_link().begins_with("https://"), "fish data links the lore website")
 	var rewards := FishCatalog.rewards()
 	_check(rewards.get("quality_names", []).size() >= 2 and rewards.quality_names.size() == rewards.get("quality_pearls", []).size(), "rewards name every quality tier and give each a pearl multiplier")
 	for canon in ["sanbi"]:
@@ -168,6 +173,16 @@ func _test_journal() -> void:
 	var rebuilt := Journal.rebuild([{"fish": "magatum", "pearls": 6, "size_cm": 90.0}, {"fish": "magatum", "pearls": 14, "size_cm": 142.5}, "junk"])
 	_check(int(rebuilt.magatum.caught) == 2 and is_equal_approx(Journal.average_pearls(rebuilt.magatum), 10.0), "journal: rebuilds from a catch log, skipping bad entries")
 	_check(Journal.average_pearls({}) == 0.0, "journal: an empty entry averages 0")
+
+
+func _test_balls() -> void:
+	_check(Balls.format(17.0) == "17 pearls", "balls: small amounts stay in pearls")
+	_check(Balls.format(1.0) == "1 pearl", "balls: one pearl")
+	_check(Balls.format(17.5) == "17.5 pearls", "balls: averages keep a decimal")
+	_check(Balls.format(50.0) == "1 amethyst", "balls: 50 pearls is an amethyst")
+	_check(Balls.format(103.4) == "2 amethysts, 3.4 pearls", "balls: bigger amounts use bigger balls")
+	_check(Balls.format(5051.0) == "1 sapphire, 1 amethyst, 1 pearl", "balls: sapphires, skipping empty balls")
+	_check(Balls.format(0.0) == "0 pearls", "balls: nothing is 0 pearls")
 
 
 func _test_escape() -> void:

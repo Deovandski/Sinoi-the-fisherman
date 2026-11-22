@@ -35,9 +35,12 @@ Decided by Deovandski (2026-11-22): **a streak earns higher quality, bigger fish
 
 Decided by Deovandski (2026-11-22): **the game keeps a journal with every fish caught: how many, the biggest catch, and the average payoff in pearls.**
 
-![The title screen with the new Journal button after importing a sample save, and the Journal: Karkoi and Magatum caught with their counts, biggest catch and average payoff; the two fish not caught yet show "???".](img/2026-11-22-journal.png)
+![The title screen with the Journal button after importing a sample save, and the Journal: Karkoi and Magatum caught, each with count, best quality, biggest catch, average payoff in balls, first catch date, region, a lore teaser and a Read more button; the two fish not caught yet show "???" and where they're seen.](img/2026-11-22-journal.png)
 
-- **Title screen → Journal** lists every fish in `fish.json` order. A caught fish shows how many were caught, the biggest catch (size and that catch's quality) and the average pearls per catch. Fish not caught yet show "???". The top line counts species found and total catches.
+- **Title screen → Journal** lists every fish in `fish.json` order. The top line counts species found and total catches.
+- A caught fish shows (Deovandski asked for all of these, 2026-11-22): how many were caught and the **best quality**; the biggest catch (size and that catch's quality); the **average payoff in balls** (pearls, shown as amethysts and up once it reaches 50: "1 amethyst, 2.8 pearls", from `data/balls.json`); the **first catch date**; the **region**; and a **lore teaser** with a "Read more on husbandoutworld.com" button.
+- Fish not caught yet show "???" and where they're seen ("Seen around Sanbi Dockyard"), a nudge to go there. Their lore stays hidden until caught.
+- **Lore teasers follow the "nudge, don't dump" rule** (CLAUDE.md): a line or two from canon, enough to bait curious players to the website. Regions are canon places; which fish lives where is a placeholder until the West March travel map sets fish per region.
 - The journal is saved as its own section (`journal`, save format v7): one entry per fish with the count, total pearls, biggest size and its quality, best quality, and first and last catch times. Keeping totals (rather than reading the catch log each time) keeps the journal right even if the catch log is trimmed later. Older saves get a journal built from their catch log.
 - Fish-test catches fill it for now; real fishing will use the same `Journal.record()`.
 
@@ -71,12 +74,12 @@ Every fish is in [`game/data/fish.json`](../../game/data/fish.json), easiest fir
 
 All four existed before as the Cast button's placeholder catches. Their sections are a first pass, themed on the real fish they're named after.
 
-| Fish | Based on | Sections (difficulty 0–10) | Curve | Pearls | Size (cm) |
-| --- | --- | --- | --- | --- | --- |
-| Karkoi | carp (Karpfen + koi) | Slide Guide 1–3 | climb | 2–5 | 25–80 |
-| Bagnazu | catfish (bagre + namazu) | Reel Spin 2–4, Slide Guide 3–5 | climb | 2–6 | 30–120 |
-| Magatum | tuna (maguro + atum) | Hookset 3–5, Reel Spin 4–6, Tap Tempo 4–6 | bell | 3–8 | 60–200 |
-| Sanbi (canon) | #HusbandOutWorld | Hookset 5–7 (decoys), Hold Hop 5–7, Lost Ref 6–8 | climb | 10–25 | 40–90 (placeholder) |
+| Fish | Based on | Region | Sections (difficulty 0–10) | Curve | Pearls | Size (cm) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Karkoi | carp (Karpfen + koi) | Deltacross | Slide Guide 1–3 | climb | 2–5 | 25–80 |
+| Bagnazu | catfish (bagre + namazu) | Sanbi swamps | Reel Spin 2–4, Slide Guide 3–5 | climb | 2–6 | 30–120 |
+| Magatum | tuna (maguro + atum) | Fostwater | Hookset 3–5, Reel Spin 4–6, Tap Tempo 4–6 | bell | 3–8 | 60–200 |
+| Sanbi (canon) | #HusbandOutWorld | Sanbi Dockyard | Hookset 5–7 (decoys), Hold Hop 5–7, Lost Ref 6–8 | climb | 10–25 | 40–90 (placeholder) |
 
 The "based on" pairs for Karkoi and Bagnazu are Claude's reading of the existing names under the two-language rule; Magatum's is the example in CLAUDE.md. Sanbi's fight is a placeholder until the lore is checked.
 
@@ -103,7 +106,7 @@ Magatum | Hookset 3-5, Reel Spin 4-6, Tap Tempo 4-6 (bell) | 1 | 3 | 41.2 | 57 |
 - `scripts/fight/fish_fight.gd` — sections, segment fills, difficulty curves, carry-over, catch and escape.
 - `scripts/fight/fish_catalog.gd` — reads `fish.json`.
 - `scripts/fight/catch_reward.gd` — rolls a catch's quality, size and pearls from the streak and accuracy.
-- `scripts/journal.gd` — records catches into the journal and works out averages; `scripts/journal_screen.gd` + `scenes/journal.tscn` show it.
+- `scripts/journal.gd` — records catches into the journal and works out averages; `scripts/journal_screen.gd` + `scenes/journal.tscn` show it; `scripts/balls.gd` formats pearls into the ball currency.
 - `scripts/fish_test.gd` + `scenes/fish_test.tscn` — the screen.
 - `tests/test_fish_fights.gd` — data checks, section flow, climb and bell curves, carry-over, streak rewards, the journal, escape, and every fish's sections running.
 
@@ -117,7 +120,9 @@ Magatum | Hookset 3-5, Reel Spin 4-6, Tap Tempo 4-6 (bell) | 1 | 3 | 41.2 | 57 |
 - **Later sections more forgiving?** No: walls of difficulty push players toward better gear; skilled players can crank through anyway.
 - **Do quality and size matter beyond pearls?** Yes, in the journal: every fish caught records how many, the biggest catch and the average payoff.
 
+- **What else should the journal show?** All of it: best quality, first catch date, region and lore text (with the nudge rule above).
+
 ## Open questions
 
-- Should the journal show more later (best quality, first catch date, region, lore text once regions exist)?
+- Which fish live in which region (waits for the West March travel map)?
 - Fish beyond these four (canon Fihi, Ptaina, True Sanbi King, and new two-language fish) wait for the region and fish lists.
