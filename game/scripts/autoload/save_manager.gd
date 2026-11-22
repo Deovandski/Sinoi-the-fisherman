@@ -13,7 +13,7 @@ signal changed
 signal message(text: String)
 
 const FORMAT := "sinoi-save"
-const VERSION := 3
+const VERSION := 4
 const MAX_IMPORT_BYTES := 1_000_000
 
 var save_path := "user://save.json"
@@ -44,11 +44,12 @@ static func default_data() -> Dictionary:
 			"timing_forgiveness": 0,
 			"left_handed": false,
 		},
-		# Pre-production playtests: per fight-box mode, the chosen difficulty
-		# and, per difficulty level, the tester's totals and "How hard?"
-		# rating (see FightSession.to_dict()).
+		# Pre-production playtests (see FightSession.to_dict()):
+		# fight_modes: per mode, the chosen difficulty and totals per level;
+		# fish: totals per fish from the fish test.
 		"playtest": {
 			"fight_modes": {},
+			"fish": {},
 		},
 	}
 
@@ -101,6 +102,20 @@ func _migrate(save: Dictionary, from_version: int) -> Dictionary:
 				if typeof(modes[id]) == TYPE_DICTIONARY:
 					upgraded[id] = {"difficulty": 5, "levels": {"5": modes[id]}}
 		out["playtest"] = {"fight_modes": upgraded}
+	if from_version < 4:
+		# v4 drops the "How hard?" ratings (the difficulty slider replaced
+		# them) and adds fish-test results.
+		var playtest: Dictionary = out.get("playtest", {}) if typeof(out.get("playtest")) == TYPE_DICTIONARY else {}
+		var modes: Variant = playtest.get("fight_modes", {})
+		if typeof(modes) == TYPE_DICTIONARY:
+			for id in modes:
+				var levels: Variant = modes[id].get("levels", {}) if typeof(modes[id]) == TYPE_DICTIONARY else {}
+				if typeof(levels) == TYPE_DICTIONARY:
+					for level in levels:
+						if typeof(levels[level]) == TYPE_DICTIONARY:
+							levels[level].erase("feel")
+		playtest["fish"] = {}
+		out["playtest"] = playtest
 	return out
 
 

@@ -247,6 +247,17 @@ func _test_reel_spin() -> void:
 		a += TAU * 1.5 * DT  # 1.5 turns a second, clockwise on screen
 		total += mode.step(DT, {0: mode.center() + Vector2.from_angle(a) * 35.0})
 	_check(total > 0.1, "reel spin: steady clockwise spinning reels in")
+	# Touch updates only every third frame (slow phones, browsers) still read as spinning.
+	var sparse := FightCatalog.create("reel_spin", SIDE, {"seed": 10, "reel_min": 100.0, "reel_max": 100.0})
+	var sparse_total := 0.0
+	var at := sparse.center() + Vector2(35, 0)
+	a = 0.0
+	for f in 240:
+		a += TAU * 1.5 * DT
+		if f % 3 == 0:
+			at = sparse.center() + Vector2.from_angle(a) * 35.0
+		sparse_total += sparse.step(DT, {0: at})
+	_check(sparse_total > 0.1, "reel spin: works when touches update less often than frames")
 	var wrong := FightCatalog.create("reel_spin", SIDE, {"seed": 10, "reel_min": 100.0, "reel_max": 100.0})
 	var lost := 0.0
 	a = 0.0

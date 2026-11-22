@@ -44,6 +44,7 @@ A new page in `site/` also needs: an entry in `site/sitemap.xml` and `site/llms.
 godot --headless --path game --import                                   # first run / after adding assets
 godot --headless --path game -s res://tests/test_save_manager.gd        # tests (must pass)
 godot --headless --path game -s res://tests/test_fight_modes.gd
+godot --headless --path game -s res://tests/test_fish_fights.gd
 mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play
 python3 tools/build_llms_full.py site                                   # after the export
 ```

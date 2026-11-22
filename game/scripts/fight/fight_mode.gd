@@ -34,8 +34,12 @@ const POP_TIME := 0.6
 var id := ""
 var tuning := {}
 var side := 120.0
-## 0 = easiest, 1 = hardest (the touch test's slider shows 0-10).
-var difficulty := 0.5
+## 0 = easiest, 1 = hardest (the touch test's slider shows 0-10). Tuning
+## is read live, so a fish section can raise it while the fight goes on.
+var difficulty := 0.5:
+	set(value):
+		difficulty = clampf(value, 0.0, 1.0)
+		_difficulty_changed()
 var time := 0.0
 ## Short live instruction shown under the meter ("Faster!", "Lift!").
 var cue := ""
@@ -52,7 +56,7 @@ func setup(p_id: String, p_tuning: Dictionary, p_side: float, p_difficulty := 0.
 	id = p_id
 	tuning = p_tuning
 	side = p_side
-	difficulty = clampf(p_difficulty, 0.0, 1.0)
+	difficulty = p_difficulty
 	if tuning.has("seed"):
 		rng.seed = int(tuning.seed)
 	else:
@@ -78,6 +82,11 @@ func pads() -> Pads:
 
 
 func _start() -> void:
+	pass
+
+
+## Called whenever `difficulty` changes (Lost Ref passes it to its inner mode).
+func _difficulty_changed() -> void:
 	pass
 
 

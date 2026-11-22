@@ -4,7 +4,7 @@ Recorded November 21, 2026 from Deovandski's brief in [issue #1](https://github.
 
 ## The brief
 
-On the touch-test fight box, add a carousel at the very top to pick between fight-box modes. Keep the first prototype (now **Slide Guide**) and add:
+On the touch-test fight box, add a carousel at the very top to pick between fight-box modes (since replaced by a drop-down, issue #16). Keep the first prototype (now **Slide Guide**) and add:
 
 1. **Press and hold**, lift, then press and hold in a new spot. Tighter spots; the player can't stay outside the spot for long; the touch and the release are punished more than not pressing the exact spot. → **Hold Hop**
 2. **Two-finger slides**: index and middle finger each keep a box that moves up, down, left and right in its own area, at varying speed. → **Twin Drift**
@@ -17,21 +17,20 @@ On the touch-test fight box, add a carousel at the very top to pick between figh
 ## How to test
 
 1. Open the game (website or APK) and tap **Fight box: try the modes**.
-2. Pick a mode from the carousel at the top: swipe it, tap a neighbour, or tap the arrows. A card explains the mode; touch the bottom box to start (Shake starts by itself).
-3. Set the **difficulty slider** under the carousel: 0 (easy) to 10 (hard), 5 to start. Each mode remembers its own level; moving the slider restarts the fight at the new level.
-4. Play a few fish. The meter starts a quarter full: fill it to catch the fish, let it empty and the fish gets away. The row under the carousel shows catches, losses, average catch time and accuracy for that mode.
-5. Tap **How hard?** 1 (easy) to 5 (hard): how hard that mode felt at that level.
-6. Tap **Copy** and paste the results to Deovandski. They look like this:
+2. Pick a mode from the drop-down at the top. A card explains the mode; touch the bottom box to start (Shake starts by itself).
+3. Set the **difficulty slider** under it: 0 (easy) to 10 (hard), 5 to start. Each mode remembers its own level; moving the slider restarts the fight at the new level.
+4. Play a few fish. The meter starts a quarter full: fill it to catch the fish, let it empty and the fish gets away. The row under the slider shows catches, losses, average catch time and accuracy for that mode and level.
+5. Tap **Copy** and paste the results to Deovandski. They look like this:
 
 ```
 Sinoi the Fisherman fight-box test, build 0.0.1, Android, screen 1080x2400, motion sensor yes
-mode | difficulty (0-10) | caught | lost | avg catch s | accuracy % | felt (1-5)
-Slide Guide | 5 | 4 | 1 | 7.9 | 81 | 1
-Slide Guide | 9 | 1 | 3 | 15.0 | 58 | 3
-Twin Drift | 2 | 1 | 3 | 18.2 | 52 | 4
+mode | difficulty (0-10) | caught | lost | avg catch s | accuracy %
+Slide Guide | 5 | 4 | 1 | 7.9 | 81
+Slide Guide | 9 | 1 | 3 | 15.0 | 58
+Twin Drift | 2 | 1 | 3 | 18.2 | 52
 ```
 
-Results and ratings are kept in the save file per mode and per difficulty level (`playtest.fight_modes`, save format v3, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)), so they add up over several sessions and travel with an exported save. **Reset save** on the title screen clears them. The modes, their order and every tuning number live in [`game/data/fight_modes.json`](../../game/data/fight_modes.json), so balancing doesn't need code changes.
+Results are kept in the save file per mode and per difficulty level (`playtest.fight_modes`, save format v4, see [SAVE_FORMAT.md](../SAVE_FORMAT.md)), so they add up over several sessions and travel with an exported save. **Reset save** on the title screen clears them. The "How hard?" 1–5 rating boxes were removed (issue #16): the difficulty slider does that job, and catch time, losses and accuracy measure it. The modes, their order and every tuning number live in [`game/data/fight_modes.json`](../../game/data/fight_modes.json), so balancing doesn't need code changes.
 
 ## Research: what similar games do
 
@@ -61,7 +60,7 @@ Mechanics only, never names or assets (as decided in chapter 02).
 
 ## The modes
 
-The carousel lists them roughly from simplest to most demanding (Claude's first guess at their difficulty at the middle level). The on-screen difficulty guess was replaced by the difficulty slider (2026-11-22, see [Difficulty](#difficulty)).
+The drop-down lists them roughly from simplest to most demanding (Claude's first guess at their difficulty at the middle level). The on-screen difficulty guess was replaced by the difficulty slider (2026-11-22, see [Difficulty](#difficulty)).
 
 ![The nine modes in the web build, mid-play: Slide Guide, Shake (rub fallback), Tap Tempo; Reel Spin, Hookset, Hold Hop; Lost Ref (bottom box out), Beat Notes, Twin Drift. The top box is the shadow pad, the bottom box the real pad.](img/2026-11-21-fight-box-modes.png)
 
@@ -116,9 +115,9 @@ Approximate values at the middle level (5); the easy and hard ends are in `fight
 
 Playtest results go here:
 
-| Mode | Level | Testers | Felt (avg 1–5) | Avg catch time | Accuracy | Escapes per catch | Rank |
+| Mode | Level | Testers | Avg catch time | Accuracy | Escapes per catch | Rank |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| (to fill in) | | | | | | | |
+| (to fill in) | | | | | | |
 
 ## Interpretations and answers
 
@@ -127,13 +126,13 @@ Where the brief left room, Claude made a call; Deovandski's answers (2026-11-22)
 - **Flip → Lost Ref:** Claude first read "the screen inverts" as swapping the boxes and turning both upside down. Deovandski: it's less of a flip and more "you lost the reference box". Rebuilt as Lost Ref (above).
 - **Hold Hop:** the press got a timing (a closing ring, like osu!) so that "the touch part is more punitive" has something to judge; a press outside the spot is only a small penalty. Deovandski will check it in playtests.
 - **Tap Tempo:** "more rhythmically" became call and response (the fish taps a bar, the player repeats it). Confirmed.
-- **Ratings are saved** (save format v3, per difficulty level). Deovandski: change the save format freely until alpha (see [SAVE_FORMAT.md](../SAVE_FORMAT.md)).
+- **Ratings were saved** (save format v3), then the rating boxes were removed in favour of the slider (issue #16). Results are still saved per level. Deovandski: change the save format freely until alpha (see [SAVE_FORMAT.md](../SAVE_FORMAT.md)).
 - **Shake:** works in the Android app and in Chrome on Android. iPhone browsers need a permission prompt that isn't built (Android is the target).
 - **Sound:** placeholder beeps made in code (metronome, hit, miss, catch) until real audio exists. The rhythm modes rely on them.
 
 ## How the modes could fit the game (proposal)
 
-- A fight becomes a short sequence of **segments**, each a mode: common fish use one or two easy modes, harder fish chain more, legendaries add Lost Ref twists and two-finger segments (matching the difficulty ladder in chapter 02).
+- A fight becomes a short sequence of **segments**, each a mode (now built: fish sections, see [chapter 06](06-fish-fights.md)): common fish use one or two easy modes, harder fish chain more, legendaries add Lost Ref twists and two-finger segments (matching the difficulty ladder in chapter 02).
 - **Each fish sets a difficulty per mode** (0–1), using the same `[easy, hard]` blend as the slider.
 - **Tackle edits the tuning** instead of adding rules: it can lower the difficulty of one mode, or adjust single values (a Cork Bobber widens radii and windows, a Trap Bobber slows drains, a Lead Bobber removes speed wobble, a Barbed Hook adds slack). That's why every number is in the data file.
 - **Lore fish** map onto modes: Sanbi decoys are Hookset's X; Fihi shocks fit Hold Hop (lift when shocked); Ptaina's stun could freeze the pad mid-Beat Notes.

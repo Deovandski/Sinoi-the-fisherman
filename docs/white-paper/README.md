@@ -9,6 +9,7 @@ This folder is the foundation the game is built on. Deovandski Skibinski Junior 
 | [03 — Plan and roles](03-plan-and-roles.md): timeline, who does what, art pipeline, playtesting | Plan, Nov 8, 2026 |
 | [04 — Fight-box modes](04-fight-box-modes.md): research on similar games, nine prototype modes, predicted ranking, how to playtest | Prototypes, Nov 21, 2026 |
 | [05 — Ideas log](05-ideas-log.md): every idea so far, kept or cut, and why | Kept up to date |
+| [06 — Fish fights](06-fish-fights.md): fish sections (a mode and a difficulty range each), the fish data, the fish test | Prototype, Nov 22, 2026 |
 
 Related: [illustrator brief](../art/illustrator-brief.md), [building](../BUILDING.md), [save format](../SAVE_FORMAT.md).
 

@@ -1,0 +1,50 @@
+{
+	"_about": "Every fish in the game so far, easiest first. A fish's fight is one or more sections; each section is one fight-box mode (an id from fight_modes.json) with a difficulty range [from, to] on the 0 (easy) .. 1 (hard) scale. The section starts at 'from' and climbs to 'to' as its meter fills. Names follow the two-language rule (see CLAUDE.md); Sanbi is canon. 'pearls' is the reward range [min, max]. See docs/white-paper/06-fish-fights.md.",
+	"fish": [
+		{
+			"id": "karkoi",
+			"name": "Karkoi",
+			"based_on": "carp (German Karpfen + Japanese koi)",
+			"pearls": [2, 5],
+			"description": "A lazy pond fish. It drifts about and gives up quickly.",
+			"sections": [
+				{"mode": "slide_guide", "difficulty": [0.1, 0.3]}
+			]
+		},
+		{
+			"id": "bagnazu",
+			"name": "Bagnazu",
+			"based_on": "catfish (Portuguese bagre + Japanese namazu)",
+			"pearls": [2, 6],
+			"description": "A heavy bottom-feeder. Reel it up, then keep up as it wanders.",
+			"sections": [
+				{"mode": "reel_spin", "difficulty": [0.2, 0.4]},
+				{"mode": "slide_guide", "difficulty": [0.3, 0.5]}
+			]
+		},
+		{
+			"id": "magatum",
+			"name": "Magatum",
+			"based_on": "tuna (Japanese maguro + Portuguese atum)",
+			"pearls": [3, 8],
+			"description": "Fast and strong. Set the hook, survive its runs, then match its tail beat.",
+			"sections": [
+				{"mode": "flick_hookset", "difficulty": [0.3, 0.5]},
+				{"mode": "reel_spin", "difficulty": [0.4, 0.6]},
+				{"mode": "tap_tempo", "difficulty": [0.4, 0.6]}
+			]
+		},
+		{
+			"id": "sanbi",
+			"name": "Sanbi",
+			"based_on": "canon fish from #HusbandOutWorld",
+			"pearls": [10, 25],
+			"description": "Placeholder fight for the canon fish. Ignore its decoys, hold steady, and keep going when you lose sight of it.",
+			"sections": [
+				{"mode": "flick_hookset", "difficulty": [0.5, 0.7]},
+				{"mode": "hold_hop", "difficulty": [0.5, 0.7]},
+				{"mode": "lost_ref", "difficulty": [0.6, 0.8]}
+			]
+		}
+	]
+}
