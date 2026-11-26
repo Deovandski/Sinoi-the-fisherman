@@ -44,6 +44,12 @@ cd site && python3 -m http.server 8000                             # open http:/
 - `site/play/` and `site/manifest.webmanifest` are generated (by CI or locally) and ignored by git.
 - The engine download is about 10 MB gzipped; the first load can take a few seconds on phones.
 
+### Install app button
+
+- The landing page's **Install app** button is `site/install-app.js` + `site/install-app.css`, ported from Deovandski/Deovandski's `InstallApp.astro` (issue #20). It shows the button only when the browser offers to install the site right now (`beforeinstallprompt`), and otherwise a hint: open the page in Chrome (Android, where links opened from WhatsApp, Instagram or Gmail have no install option), Share → Add to Home Screen (iPhone/iPad), or which browsers can install it. Inside the installed app it says so.
+- It works on the landing page because the site manifest's scope is the whole site (`./`, same id as the game's), so installing from `/` installs the same app that opens into the game.
+- Its words live in the page (the button and a hidden strings block), so translating the page translates it. Load `install-app.js` in `<head>` without `defer`, so it catches an early install offer.
+
 ### Shared pieces (one source)
 
 - The landing page's support block and every page's footer are rebuilt from one source by `python3 tools/sync_site.py`: the support text and links from `game/data/credits.json` (the same file the game's title screen reads), the footer from `tools/site_parts/footer.html`. The pieces sit between `<!-- one-source:NAME -->` markers; don't edit them in the page. CI fails if they're out of date (`--check`).
