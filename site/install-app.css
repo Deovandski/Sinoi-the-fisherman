@@ -1,0 +1,25 @@
+/* InstallApp (install-app.js): ported from Deovandski/Deovandski's InstallApp.astro.
+   Theming: --install-accent, --install-ink, --install-muted. */
+.install-app { display: grid; gap: 0.4rem; justify-items: start; }
+.install-app__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: inherit;
+  font-weight: 800;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--install-accent, #39c5bb);
+  color: var(--install-ink, #07040d);
+  cursor: pointer;
+}
+.install-app__btn[hidden] { display: none; }
+.install-app__btn:hover { filter: brightness(1.06); }
+.install-app__btn:focus-visible { outline: 3px solid var(--focus, var(--install-accent, #39c5bb)); outline-offset: 3px; }
+.install-app__btn svg { flex: none; }
+.install-app__note { margin: 0; font-size: 0.95em; color: var(--install-muted, #9aa6b8); max-width: 40rem; }
+.install-app__note:empty { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .install-app__btn { transition: filter 0.15s ease; }
+}

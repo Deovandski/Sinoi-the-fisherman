@@ -143,3 +143,6 @@ footer p { margin: 4px 0; }
 @media (max-width: 700px) and (pointer: coarse) {
   .stage iframe { aspect-ratio: auto; width: 100vw; border-radius: 0; }
 }
+
+/* Install app button (install-app.css), themed for this site. */
+#install .install-app { margin: 0 0 22px; --install-accent: var(--sand); --install-ink: #10202b; --install-muted: var(--ink-soft); }

@@ -73,7 +73,7 @@ class PageText(html.parser.HTMLParser):
             if tag == self._skip_tag:
                 self._skip += 1  # same tag nested inside the skipped one
             return
-        if tag in SKIP_TAGS or a.get("aria-hidden") == "true":
+        if tag in SKIP_TAGS or a.get("aria-hidden") == "true" or "hidden" in a:
             self._skip, self._skip_tag = 1, tag
             return
         if tag in BLOCK_TAGS:
