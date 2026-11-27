@@ -18,6 +18,9 @@ and is rebuilt from:
                  also in the Settings App row (landing page)
     support      game/data/credits.json, the support text and links the game's
                  title screen shows too (landing page)
+    privacy      PRIVACY.md, the privacy policy (privacy page), rendered by
+                 markdown_html(): headings, paragraphs, lists, bold, links,
+                 inline code and HTML comments (dropped)
 Pieces are written without indentation; each one is indented like its
 opening marker. In a piece, {root} is the way back to the site root from that
 page ("./" or "../") and {home} the landing page before a #link ("" on the
@@ -98,8 +101,68 @@ def piece_support() -> str:
     ])
 
 
+def inline(text: str) -> str:
+    """**bold**, `code` and [links](url) in one line of Markdown, HTML-escaped."""
+    parts = re.split(r"(`[^`]+`)", text)
+    out = []
+    for part in parts:
+        if part.startswith("`") and part.endswith("`") and len(part) > 1:
+            out.append(f"<code>{html.escape(part[1:-1], quote=False)}</code>")
+            continue
+        s = html.escape(part, quote=False)
+        s = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", lambda m: f'<a href="{html.escape(m.group(2))}">{m.group(1)}</a>', s)
+        s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
+        out.append(s)
+    return "".join(out)
+
+
+def markdown_html(text: str) -> str:
+    """The small Markdown subset PRIVACY.md uses, as the privacy page's HTML: "# " is the page's <h2>, "## " an <h3>,
+    "- " list items, other lines paragraphs. The first paragraph is the lede and "Last updated …" is muted."""
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    out, para, items = [], [], []
+
+    def flush():
+        if para:
+            body = inline(" ".join(para))
+            cls = ' class="lede"' if not any(line.startswith("<p") for line in out) else (
+                ' class="muted"' if para[0].startswith("Last updated") else "")
+            out.append(f"<p{cls}>{body}</p>")
+            para.clear()
+        if items:
+            out.append('<ul class="plain">')
+            out.extend(f"  <li>{inline(i)}</li>" for i in items)
+            out.append("</ul>")
+            items.clear()
+
+    for line in text.split("\n"):
+        s = line.strip()
+        if not s:
+            flush()
+        elif s.startswith("## "):
+            flush()
+            out += ["", f"<h3>{inline(s[3:])}</h3>"]
+        elif s.startswith("# "):
+            flush()
+            out.append(f"<h2>{inline(s[2:])}</h2>")
+        elif s.startswith("- "):
+            if para:
+                flush()
+            items.append(s[2:])
+        elif items:
+            items[-1] += " " + s
+        else:
+            para.append(s)
+    flush()
+    return "\n".join(out)
+
+
+def piece_privacy() -> str:
+    return markdown_html((ROOT / "PRIVACY.md").read_text(encoding="utf-8"))
+
+
 PIECES = {"header": piece_header, "footer": piece_footer, "install-app": piece_install_app, "support": piece_support,
-          "languages": None}
+          "privacy": piece_privacy, "languages": None}
 # The languages piece counts translated text on the pages as written, so it goes in a second pass.
 PASSES = [[n for n in PIECES if n != "languages"], ["languages"]]
 
