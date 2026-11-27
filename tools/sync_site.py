@@ -18,9 +18,15 @@ and is rebuilt from:
                  also in the Settings App row (landing page)
     support      game/data/credits.json, the support text and links the game's
                  title screen shows too (landing page)
+    description  "description" in game/data/credits.json: the landing page's
+                 meta description and link preview (og:description)
+    hero         the same "description": the landing page's hero paragraph
     privacy      PRIVACY.md, the privacy policy (privacy page), rendered by
                  markdown_html(): headings, paragraphs, lists, bold, links,
                  inline code and HTML comments (dropped)
+Outside the pages it also writes "description" into the summary line of
+site/llms.txt (the "> " line under the title) and "tagline" into
+config/description in game/project.godot.
 Pieces are written without indentation; each one is indented like its
 opening marker. In a piece, {root} is the way back to the site root from that
 page ("./" or "../") and {home} the landing page before a #link ("" on the
@@ -157,12 +163,31 @@ def markdown_html(text: str) -> str:
     return "\n".join(out)
 
 
+def piece_description() -> str:
+    d = html.escape(credits()["description"])
+    return f'<meta name="description" content="{d}">\n<meta property="og:description" content="{d}">'
+
+
+def piece_hero() -> str:
+    return f'<p class="lead">{html.escape(credits()["description"], quote=False)}</p>'
+
+
+def other_files() -> list:
+    """(path, regex for the line, the line it should be) for one-source lines outside the pages."""
+    c = credits()
+    tagline = c["tagline"].replace("\\", "\\\\").replace('"', '\\"')
+    return [
+        (ROOT / "site/llms.txt", re.compile(r"^> .*$", re.M), "> " + c["description"]),
+        (ROOT / "game/project.godot", re.compile(r'^config/description=".*"$', re.M), f'config/description="{tagline}"'),
+    ]
+
+
 def piece_privacy() -> str:
     return markdown_html((ROOT / "PRIVACY.md").read_text(encoding="utf-8"))
 
 
 PIECES = {"header": piece_header, "footer": piece_footer, "install-app": piece_install_app, "support": piece_support,
-          "privacy": piece_privacy, "languages": None}
+          "privacy": piece_privacy, "description": piece_description, "hero": piece_hero, "languages": None}
 # The languages piece counts translated text on the pages as written, so it goes in a second pass.
 PASSES = [[n for n in PIECES if n != "languages"], ["languages"]]
 
@@ -194,6 +219,15 @@ def main() -> None:
             stale += changed
             if changed and not check:
                 path.write_text(text, encoding="utf-8")
+    for path, pattern, wanted in other_files():
+        text = path.read_text(encoding="utf-8")
+        m = pattern.search(text)
+        if not m:
+            sys.exit(f"{path.relative_to(ROOT)}: no line matching {pattern.pattern}")
+        if m.group(0) != wanted:
+            stale.append(f"{path.relative_to(ROOT)}: description")
+            if not check:
+                path.write_text(text[:m.start()] + wanted + text[m.end():], encoding="utf-8")
     for item in stale:
         print(("out of date: " if check else "updated: ") + item)
     if check and stale:

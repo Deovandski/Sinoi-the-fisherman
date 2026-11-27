@@ -11,10 +11,6 @@
   "en": "Open <a href=\"~/play/\">the game</a>, tap <em>Share</em> → <em>Add to Home Screen</em>.",
   "t": "<a href=\"~/play/\">ゲーム</a>を開き、<em>共有</em> → <em>ホーム画面に追加</em>をタップします。"
  },
- "100b53e54677": {
-  "en": "An open-source, touch-first pixel-art fishing game set in the world of #HusbandOutWorld. In pre-production.",
-  "t": "#HusbandOutWorld の世界を舞台にした、オープンソースでタッチ操作優先のピクセルアート釣りゲーム。現在プリプロダクション中。"
- },
  "18ad18373374": {
   "en": "Updates arrive on their own: the next time you open the game online, it's the newest version. Your save stays on your device and carries over.",
   "t": "アップデートは自動で届きます。次にオンラインでゲームを開いたときには最新版になっています。セーブは端末に残り、そのまま引き継がれます。"
@@ -62,10 +58,6 @@
  "4aa4e40ec700": {
   "en": "eBooks on Amazon",
   "t": "Amazon の電子書籍"
- },
- "4ecb1e9946e8": {
-  "en": "Sinoi the Fisherman is an open-source, active, touch-first pixel-art fishing game set in the world of the #HusbandOutWorld series. Free, no ads, no in-app purchases. In pre-production.",
-  "t": "Sinoi the Fisherman は、#HusbandOutWorld シリーズの世界を舞台にした、オープンソースでアクティブな、タッチ操作優先のピクセルアート釣りゲームです。無料、広告なし、アプリ内課金なし。現在プリプロダクション中。"
  },
  "518951cdb3c6": {
   "en": "iPhone and iPad (Safari)",
