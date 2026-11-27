@@ -1,0 +1,27 @@
+<header class="top">
+  <a class="brand" href="{root}"><img src="{root}icon.png" alt="">Sinoi the Fisherman</a>
+  <nav>
+    <a href="{root}play/">Play</a>
+    <a href="{home}#about">About</a>
+    <a href="{home}#install">Install</a>
+    <a href="{home}#saves">Saves</a>
+    <a href="{home}#docs">Docs</a>
+    <a href="{root}privacy.html">Privacy</a>
+    <a href="https://github.com/Deovandski/Sinoi-the-fisherman">GitHub</a>
+  </nav>
+  <!-- The gear opens Settings (settings.js). Gear.astro in Deovandski/Deovandski-repo-template. -->
+  <button class="gear" id="gear" type="button" aria-haspopup="dialog" aria-controls="site-settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.5 7.5 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0-.5.4l-.4 2.7c-.6.2-1.2.6-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.8 1.7 1l.4 2.6c0 .3.2.5.5.5h4c.3 0 .5-.2.5-.4l.4-2.7c.6-.2 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 13ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg></button>
+</header>
+<!-- Settings: the × (top right) or Esc closes it. SettingsDialog.astro in Deovandski/Deovandski-repo-template. -->
+<dialog id="site-settings" class="site-settings" aria-labelledby="site-settings-title">
+  <form method="dialog">
+    <div class="settings-head">
+      <h2 id="site-settings-title">Settings</h2>
+      <button class="settings-close" value="close" aria-label="Close" title="Close"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg></button>
+    </div>
+    <div class="setting setting-app"><span>App</span>
+      {install_app}
+    </div>
+    <div class="setting setting-debug"><span>Stats for nerds</span><a class="debug-btn" href="{root}debug/" translate="no">DEBUG</a></div>
+  </form>
+</dialog>

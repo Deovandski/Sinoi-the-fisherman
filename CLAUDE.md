@@ -24,7 +24,7 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 
 Anything shown in two places (the same text, widget or game on two pages, or in the game and on the website) comes from one source, never a pasted copy. If a copy really has to stay, say why in the PR and get Deo's OK.
 - Credits, support text, links and the one-line description: `game/data/credits.json`. The game reads it; `tools/web_postexport.py` uses it for the play page; `tools/sync_site.py` writes the landing page's support block.
-- Website footer: `tools/site_parts/footer.html`, written into every page by `tools/sync_site.py`. Edit pieces between `<!-- one-source:NAME -->` markers only through their source, then run `python3 tools/sync_site.py` (CI runs `--check`).
+- Website header (top bar, gear and Settings dialog), footer and the Install app block: `tools/site_parts/` (`header.html`, `footer.html`, `install-app.html`), written into every page in `PAGES` of `tools/sync_site.py`. In a piece, `{root}` is the way back to the site root (`./` or `../`) and `{home}` the landing page before a `#link`. Edit pieces between `<!-- one-source:NAME -->` markers only through their source, then run `python3 tools/sync_site.py` (CI runs `--check`).
 - Fish, modes and currency: `game/data/*.json`. `site/llms-full.txt` is generated from the pages. `site/llms.txt` and `site/sitemap.xml` stay hand-written and change with the pages.
 - One copy of the game: the website's `/play/` is the only web build.
 
@@ -57,6 +57,14 @@ On the website (`site/`, not the game), every picture opens bigger when pressed,
 
 A new page in `site/` also needs: an entry in `site/sitemap.xml` and `site/llms.txt` (both hand-written), an entry in `PAGES` in `tools/build_llms_full.py`, and in its head a `<meta name="description">`, `<link rel="canonical">`, `<link rel="alternate" type="text/markdown" href="llms.txt">` and the sitemap link. See `docs/BUILDING.md`.
 
+## Stats for nerds (debug page)
+
+Settings (the gear, top right of every page) › **DEBUG** opens `site/debug/`: a terminal that types out build, game, browser, network and page-speed facts. Nothing is saved or sent; it only asks the site for `stats.json` (privacy paragraph in `PRIVACY.md` and `site/privacy.html`).
+- Where things live: the page `site/debug/index.html`; its script `site/debug/debug.js`; the terminal `site/terminal-screen.js` + `.css` (reusable); build facts `site/stats.json`, written by `python3 tools/build_stats.py site` in CI after the export (not committed). Ported from Deovandski-repo-template (#19 there).
+- **To add a line:** add `<div class="term-row"><span class="term-k">Label</span><span class="term-v" data-v="key">...</span></div>` under its `== SECTION ==` heading in `site/debug/index.html`, then `set('key', text)` in `site/debug/debug.js`. If it's a build fact, add it to `tools/build_stats.py` and read it in `fromStats()`. Every value must fill in: show `n/a` when the browser won't say, never leave `...`.
+- Kept out of search on purpose: `noindex, nofollow`, and **not** in `sitemap.xml`, `llms.txt` or `build_llms_full.py` (the exception to "Website pages for AI readers"; CI checks it). Commit, branch, PR and repo are left out of `stats.json` when the repo is private.
+- The site has no translations, so the Languages section says English only. Words the script writes live in the page's hidden `.debug-words` block.
+
 ## Commands
 
 ```
@@ -66,6 +74,7 @@ godot --headless --path game -s res://tests/test_fight_modes.gd
 godot --headless --path game -s res://tests/test_fish_fights.gd
 mkdir -p site/play && godot --headless --path game --export-release "Web" ../site/play/index.html && python3 tools/web_postexport.py site/play
 python3 tools/build_llms_full.py site                                   # after the export
+python3 tools/build_stats.py site                                       # after the export: stats.json for the debug page
 python3 tools/check_fresh_deploy.py site                                # fake deploy: fresh page/script, offline (needs playwright + Chrome)
 python3 tools/sync_site.py                                              # after editing credits.json or tools/site_parts/
 ```

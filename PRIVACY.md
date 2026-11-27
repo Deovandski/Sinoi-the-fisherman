@@ -15,10 +15,12 @@ Sinoi the Fisherman collects no personal data. There are no accounts, no cookies
 
 The website at https://deovandski.github.io/Sinoi-the-fisherman/ is hosted on GitHub Pages, so [GitHub](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement) sees your IP address when it sends you the pages. The site sets no cookies and runs no analytics.
 
+**Stats for nerds.** The debug page (Settings › DEBUG, `/debug/`) shows what your browser tells the page about itself: browser and device, screen, storage use, connection, page timings. It reads this only to show it to you on that page. Nothing is saved and nothing is sent anywhere; the page only asks this website for its build file (`stats.json`) and times three small requests to it.
+
 ## Google Play
 
 If you install the app from Google Play, Google handles the download and may collect data under its own policies. The app itself adds nothing.
 
 Questions: open an [issue](https://github.com/Deovandski/Sinoi-the-fisherman/issues).
 
-Last updated November 19, 2026. Copyright (c) 2026, Deovandski Skibinski Junior.
+Last updated November 26, 2026. Copyright (c) 2026, Deovandski Skibinski Junior.

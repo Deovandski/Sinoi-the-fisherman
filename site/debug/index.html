@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stats for nerds — Sinoi the Fisherman</title>
+  <meta name="description" content="Build, game, device, network and page-speed details for the Sinoi the Fisherman website, typed out like an old computer terminal.">
+  <!-- Not for search engines or AI readers: kept out of sitemap.xml, llms.txt and llms-full.txt too ("Stats for nerds" in CLAUDE.md). -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="../icon.png">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <meta name="theme-color" content="#000000">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../install-app.css">
+  <link rel="stylesheet" href="../terminal-screen.css">
+  <!-- Not deferred: it keeps the browser's install offer even if it comes early (install-app.js). -->
+  <script src="../install-app.js"></script>
+  <script src="../settings.js" defer></script>
+  <script src="../terminal-screen.js" defer></script>
+  <script src="debug.js" defer></script>
+</head>
+<body class="page-terminal">
+  <div class="wrap">
+    <!-- one-source:header (tools/sync_site.py; edit tools/site_parts/header.html) -->
+    <header class="top">
+      <a class="brand" href="../"><img src="../icon.png" alt="">Sinoi the Fisherman</a>
+      <nav>
+        <a href="../play/">Play</a>
+        <a href="../#about">About</a>
+        <a href="../#install">Install</a>
+        <a href="../#saves">Saves</a>
+        <a href="../#docs">Docs</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="https://github.com/Deovandski/Sinoi-the-fisherman">GitHub</a>
+      </nav>
+      <!-- The gear opens Settings (settings.js). Gear.astro in Deovandski/Deovandski-repo-template. -->
+      <button class="gear" id="gear" type="button" aria-haspopup="dialog" aria-controls="site-settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.5 7.5 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0-.5.4l-.4 2.7c-.6.2-1.2.6-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.8 1.7 1l.4 2.6c0 .3.2.5.5.5h4c.3 0 .5-.2.5-.4l.4-2.7c.6-.2 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 13ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg></button>
+    </header>
+    <!-- Settings: the × (top right) or Esc closes it. SettingsDialog.astro in Deovandski/Deovandski-repo-template. -->
+    <dialog id="site-settings" class="site-settings" aria-labelledby="site-settings-title">
+      <form method="dialog">
+        <div class="settings-head">
+          <h2 id="site-settings-title">Settings</h2>
+          <button class="settings-close" value="close" aria-label="Close" title="Close"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg></button>
+        </div>
+        <div class="setting setting-app"><span>App</span>
+          <div class="install-app" data-install-app>
+            <span class="install-app__strings" hidden>
+              <span data-k="installed">You’re using the installed app.</span>
+              <span data-k="done">Installed! Open it from your home screen or app list.</span>
+              <span data-k="android">No install button? Open this page in Chrome (⋮ → Open in Chrome), then ⋮ → Install app.</span>
+              <span data-k="ios">On iPhone or iPad: tap Share, then Add to Home Screen.</span>
+              <span data-k="other">To install it, open this page in Chrome, Edge or Samsung Internet. On iPhone or iPad: Share, then Add to Home Screen.</span>
+            </span>
+            <button type="button" class="install-app__btn" hidden>
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M11 3h2v9.6l3.3-3.3 1.4 1.4L12 16.4l-5.7-5.7 1.4-1.4 3.3 3.3V3Zm-6 15h14v2H5v-2Z"/></svg>
+              <span>Install app</span>
+            </button>
+            <p class="install-app__note" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="setting setting-debug"><span>Stats for nerds</span><a class="debug-btn" href="../debug/" translate="no">DEBUG</a></div>
+      </form>
+    </dialog>
+    <!-- /one-source:header -->
+    <main>
+      <h1 class="visually-hidden">Stats for nerds</h1>
+      <noscript><p class="debug-noscript">Stats for nerds needs JavaScript: the browser fills in every value.</p></noscript>
+      <!-- "Stats for nerds" (#22), Settings › DEBUG. Ported from Deovandski/Deovandski-repo-template src/pages/debug.astro.
+           Every [data-v] value is filled in by debug.js (build facts from ../stats.json, written by tools/build_stats.py),
+           then the terminal types it out (terminal-screen.js). To add a line, see "Stats for nerds" in CLAUDE.md. -->
+      <div class="terminal debug-terminal" role="region" dir="ltr" aria-label="Stats for nerds" data-terminal data-duration="2000" data-wait>
+        <div class="terminal__bar" aria-hidden="true" translate="no"><span class="terminal__dots"><i></i><i></i><i></i></span><span class="terminal__title">stats-for-nerds</span></div>
+        <div class="terminal__screen" translate="no" tabindex="0">
+        <div class="term-hi">SINOI THE FISHERMAN DIAGNOSTICS</div>
+        <div class="term-dim">Memory test <span data-v="memtest">...</span> OK · <span data-v="now">...</span></div>
+        <div class="term-dim">Click or press any key to skip the typing.</div>
+        <div class="term-gap"></div>
+        <div class="term-h">== CODE ======================</div>
+        <div class="term-row"><span class="term-k">Repository</span><span class="term-v" data-v="repo">...</span></div>
+        <div class="term-row"><span class="term-k">Visibility</span><span class="term-v" data-v="visibility">...</span></div>
+        <div class="term-row"><span class="term-k">Build</span><span class="term-v" data-v="build">...</span></div>
+        <div class="term-row"><span class="term-k">Built at</span><span class="term-v" data-v="builtAt">...</span></div>
+        <div class="term-row"><span class="term-k">Branch</span><span class="term-v" data-v="branch">...</span></div>
+        <div class="term-row"><span class="term-k">Commit</span><span class="term-v" data-v="commit">...</span></div>
+        <div class="term-row"><span class="term-k">Committed</span><span class="term-v" data-v="commitDate">...</span></div>
+        <div class="term-row"><span class="term-k">Pull request</span><span class="term-v" data-v="pr">...</span></div>
+        <div class="term-row"><span class="term-k">Workflow run</span><span class="term-v" data-v="run">...</span></div>
+        <div class="term-row"><span class="term-k">Tools</span><span class="term-v" data-v="tools">...</span></div>
+        <div class="term-gap"></div>
+        <div class="term-h">== SITE ======================</div>
+        <div class="term-row"><span class="term-k">Address</span><span class="term-v" data-v="siteUrl">...</span></div>
+        <div class="term-row"><span class="term-k">This page</span><span class="term-v" data-v="path">...</span></div>
+        <div class="term-row"><span class="term-k">Pages</span><span class="term-v" data-v="pages">...</span></div>
+        <div class="term-row"><span class="term-k">Deployed</span><span class="term-v" data-v="deployed">...</span></div>
+        <div class="term-row"><span class="term-k">Biggest types</span><span class="term-v" data-v="types">...</span></div>
+        <div class="term-row"><span class="term-k">App mode</span><span class="term-v" data-v="display">...</span></div>
+        <div class="term-row"><span class="term-k">Offline worker</span><span class="term-v" data-v="sw">...</span></div>
+        <div class="term-row"><span class="term-k">Saved copies</span><span class="term-v" data-v="caches">...</span></div>
+        <div class="term-row"><span class="term-k">Databases</span><span class="term-v" data-v="idb">...</span></div>
+        <div class="term-gap"></div>
+        <div class="term-h">== GAME ======================</div>
+        <div class="term-row"><span class="term-k">Game</span><span class="term-v" data-v="game">...</span></div>
+        <div class="term-row"><span class="term-k">Engine</span><span class="term-v" data-v="engine">...</span></div>
+        <div class="term-row"><span class="term-k">Renderer</span><span class="term-v" data-v="renderer">...</span></div>
+        <div class="term-row"><span class="term-k">Web build</span><span class="term-v" data-v="webBuild">...</span></div>
+        <div class="term-row"><span class="term-k">Exported</span><span class="term-v" data-v="exported">...</span></div>
+        <div class="term-row"><span class="term-k">Cache version</span><span class="term-v" data-v="cacheVersion">...</span></div>
+        <div class="term-row"><span class="term-k">Save format</span><span class="term-v" data-v="saveFormat">...</span></div>
+        <div class="term-row"><span class="term-k">Content</span><span class="term-v" data-v="content">...</span></div>
+        <div class="term-gap"></div>
+        <div class="term-h">== RUNTIME ===================</div>
+        <div class="term-row"><span class="term-k">Browser</span><span class="term-v" data-v="browser">...</span></div>
+        <div class="term-row"><span class="term-k">Platform</span><span class="term-v" data-v="platform">...</span></div>
+        <div class="term-row"><span class="term-k">CPU threads</span><span class="term-v" data-v="cpu">...</span></div>
+        <div class="term-row"><span class="term-k">Device memory</span><span class="term-v" data-v="deviceMemory">...</span></div>
+        <div class="term-row"><span class="term-k">JS heap</span><span class="term-v" data-v="heap">...</span></div>
+        <div class="term-row"><span class="term-k">Storage</span><span class="term-v" data-v="storage">...</span></div>
+        <div class="term-row"><span class="term-k">Cookies</span><span class="term-v" data-v="cookies">...</span></div>
+        <div class="term-row"><span class="term-k">Local storage</span><span class="term-v" data-v="local">...</span></div>
+        <div class="term-row"><span class="term-k">Session storage</span><span class="term-v" data-v="session">...</span></div>
+        <div class="term-row"><span class="term-k">Screen</span><span class="term-v" data-v="screen">...</span></div>
+        <div class="term-row"><span class="term-k">Viewport</span><span class="term-v" data-v="viewport">...</span></div>
+        <div class="term-row"><span class="term-k">Pixel ratio</span><span class="term-v" data-v="dpr">...</span></div>
+        <div class="term-row"><span class="term-k">Colour scheme</span><span class="term-v" data-v="scheme">...</span></div>
+        <div class="term-row"><span class="term-k">Motion</span><span class="term-v" data-v="motion">...</span></div>
+        <div class="term-row"><span class="term-k">Input</span><span class="term-v" data-v="input">...</span></div>
+        <div class="term-row"><span class="term-k">GPU</span><span class="term-v" data-v="gpu">...</span></div>
+        <div class="term-row"><span class="term-k">WebGPU</span><span class="term-v" data-v="webgpu">...</span></div>
+        <div class="term-row"><span class="term-k">Battery</span><span class="term-v" data-v="battery">...</span></div>
+        <div class="term-row"><span class="term-k">Time zone</span><span class="term-v" data-v="tz">...</span></div>
+        <div class="term-row"><span class="term-k">Languages</span><span class="term-v" data-v="langs">...</span></div>
+        <div class="term-row"><span class="term-k">Local time</span><span class="term-v" data-v="clock">...</span></div>
+        <div class="term-row"><span class="term-k">Uptime</span><span class="term-v" data-v="uptime">...</span></div>
+        <div class="term-row"><span class="term-k">Frame rate</span><span class="term-v" data-v="fps">...</span></div>
+        <div class="term-row"><span class="term-k">User agent</span><span class="term-v" data-v="ua">...</span></div>
+        <div class="term-gap"></div>
+        <div class="term-h">== NETWORK ===================</div>
+        <div class="term-row"><span class="term-k">Status</span><span class="term-v" data-v="online">...</span></div>
+        <div class="term-row"><span class="term-k">Connection</span><span class="term-v" data-v="connection">...</span></div>
+        <div class="term-row"><span class="term-k">Downlink</span><span class="term-v" data-v="downlink">...</span></div>
+        <div class="term-row"><span class="term-k">Round trip</span><span class="term-v" data-v="rtt">...</span></div>
+        <div class="term-row"><span class="term-k">Data saver</span><span class="term-v" data-v="saveData">...</span></div>
+        <div class="term-row"><span class="term-k">Protocol</span><span class="term-v" data-v="protocol">...</span></div>
+        <div class="term-row"><span class="term-k">Served from</span><span class="term-v" data-v="servedFrom">...</span></div>
+        <div class="term-row"><span class="term-k">Server</span><span class="term-v" data-v="server">...</span></div>
+        <div class="term-row"><span class="term-k">CDN node</span><span class="term-v" data-v="cdn">...</span></div>
+        <div class="term-row"><span class="term-k">Cache</span><span class="term-v" data-v="cdnCache">...</span></div>
+        <div class="term-row"><span class="term-k">Ping</span><span class="term-v" data-v="ping">...</span></div>
+        <div class="term-row"><span class="term-k">Secure context</span><span class="term-v" data-v="secure">...</span></div>
+        <div class="term-row"><span class="term-k">Isolated</span><span class="term-v" data-v="isolated">...</span></div>
+        <div class="term-gap"></div>
+        <div class="term-h">== PERFORMANCE ===============</div>
+        <div class="term-row"><span class="term-k">DNS</span><span class="term-v" data-v="dns">...</span></div>
+        <div class="term-row"><span class="term-k">Connect</span><span class="term-v" data-v="connect">...</span></div>
+        <div class="term-row"><span class="term-k">TLS</span><span class="term-v" data-v="tls">...</span></div>
+        <div class="term-row"><span class="term-k">First byte</span><span class="term-v" data-v="ttfb">...</span></div>
+        <div class="term-row"><span class="term-k">Download</span><span class="term-v" data-v="download">...</span></div>
+        <div class="term-row"><span class="term-k">DOM ready</span><span class="term-v" data-v="domReady">...</span></div>
+        <div class="term-row"><span class="term-k">Load</span><span class="term-v" data-v="load">...</span></div>
+        <div class="term-row"><span class="term-k">First paint</span><span class="term-v" data-v="fcp">...</span></div>
+        <div class="term-row"><span class="term-k">Largest paint</span><span class="term-v" data-v="lcp">...</span></div>
+        <div class="term-row"><span class="term-k">Layout shift</span><span class="term-v" data-v="cls">...</span></div>
+        <div class="term-row"><span class="term-k">Page transfer</span><span class="term-v" data-v="transfer">...</span></div>
+        <div class="term-row"><span class="term-k">Resources</span><span class="term-v" data-v="resources">...</span></div>
+        <div class="term-row"><span class="term-k">DOM nodes</span><span class="term-v" data-v="nodes">...</span></div>
+        <div class="term-gap"></div>
+        <div class="term-h">== LANGUAGES =================</div>
+        <div class="term-row"><span class="term-k">Page language</span><span class="term-v" data-v="pageLang">...</span></div>
+        <div class="term-row"><span class="term-k">Translations</span><span class="term-v">none: English only. The site isn't translated yet.</span></div>
+        <div class="term-gap"></div>
+        <div class="term-hi">READY.</div>
+        <span class="terminal__cursor" aria-hidden="true"></span>
+        </div>
+      </div>
+      <!-- Words debug.js writes into the terminal (kept in the page, not in the script). -->
+      <div class="debug-words" hidden translate="no">
+        <span data-k="na">n/a</span><span data-k="local">local build</span><span data-k="public">public</span><span data-k="private">private (hidden)</span>
+        <span data-k="online">online</span><span data-k="offline">offline</span><span data-k="yes">yes</span><span data-k="no">no</span>
+        <span data-k="none">none</span><span data-k="network">network</span><span data-k="worker">offline worker (saved copy)</span>
+        <span data-k="memcache">browser cache</span><span data-k="charging">charging</span><span data-k="unplugged">on battery</span>
+        <span data-k="standalone">installed app</span><span data-k="tab">browser tab</span><span data-k="noStats">stats.json not found (run python3 tools/build_stats.py site)</span>
+        <span data-k="controlled">active, controlling this page</span><span data-k="notControlled">active</span>
+        <span data-k="noWorker">not supported</span><span data-k="reduce">reduced</span><span data-k="full">full</span>
+        <span data-k="noGame">no web build here (run the export)</span>
+      </div>
+    </main>
+    <!-- one-source:footer (tools/sync_site.py; edit tools/site_parts/footer.html) -->
+    <footer>
+      <p>No cookies, no analytics, no ads. <a href="../privacy.html">Privacy</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/LICENSE">License</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/AI-DISCLOSURE.md">AI disclosure</a> · <a href="../llms.txt">llms.txt</a> · <a href="../llms-full.txt">llms-full.txt</a></p>
+      <p>Game code © Deovandski Skibinski Junior, MIT license. #HusbandOutWorld, its world and characters © Deovandski Skibinski Junior. A Husband Out of This World and #HusbandOutWorld are trademarks of Deovandski Skibinski Junior.</p>
+    </footer>
+    <!-- /one-source:footer -->
+  </div>
+</body>
+</html>

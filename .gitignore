@@ -19,6 +19,8 @@ build/
 site/play/
 site/manifest.webmanifest
 site/llms-full.txt
+# Build facts for the Stats for nerds page (tools/build_stats.py), written per build
+site/stats.json
 *.apk
 *.aab
 *.idsig
