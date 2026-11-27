@@ -64,8 +64,16 @@ cd site && python3 -m http.server 8000                             # open http:/
 
 ### Settings and Stats for nerds
 
-- The gear (top right) opens Settings (`site/settings.js`): an App row (Install app) and Stats for nerds, whose **DEBUG** button opens `site/debug/`. The × or Esc closes it, and so does a tap on the backdrop.
+- The gear (top right) opens Settings (`site/settings.js`): Language (with a "Want a language added?" link to #2), an App row (Install app) and Stats for nerds, whose **DEBUG** button opens `site/debug/`. The × or Esc closes it, and so does a tap on the backdrop.
 - The debug page reads `site/stats.json`, written by `python3 tools/build_stats.py site` after the web export (CI does it; locally run it yourself, or the page says stats.json is missing). See "Stats for nerds" in CLAUDE.md for how to add a line.
+
+### Translations
+
+- The pages are written in English; `python3 tools/i18n.py build site` (CI, after the export) writes a translated copy of the home, privacy and debug pages for each language at `site/<lang>/`, from the stores in `i18n/<lang>/`. They aren't committed. Links to the game, styles and files point back at the one copy; links between pages stay inside the language.
+- Each translated page gets the language's `<html lang>` and direction (Arabic runs right to left), the AI-translation banner with a link back to English, its own canonical address and `hreflang` links. A language under 90% for a page is built but marked `noindex`; one with nothing translated isn't built.
+- The English pages carry the same `hreflang` links and a `<meta name="site-langs">` list, written by `python3 tools/sync_site.py` from the stores. `site/lang.js` reads that list to open the visitor's language on a first visit.
+- The game: `python3 tools/game_pot.py` writes `game/i18n/messages.pot` from every `tr()` string and the shown data. The `.po` files, the in-game language setting and the CJK/Arabic fonts come later (#2).
+- How to translate, and the rules: "Translations" in CLAUDE.md.
 
 ### Testing the PWA
 

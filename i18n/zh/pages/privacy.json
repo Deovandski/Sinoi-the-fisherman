@@ -1,0 +1,78 @@
+{
+ "10bd24be98fd": {
+  "en": "When you <strong>export</strong> a save, the game writes a JSON file to the place you choose (or your downloads, or your clipboard). When you <strong>import</strong> one, it reads only the file you pick.",
+  "t": "当你<strong>导出</strong>存档时，游戏会把一个 JSON 文件写到你选择的位置（或你的下载文件夹，或剪贴板）。当你<strong>导入</strong>存档时，它只读取你选择的那个文件。"
+ },
+ "1fc13386a3b2": {
+  "en": "Privacy for Sinoi the Fisherman: no accounts, cookies, analytics, ads or tracking. Saves and the offline game files stay on your device.",
+  "t": "Sinoi the Fisherman 的隐私：没有账号、Cookie、分析、广告或跟踪。存档和离线游戏文件都留在你的设备上。"
+ },
+ "2622bbdfda0c": {
+  "en": "<strong>Languages.</strong> The site opens in your browser's language when a translation is ready. If you pick a language in Settings, your browser remembers that choice on your device (local storage). It's never sent anywhere; clearing this site's data forgets it.",
+  "t": "<strong>语言。</strong>当有准备好的翻译时，网站会以你的浏览器语言打开。如果你在设置中选择了一种语言，浏览器会把这个选择记在你的设备上（本地存储）。它从不会被发送到任何地方；清除本站数据即可忘记它。"
+ },
+ "27a6464214a3": {
+  "en": "The site is hosted on GitHub Pages, so <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> sees your IP address when it sends you the pages. The site sets no cookies and runs no analytics.",
+  "t": "本站托管在 GitHub Pages 上，因此 <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> 在向你发送页面时会看到你的 IP 地址。本站不设置 Cookie，也不运行任何分析。"
+ },
+ "2cffb6430f15": {
+  "en": "Privacy — Sinoi the Fisherman",
+  "t": "隐私 — Sinoi the Fisherman"
+ },
+ "32e71b945680": {
+  "en": "The Android app asks for no permissions.",
+  "t": "Android 应用不请求任何权限。"
+ },
+ "36f800782dd2": {
+  "en": "This website",
+  "t": "本网站"
+ },
+ "485a60609d0c": {
+  "en": "Your save is stored only on your device: in the app's private storage on Android, or in this site's browser storage (IndexedDB) on the web.",
+  "t": "你的存档只保存在你的设备上：在 Android 上保存在应用的私有存储中，在网页上保存在本站的浏览器存储（IndexedDB）中。"
+ },
+ "56452b6b8068": {
+  "en": "Nothing is sent to us or anyone else. The game works offline.",
+  "t": "不会向我们或任何人发送任何内容。游戏可以离线运行。"
+ },
+ "678d413c2f7f": {
+  "en": "<strong>Installed web app:</strong> if you install the browser version or play it once, your browser keeps a copy of the game's files (the engine, game data, icons and an offline page, about 40 MB) so it can start with no signal. They're stored only on your device, never sent anywhere, and contain no personal data. The app only checks this website for a newer version of those files. Uninstalling the app or clearing this site's data removes them, along with the browser save.",
+  "t": "<strong>已安装的网页应用：</strong>如果你安装了浏览器版或玩过一次，浏览器会保留一份游戏文件的副本（引擎、游戏数据、图标和一个离线页面，约 40 MB），以便在没有信号时也能启动。这些文件只保存在你的设备上，从不发送到任何地方，也不包含任何个人数据。应用只会向本网站检查这些文件是否有新版本。卸载应用或清除本站数据会删除它们，连同浏览器中的存档一起。"
+ },
+ "7eb60d1025d6": {
+  "en": "Open an <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">issue on GitHub</a>.",
+  "t": "请在 <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">GitHub 上提交 issue</a>。"
+ },
+ "9a1fc1731f62": {
+  "en": "Questions",
+  "t": "问题"
+ },
+ "aae5e58a3b87": {
+  "en": "The game (Android app and browser version)",
+  "t": "游戏（Android 应用和浏览器版）"
+ },
+ "d5b091197de2": {
+  "en": "Sinoi the Fisherman collects no personal data. There are no accounts, no cookies, no analytics, no ads and no tracking, in the app or on this website.",
+  "t": "Sinoi the Fisherman 不收集任何个人数据。无论是应用还是本网站，都没有账号、没有 Cookie、没有分析、没有广告，也没有跟踪。"
+ },
+ "da68b612ec36": {
+  "en": "Google Play",
+  "t": "Google Play"
+ },
+ "e520a6fc74fd": {
+  "en": "Last updated November 26, 2026.",
+  "t": "最后更新于 2026 年 11 月 26 日。"
+ },
+ "e8f09db77287": {
+  "en": "Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.",
+  "t": "指向 Amazon 和 GitHub 的链接会在你的浏览器中打开；这些网站有各自的隐私政策。"
+ },
+ "ed8240833c19": {
+  "en": "If you install the app from Google Play, Google handles the download and may collect data under its own policies. The app itself adds nothing.",
+  "t": "如果你从 Google Play 安装应用，下载由 Google 处理，Google 可能会依照其自身的政策收集数据。应用本身不会增加任何收集。"
+ },
+ "f9f98ec16f76": {
+  "en": "<strong>Stats for nerds.</strong> The debug page (Settings › DEBUG, <code>debug/</code>) shows what your browser tells the page about itself: browser and device, screen, storage use, connection, page timings. It reads this only to show it to you on that page. Nothing is saved and nothing is sent anywhere; the page only asks this website for its build file (<code>stats.json</code>) and times three small requests to it.",
+  "t": "<strong>详细统计信息。</strong>调试页面（设置 › DEBUG，<code>debug/</code>）会显示你的浏览器向页面透露的关于它自己的信息：浏览器和设备、屏幕、存储用量、网络连接、页面加载耗时。它读取这些信息只是为了在该页面上展示给你看。不会保存任何内容，也不会发送到任何地方；该页面只会向本网站请求它的构建文件（<code>stats.json</code>），并对它发出三个小请求来计时。"
+ }
+}

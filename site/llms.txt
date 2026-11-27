@@ -12,6 +12,7 @@ The current build is a pre-production shell: a title screen, placeholder catches
 - [Play](https://deovandski.github.io/Sinoi-the-fisherman/play/): the browser build (needs JavaScript and WebGL; the game is drawn on a canvas, so it has no readable text)
 - [Privacy](https://deovandski.github.io/Sinoi-the-fisherman/privacy.html): no accounts, cookies, analytics, ads or tracking; saves and offline game files stay on the device
 - [Full text of the site](https://deovandski.github.io/Sinoi-the-fisherman/llms-full.txt): the pages above in one plain-text file
+- Translations of the home and privacy pages, written ahead of time and marked as AI-translated: [中文](https://deovandski.github.io/Sinoi-the-fisherman/zh/), [日本語](https://deovandski.github.io/Sinoi-the-fisherman/ja/), [Português](https://deovandski.github.io/Sinoi-the-fisherman/pt/), [Español](https://deovandski.github.io/Sinoi-the-fisherman/es/), [العربية](https://deovandski.github.io/Sinoi-the-fisherman/ar/), [한국어](https://deovandski.github.io/Sinoi-the-fisherman/ko/). English is the source.
 
 ## Docs (on GitHub)
 

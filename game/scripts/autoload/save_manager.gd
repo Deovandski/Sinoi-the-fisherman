@@ -65,20 +65,20 @@ func to_json() -> String:
 ## Validates and applies a save. Returns {"ok": bool, "message": String}.
 func apply_json(text: String) -> Dictionary:
 	if text.length() > MAX_IMPORT_BYTES:
-		return _fail("That file is too big to be a save.")
+		return _fail(tr("That file is too big to be a save."))
 	var json := JSON.new()
 	if json.parse(text) != OK:
-		return _fail("That file isn't valid save data (not JSON).")
+		return _fail(tr("That file isn't valid save data (not JSON)."))
 	var parsed = json.data
 	if typeof(parsed) != TYPE_DICTIONARY:
-		return _fail("That file isn't valid save data (not JSON).")
+		return _fail(tr("That file isn't valid save data (not JSON)."))
 	if parsed.get("format", "") != FORMAT:
-		return _fail("That JSON isn't a Sinoi the Fisherman save.")
+		return _fail(tr("That JSON isn't a Sinoi the Fisherman save."))
 	var version := int(parsed.get("version", 0))
 	if version < 1:
-		return _fail("That save has no version number.")
+		return _fail(tr("That save has no version number."))
 	if version > VERSION:
-		return _fail("That save comes from a newer version of the game. Update the game first.")
+		return _fail(tr("That save comes from a newer version of the game. Update the game first."))
 	var migrated := _migrate(parsed, version)
 	data = _merge_defaults(migrated, default_data())
 	data["version"] = VERSION
@@ -214,7 +214,7 @@ func export_save() -> void:
 	var file_name := export_file_name()
 	if OS.has_feature("web"):
 		JavaScriptBridge.download_buffer(text.to_utf8_buffer(), file_name, "application/json")
-		message.emit("Save downloaded as %s." % file_name)
+		message.emit(tr("Save downloaded as %s.") % file_name)
 	elif DisplayServer.has_feature(DisplayServer.FEATURE_NATIVE_DIALOG_FILE):
 		DisplayServer.file_dialog_show("Export save", OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS),
 			file_name, false, DisplayServer.FILE_DIALOG_MODE_SAVE_FILE,
@@ -225,7 +225,7 @@ func export_save() -> void:
 
 func _on_export_path_chosen(status: bool, paths: PackedStringArray, _filter: int, text: String) -> void:
 	if not status or paths.is_empty():
-		message.emit("Export cancelled.")
+		message.emit(tr("Export cancelled."))
 		return
 	var file := FileAccess.open(paths[0], FileAccess.WRITE)
 	if file == null:
@@ -233,12 +233,12 @@ func _on_export_path_chosen(status: bool, paths: PackedStringArray, _filter: int
 		return
 	file.store_string(text)
 	file.close()
-	message.emit("Save exported.")
+	message.emit(tr("Save exported."))
 
 
 func _export_to_clipboard(text: String) -> void:
 	DisplayServer.clipboard_set(text)
-	message.emit("Save copied to the clipboard. Paste it into a .json file to keep it.")
+	message.emit(tr("Save copied to the clipboard. Paste it into a .json file to keep it."))
 
 
 # ---------------------------------------------------------------------------
@@ -259,11 +259,11 @@ func import_save() -> void:
 
 func _on_import_path_chosen(status: bool, paths: PackedStringArray, _filter: int) -> void:
 	if not status or paths.is_empty():
-		message.emit("Import cancelled.")
+		message.emit(tr("Import cancelled."))
 		return
 	var file := FileAccess.open(paths[0], FileAccess.READ)
 	if file == null:
-		message.emit("Couldn't open that file. Try copying the save text and using Paste save.")
+		message.emit(tr("Couldn't open that file. Try copying the save text and using Paste save."))
 		return
 	_finish_import(file.get_as_text())
 

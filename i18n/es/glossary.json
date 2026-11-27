@@ -1,0 +1,51 @@
+{
+ "_about": "How names and recurring terms are written in this language, for the website now and the game's .po files later. World names (characters, places, coins, canon fish) come from HusbandOutWorld content/i18n/es/glossary.json: the series wins, so if a spelling there changes, change it here too. Game-only names (fish made for this game) are added here.",
+ "rule": "Story names stay exactly as in English. That includes coined world terms written as names: creatures, plants, items, nari gels, factions, guilds, places, ranks and coins (Wood People, Sand Worms, Fost Stone, Nari Refresher, Red Winga, Sapphire, Pearl). Plain words around them are translated (nari gel stays, 'soul energy' becomes 'energía del alma'). Exception: the currency balls is written bolas (singular bola), which keeps the double meaning; the rank stays after it (bolas sapphire, bola pearl). Faction names like Beer Balls stay as they are.",
+ "keep_as_is": [
+  "Sinoi the Fisherman",
+  "A Husband Out of This World",
+  "#HusbandOutWorld",
+  "Deovandski",
+  "Deovandski Skibinski Junior",
+  "Mitsukiven",
+  "Feiourm",
+  "Wizard Deo Solutions",
+  "D&D",
+  "Claude",
+  "Godot",
+  "Stardew Valley",
+  "GitHub",
+  "GitHub Pages",
+  "Google Play",
+  "Amazon",
+  "Chrome",
+  "Edge",
+  "Samsung Internet",
+  "Safari",
+  "iPhone",
+  "iPad",
+  "Android",
+  "IndexedDB",
+  "JSON",
+  "APK",
+  "MIT",
+  "llms.txt",
+  "llms-full.txt",
+  "husbandoutworld.com",
+  "DEBUG"
+ ],
+ "names": {
+  "_note": "Names stay exactly as in English (Sinoi, Sanbi, Fihi, Ptaina, True Sanbi King, Vraki, Lukewarm Lake, Deltacross, Karkoi, Bagnazu, Magatum, Pearl, Amethyst, Aquamarine, Sapphire).",
+  "balls (currency)": "bolas (sing. bola)"
+ },
+ "terms": {
+  "fight box": "caja de pelea",
+  "Stats for nerds": "Estadísticas para nerds",
+  "World Lore": "Lore del mundo",
+  "West March campaign": "campaña West March",
+  "white paper": "white paper",
+  "bait and tackle": "cebo y aparejos",
+  "save (game save)": "partida guardada",
+  "pre-production": "preproducción"
+ }
+}

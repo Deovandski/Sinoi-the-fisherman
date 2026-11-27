@@ -1,0 +1,78 @@
+{
+ "10bd24be98fd": {
+  "en": "When you <strong>export</strong> a save, the game writes a JSON file to the place you choose (or your downloads, or your clipboard). When you <strong>import</strong> one, it reads only the file you pick.",
+  "t": "عندما <strong>تصدّر</strong> ملف حفظ، تكتب اللعبة ملف JSON في المكان الذي تختاره (أو في مجلد التنزيلات، أو في الحافظة). وعندما <strong>تستورد</strong> ملفًا، لا تقرأ إلا الملف الذي تختاره."
+ },
+ "1fc13386a3b2": {
+  "en": "Privacy for Sinoi the Fisherman: no accounts, cookies, analytics, ads or tracking. Saves and the offline game files stay on your device.",
+  "t": "الخصوصية في Sinoi the Fisherman: لا حسابات، ولا ملفات تعريف ارتباط، ولا تحليلات، ولا إعلانات، ولا تتبّع. تبقى ملفات الحفظ وملفات اللعبة للعمل دون اتصال على جهازك."
+ },
+ "2622bbdfda0c": {
+  "en": "<strong>Languages.</strong> The site opens in your browser's language when a translation is ready. If you pick a language in Settings, your browser remembers that choice on your device (local storage). It's never sent anywhere; clearing this site's data forgets it.",
+  "t": "<strong>اللغات.</strong> يفتح الموقع بلغة متصفحك عندما تكون الترجمة جاهزة. وإذا اخترت لغة من الإعدادات، يتذكّر متصفحك هذا الاختيار على جهازك (التخزين المحلي). لا يُرسَل إلى أي مكان أبدًا؛ ومسح بيانات هذا الموقع يُنسيه."
+ },
+ "27a6464214a3": {
+  "en": "The site is hosted on GitHub Pages, so <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> sees your IP address when it sends you the pages. The site sets no cookies and runs no analytics.",
+  "t": "الموقع مستضاف على GitHub Pages، لذلك يرى <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> عنوان IP الخاص بك عندما يرسل إليك الصفحات. لا يضع الموقع ملفات تعريف ارتباط ولا يشغّل أي تحليلات."
+ },
+ "2cffb6430f15": {
+  "en": "Privacy — Sinoi the Fisherman",
+  "t": "الخصوصية — Sinoi the Fisherman"
+ },
+ "32e71b945680": {
+  "en": "The Android app asks for no permissions.",
+  "t": "لا يطلب تطبيق Android أي أذونات."
+ },
+ "36f800782dd2": {
+  "en": "This website",
+  "t": "هذا الموقع"
+ },
+ "485a60609d0c": {
+  "en": "Your save is stored only on your device: in the app's private storage on Android, or in this site's browser storage (IndexedDB) on the web.",
+  "t": "يُخزَّن ملف حفظك على جهازك فقط: في التخزين الخاص بالتطبيق على Android، أو في تخزين المتصفح لهذا الموقع (IndexedDB) على الويب."
+ },
+ "56452b6b8068": {
+  "en": "Nothing is sent to us or anyone else. The game works offline.",
+  "t": "لا يُرسَل أي شيء إلينا ولا إلى أي أحد. تعمل اللعبة دون اتصال."
+ },
+ "678d413c2f7f": {
+  "en": "<strong>Installed web app:</strong> if you install the browser version or play it once, your browser keeps a copy of the game's files (the engine, game data, icons and an offline page, about 40 MB) so it can start with no signal. They're stored only on your device, never sent anywhere, and contain no personal data. The app only checks this website for a newer version of those files. Uninstalling the app or clearing this site's data removes them, along with the browser save.",
+  "t": "<strong>تطبيق الويب المثبَّت:</strong> إذا ثبّتّ نسخة المتصفح أو لعبتها مرة واحدة، يحتفظ متصفحك بنسخة من ملفات اللعبة (المحرّك، وبيانات اللعبة، والأيقونات، وصفحة للعمل دون اتصال، نحو 40 MB) حتى تبدأ دون إشارة. تُخزَّن على جهازك فقط، ولا تُرسَل إلى أي مكان، ولا تحتوي على بيانات شخصية. لا يتحقق التطبيق من هذا الموقع إلا لمعرفة وجود نسخة أحدث من تلك الملفات. إلغاء تثبيت التطبيق أو مسح بيانات هذا الموقع يزيلها، ومعها ملف الحفظ في المتصفح."
+ },
+ "7eb60d1025d6": {
+  "en": "Open an <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">issue on GitHub</a>.",
+  "t": "افتح <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">مشكلة (issue) على GitHub</a>."
+ },
+ "9a1fc1731f62": {
+  "en": "Questions",
+  "t": "أسئلة"
+ },
+ "aae5e58a3b87": {
+  "en": "The game (Android app and browser version)",
+  "t": "اللعبة (تطبيق Android ونسخة المتصفح)"
+ },
+ "d5b091197de2": {
+  "en": "Sinoi the Fisherman collects no personal data. There are no accounts, no cookies, no analytics, no ads and no tracking, in the app or on this website.",
+  "t": "لا تجمع Sinoi the Fisherman أي بيانات شخصية. لا توجد حسابات، ولا ملفات تعريف ارتباط، ولا تحليلات، ولا إعلانات، ولا تتبّع، لا في التطبيق ولا في هذا الموقع."
+ },
+ "da68b612ec36": {
+  "en": "Google Play",
+  "t": "Google Play"
+ },
+ "e520a6fc74fd": {
+  "en": "Last updated November 26, 2026.",
+  "t": "آخر تحديث: 26 نوفمبر 2026."
+ },
+ "e8f09db77287": {
+  "en": "Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.",
+  "t": "تُفتح روابط Amazon وGitHub في متصفحك؛ ولتلك المواقع سياسات خصوصية خاصة بها."
+ },
+ "ed8240833c19": {
+  "en": "If you install the app from Google Play, Google handles the download and may collect data under its own policies. The app itself adds nothing.",
+  "t": "إذا ثبّتّ التطبيق من Google Play، تتولى Google التنزيل وقد تجمع بيانات وفق سياساتها الخاصة. التطبيق نفسه لا يضيف شيئًا."
+ },
+ "f9f98ec16f76": {
+  "en": "<strong>Stats for nerds.</strong> The debug page (Settings › DEBUG, <code>debug/</code>) shows what your browser tells the page about itself: browser and device, screen, storage use, connection, page timings. It reads this only to show it to you on that page. Nothing is saved and nothing is sent anywhere; the page only asks this website for its build file (<code>stats.json</code>) and times three small requests to it.",
+  "t": "<strong>إحصاءات للمهووسين.</strong> تعرض صفحة التصحيح (الإعدادات › DEBUG، <code>debug/</code>) ما يخبر به متصفحك الصفحة عن نفسه: المتصفح والجهاز، والشاشة، واستخدام التخزين، والاتصال، وأزمنة تحميل الصفحة. تقرأ هذا فقط لتعرضه لك على تلك الصفحة. لا يُحفَظ أي شيء ولا يُرسَل أي شيء إلى أي مكان؛ لا تطلب الصفحة من هذا الموقع إلا ملف البناء (<code>stats.json</code>) وتقيس زمن ثلاثة طلبات صغيرة إليه."
+ }
+}

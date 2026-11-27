@@ -55,39 +55,39 @@ func _build() -> void:
 
 	column.add_child(_spacer(8))
 	# Shown only when the installed web app (PWA) has downloaded a new version.
-	_update_button = _button("New version ready: tap to update", _on_update_pressed)
+	_update_button = _button(tr("New version ready: tap to update"), _on_update_pressed)
 	_update_button.visible = false
 	column.add_child(_update_button)
-	column.add_child(_label("Sinoi the Fisherman", 16, Color("f3e3b3")))
-	column.add_child(_label("Pre-production build " + str(ProjectSettings.get_setting("application/config/version")), 7, Color("9fc3d6")))
-	column.add_child(_label("Made for touch screens. A mouse works for testing.", 7, Color("c9dbe4")))
+	column.add_child(_label(tr("Sinoi the Fisherman"), 16, Color("f3e3b3")))
+	column.add_child(_label(tr("Pre-production build %s") % str(ProjectSettings.get_setting("application/config/version")), 7, Color("9fc3d6")))
+	column.add_child(_label(tr("Made for touch screens. A mouse works for testing."), 7, Color("c9dbe4")))
 	column.add_child(_spacer(2))
 
 	_stats = _label("", 9, Color("ffffff"))
 	column.add_child(_stats)
 
 	column.add_child(_row([
-		_button("Fish test", _on_fish_test),
-		_button("Journal", func(): get_tree().change_scene_to_file("res://scenes/journal.tscn")),
+		_button(tr("Fish test"), _on_fish_test),
+		_button(tr("Journal"), func(): get_tree().change_scene_to_file("res://scenes/journal.tscn")),
 	]))
-	column.add_child(_button("Fight box: try the modes", _on_touch_test))
+	column.add_child(_button(tr("Fight box: try the modes"), _on_touch_test))
 	column.add_child(_row([
-		_button("Export save", SaveManager.export_save),
-		_button("Import save", SaveManager.import_save),
+		_button(tr("Export save"), SaveManager.export_save),
+		_button(tr("Import save"), SaveManager.import_save),
 	]))
-	var tools: Array[Control] = [_button("Reset save", _on_reset)]
+	var tools: Array[Control] = [_button(tr("Reset save"), _on_reset)]
 	if not OS.has_feature("web"):
-		tools.push_front(_button("Paste save", SaveManager.import_from_clipboard))
+		tools.push_front(_button(tr("Paste save"), SaveManager.import_from_clipboard))
 	column.add_child(_row(tools))
 
 	_status = _label("", 7, Color("ffe08a"))
 	column.add_child(_status)
 
 	column.add_child(_spacer(4))
-	column.add_child(_label(Credits.support_text(), 6, Color("d7e6ec")))
+	column.add_child(_label(tr(Credits.support_text()), 6, Color("d7e6ec")))
 	column.add_child(_row([
-		_button("eBooks on Amazon", func(): OS.shell_open(Credits.link("amazon"))),
-		_button("World Lore", func(): OS.shell_open(Credits.link("world_lore"))),
+		_button(tr("eBooks on Amazon"), func(): OS.shell_open(Credits.link("amazon"))),
+		_button(tr("World Lore"), func(): OS.shell_open(Credits.link("world_lore"))),
 	]))
 	column.add_child(_spacer(8))
 
@@ -127,7 +127,7 @@ func _spacer(height: int) -> Control:
 
 func _refresh() -> void:
 	var catches: Array = SaveManager.data.get("catches", [])
-	_stats.text = "Pearls: %d   Catches: %d" % [int(SaveManager.data.get("pearls", 0)), catches.size()]
+	_stats.text = tr("Pearls: %d   Catches: %d") % [int(SaveManager.data.get("pearls", 0)), catches.size()]
 
 
 ## Web/PWA only. Since issue #18 the worker is network first and takes over at
@@ -184,4 +184,4 @@ func _on_touch_test() -> void:
 
 func _on_reset() -> void:
 	SaveManager.reset()
-	_show_status("Save reset.")
+	_show_status(tr("Save reset."))

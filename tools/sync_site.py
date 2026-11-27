@@ -8,7 +8,11 @@ Each piece sits between markers in the page:
     <!-- one-source:NAME -->  ...  <!-- /one-source:NAME -->
 and is rebuilt from:
     header       tools/site_parts/header.html (every page): the top bar, the
-                 gear and the Settings dialog (App row, Stats for nerds row)
+                 gear and the Settings dialog (Language, App, Stats for nerds);
+                 the language list comes from i18n/<lang>/meta.json
+    languages    in each page's <head>: which translations are ready (for
+                 lang.js) and, on indexed pages, hreflang links for search
+                 engines, worked out by tools/i18n.py from i18n/<lang>/
     footer       tools/site_parts/footer.html (every page)
     install-app  tools/site_parts/install-app.html: the Install app button,
                  also in the Settings App row (landing page)
@@ -22,6 +26,7 @@ See CLAUDE.md, "One source".
 """
 import html
 import json
+import os
 import pathlib
 import re
 import sys
@@ -45,11 +50,29 @@ def credits() -> dict:
     return json.loads((ROOT / "game/data/credits.json").read_text(encoding="utf-8"))
 
 
+def i18n():
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import i18n as module  # tools/i18n.py (needs lxml)
+    return module
+
+
+def language_options() -> str:
+    tools = i18n()
+    options = ['<option value="en" lang="en">English</option>']
+    for code in tools.codes():
+        meta = tools.load_meta(code)
+        options.append(f'<option value="{code}" lang="{html.escape(meta.get("html_lang", code))}">{html.escape(meta.get("name", code))}</option>')
+    return "\n".join(options)
+
+
 def piece_header() -> str:
     text = part("header.html")
     for line in text.split("\n"):
+        if line.strip() == "{language_options}":
+            text = text.replace(line, indent(language_options(), line[: len(line) - len(line.lstrip())]))
+    for line in text.split("\n"):
         if line.strip() == "{install_app}":
-            return text.replace(line, indent(part("install-app.html"), line[: len(line) - len(line.lstrip())]))
+            text = text.replace(line, indent(part("install-app.html"), line[: len(line) - len(line.lstrip())]))
     return text
 
 
@@ -75,19 +98,23 @@ def piece_support() -> str:
     ])
 
 
-PIECES = {"header": piece_header, "footer": piece_footer, "install-app": piece_install_app, "support": piece_support}
+PIECES = {"header": piece_header, "footer": piece_footer, "install-app": piece_install_app, "support": piece_support,
+          "languages": None}
+# The languages piece counts translated text on the pages as written, so it goes in a second pass.
+PASSES = [[n for n in PIECES if n != "languages"], ["languages"]]
 
 
-def sync(text: str, page: str) -> tuple[str, list[str]]:
+def sync(text: str, page: str, names: list) -> tuple[str, list[str]]:
     changed = []
     root = PAGES[page]
     home = "" if page == "index.html" else root
-    for name, build in PIECES.items():
+    for name in names:
         pattern = re.compile(r"^([ \t]*)(<!-- one-source:%s .*?-->\n)(.*?)(\n[ \t]*<!-- /one-source:%s -->)" % (re.escape(name), re.escape(name)), re.S | re.M)
         match = pattern.search(text)
         if not match:
             continue
-        wanted = indent(build().replace("{root}", root).replace("{home}", home), match.group(1))
+        built = i18n().alternates(page) if name == "languages" else PIECES[name]()
+        wanted = indent(built.replace("{root}", root).replace("{home}", home), match.group(1))
         if match.group(3) != wanted:
             text = text[:match.start(3)] + wanted + text[match.end(3):]
             changed.append(f"{page}: {name}")
@@ -97,12 +124,13 @@ def sync(text: str, page: str) -> tuple[str, list[str]]:
 def main() -> None:
     check = "--check" in sys.argv[1:]
     stale = []
-    for page in PAGES:
-        path = SITE / page
-        text, changed = sync(path.read_text(encoding="utf-8"), page)
-        stale += changed
-        if changed and not check:
-            path.write_text(text, encoding="utf-8")
+    for names in PASSES:
+        for page in PAGES:
+            path = SITE / page
+            text, changed = sync(path.read_text(encoding="utf-8"), page, names)
+            stale += changed
+            if changed and not check:
+                path.write_text(text, encoding="utf-8")
     for item in stale:
         print(("out of date: " if check else "updated: ") + item)
     if check and stale:

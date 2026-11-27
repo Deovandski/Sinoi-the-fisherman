@@ -26,7 +26,7 @@ func _ready() -> void:
 	add_child(top)
 	top.add_child(UiParts.small_button("< Back", func(): get_tree().change_scene_to_file("res://scenes/main.tscn")))
 	var title := Label.new()
-	title.text = "Journal"
+	title.text = tr("Journal")
 	title.add_theme_font_size_override("font_size", 10)
 	title.add_theme_color_override("font_color", Color("f3e3b3"))
 	top.add_child(title)
@@ -65,7 +65,7 @@ func _fill() -> void:
 			species += 1
 			total += caught
 		_list.add_child(_card(fish, e, names))
-	_summary.text = "%d of %d fish found - %d caught in all" % [species, FishCatalog.entries().size(), total]
+	_summary.text = tr("%d of %d fish found - %d caught in all") % [species, FishCatalog.entries().size(), total]
 
 
 func _card(fish: Dictionary, e: Dictionary, names: Array) -> Control:
@@ -87,24 +87,24 @@ func _card(fish: Dictionary, e: Dictionary, names: Array) -> Control:
 	if caught == 0:
 		name.text = "???"
 		name.add_theme_color_override("font_color", Color("6fa3c0"))
-		column.add_child(_line("Seen around %s. Not caught yet." % region if region != "" else "Not caught yet.", Color("6fa3c0")))
+		column.add_child(_line(tr("Seen around %s. Not caught yet.") % tr(region) if region != "" else tr("Not caught yet."), Color("6fa3c0")))
 		return panel
-	name.text = str(fish.name)
+	name.text = tr(str(fish.name))
 	name.add_theme_color_override("font_color", Color("ffd166"))
-	var quality := func(key: String) -> String: return str(names[clampi(int(e.get(key, 0)), 0, names.size() - 1)])
-	column.add_child(_line("Caught: %d   Best: %s" % [caught, quality.call("best_quality")]))
-	column.add_child(_line("Biggest: %.1f cm (%s)" % [float(e.get("biggest_cm", 0.0)), quality.call("biggest_quality")]))
-	column.add_child(_line("Average payoff: %s" % Balls.format(Journal.average_pearls(e))))
-	column.add_child(_line("First caught: %s" % str(e.get("first_caught_at", "")).left(10)))
+	var quality := func(key: String) -> String: return tr(str(names[clampi(int(e.get(key, 0)), 0, names.size() - 1)]))
+	column.add_child(_line(tr("Caught: %d   Best: %s") % [caught, quality.call("best_quality")]))
+	column.add_child(_line(tr("Biggest: %.1f cm (%s)") % [float(e.get("biggest_cm", 0.0)), quality.call("biggest_quality")]))
+	column.add_child(_line(tr("Average payoff: %s") % Balls.format(Journal.average_pearls(e))))
+	column.add_child(_line(tr("First caught: %s") % str(e.get("first_caught_at", "")).left(10)))
 	if region != "":
-		column.add_child(_line("Region: %s" % region))
+		column.add_child(_line(tr("Region: %s") % tr(region)))
 	var lore := str(fish.get("lore", ""))
 	if lore != "":
-		column.add_child(_line(lore, Color("c9dbe4"), true))
+		column.add_child(_line(tr(lore), Color("c9dbe4"), true))
 		var link := FishCatalog.lore_link()
 		if link != "":
 			var host := link.trim_prefix("https://").trim_prefix("http://").trim_suffix("/")
-			var more := UiParts.small_button("Read more on %s" % host, func(): OS.shell_open(link))
+			var more := UiParts.small_button(tr("Read more on %s") % host, func(): OS.shell_open(link))
 			more.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 			column.add_child(more)
 	return panel

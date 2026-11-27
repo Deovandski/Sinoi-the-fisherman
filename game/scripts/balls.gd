@@ -26,9 +26,10 @@ static func format(pearls: float) -> String:
 			break
 		var count := floori(left / worth)
 		if count > 0:
-			parts.append("%d %s%s" % [count, ball.name, "" if count == 1 else "s"])
+			# msgids "%d sapphire" / "%d sapphires" for every ball in balls.json (tools/game_pot.py adds them).
+			parts.append(TranslationServer.translate_plural("%d " + str(ball.name), "%d " + str(ball.name) + "s", count) % count)
 			left -= count * worth
 	if left > 0.0001 or parts.is_empty():
 		var whole := is_equal_approx(left, roundf(left))
-		parts.append(("%d pearl%s" % [roundi(left), "" if roundi(left) == 1 else "s"]) if whole else "%.1f pearls" % left)
+		parts.append((TranslationServer.translate_plural("%d pearl", "%d pearls", roundi(left)) % roundi(left)) if whole else TranslationServer.translate("%.1f pearls") % left)
 	return ", ".join(parts)

@@ -51,7 +51,7 @@ func _ready() -> void:
 	var names := PackedStringArray()
 	for e in _entries:
 		var count: int = e.get("sections", []).size()
-		names.append("%s  (%d section%s)" % [e.name, count, "" if count == 1 else "s"])
+		names.append("%s  (%s)" % [tr(e.name), tr_n("%d section", "%d sections", count) % count])
 	_picker = UiParts.picker(names, _select)
 	_picker.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	_picker.offset_left = 2
@@ -74,9 +74,9 @@ func _select(index: int) -> void:
 	_fight = FishFight.new(e, _stage.pad_side())
 	var count := _fight.section_count()
 	_stage.play(_fight.make_mode(_stage.pad_side()), {
-		"title": e.name,
-		"body": "%s\n\n%s" % [e.get("description", ""), _fight.sections_summary()],
-		"footer": "%d section%s - %s - %d-%d pearls" % [count, "" if count == 1 else "s", e.get("curve", "climb"), int(e.pearls[0]), int(e.pearls[1])],
+		"title": tr(e.name),
+		"body": "%s\n\n%s" % [tr(e.get("description", "")), _fight.sections_summary()],
+		"footer": "%s - %s - %s" % [tr_n("%d section", "%d sections", count) % count, e.get("curve", "climb"), tr("%d-%d pearls") % [int(e.pearls[0]), int(e.pearls[1])]],
 	})
 	_refresh_meter()
 
@@ -97,11 +97,11 @@ func _on_ticked(delta: float, judgement: Vector2) -> void:
 func _on_changed(amount: float) -> void:
 	match _fight.add(amount):
 		FishFight.Result.SECTION_DONE:
-			var name: String = FightCatalog.entry(_fight.section_mode_id()).get("name", "")
+			var name: String = tr(FightCatalog.entry(_fight.section_mode_id()).get("name", ""))
 			_stage.play(_fight.make_mode(_stage.pad_side()))
-			var title := "Section %d/%d: %s" % [_fight.section + 1, _fight.section_count(), name]
+			var title := tr("Section %d/%d: %s") % [_fight.section + 1, _fight.section_count(), name]
 			if _fight.last_carry > 0.005:
-				title += "\nStrong finish! Head start +%d%%" % roundi(_fight.last_carry * 100.0)
+				title += tr("\nStrong finish! Head start +%d%%") % roundi(_fight.last_carry * 100.0)
 			_stage.show_banner(title)
 			_stage.play_sound("tock")
 		FishFight.Result.CAUGHT:
@@ -110,15 +110,15 @@ func _on_changed(amount: float) -> void:
 			_streak += 1
 			_best_streak = maxi(_best_streak, _streak)
 			var bonus := " (+%d%%)" % roundi(reward.bonus * 100.0) if reward.bonus > 0.0 else ""
-			_stage.show_banner("Caught %s!\n%s, %.1f cm, +%d pearls%s\nStreak %d (best %d)" % [
-				_fight.fish.name, reward.quality_name, reward.size_cm, reward.pearls, bonus, _streak, _best_streak])
+			_stage.show_banner(tr("Caught %s!\n%s, %.1f cm, +%d pearls%s\nStreak %d (best %d)") % [
+				tr(_fight.fish.name), tr(reward.quality_name), reward.size_cm, reward.pearls, bonus, _streak, _best_streak])
 			_stage.play_sound("catch")
 			_restart()
 		FishFight.Result.ESCAPED:
 			_session().record_escape()
-			var lost := "\nStreak of %d lost" % _streak if _streak > 1 else ""
+			var lost := tr("\nStreak of %d lost") % _streak if _streak > 1 else ""
 			_streak = 0
-			_stage.show_banner("%s got away%s" % [_fight.fish.name, lost])
+			_stage.show_banner(tr("%s got away%s") % [tr(_fight.fish.name), lost])
 			_stage.play_sound("miss")
 			_restart()
 	_refresh_meter()
@@ -163,7 +163,7 @@ func _process(_delta: float) -> void:
 	if _fight == null:
 		return
 	var s := _session()
-	var line := "Won %d Lost %d Streak %d Lv %.1f" % [s.catches, s.escapes, _streak, _fight.difficulty() * 10.0]
+	var line := tr("Won %d Lost %d Streak %d Lv %.1f") % [s.catches, s.escapes, _streak, _fight.difficulty() * 10.0]
 	_stats.text = line
 
 
@@ -212,4 +212,4 @@ func _copy_results() -> void:
 	if lines.size() == 3:
 		lines.append("(no fish fought yet)")
 	ResultsText.copy(lines)
-	_stage.show_banner("Results copied")
+	_stage.show_banner(tr("Results copied"))

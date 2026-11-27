@@ -42,10 +42,10 @@ a { color: inherit; text-underline-offset: 3px; }
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; text-decoration: none; }
 .brand img { width: 32px; height: 32px; image-rendering: pixelated; border-radius: 6px; }
-.top nav { display: flex; gap: 18px; font-size: 15px; flex-wrap: wrap; margin-left: auto; }
+.top nav { display: flex; gap: 18px; font-size: 15px; flex-wrap: wrap; margin-inline-start: auto; }
 @media (max-width: 640px) {
-  .top nav { order: 3; flex-basis: 100%; margin-left: 0; gap: 8px 16px; }
-  .top .gear { margin-left: auto; }
+  .top nav { order: 3; flex-basis: 100%; margin-inline-start: 0; gap: 8px 16px; }
+  .top .gear { margin-inline-start: auto; }
 }
 
 .hero {
@@ -118,12 +118,12 @@ h3 { font-size: 18px; margin: 0 0 6px; }
 .card { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 14px; padding: 20px; }
 .card p { margin: 0; color: var(--ink-soft); font-size: 15.5px; }
 code { font-size: .9em; background: var(--paper-2); padding: 1px 6px; border-radius: 5px; }
-ul.plain { padding-left: 20px; }
+ul.plain { padding-inline-start: 20px; }
 ul.plain li { margin: 4px 0; }
 
 .support {
   margin: 64px 0 0; padding: 26px 28px; border-radius: 14px;
-  background: var(--paper-2); border: 1px solid var(--rule); border-left: 6px solid var(--coral);
+  background: var(--paper-2); border: 1px solid var(--rule); border-inline-start: 6px solid var(--coral);
 }
 .support p { margin: 0 0 14px; }
 .support .btn { background: var(--sea); color: var(--foam); }
@@ -159,12 +159,12 @@ footer p { margin: 4px 0; }
 .site-settings::backdrop { background: rgba(5, 12, 18, .65); backdrop-filter: blur(3px); }
 .site-settings .settings-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 0 0 6px; }
 .site-settings h2 { font-size: 24px; margin: 0; }
-.site-settings .settings-close { display: grid; place-items: center; width: 40px; height: 40px; margin-right: -8px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; }
+.site-settings .settings-close { display: grid; place-items: center; width: 40px; height: 40px; margin-inline-end: -8px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; }
 .site-settings .settings-close:hover { background: var(--paper-2); }
 .site-settings .setting { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
 .site-settings .setting > span { font-weight: 700; }
 .site-settings .setting-app { align-items: flex-start; }
-.site-settings .setting-app .install-app { justify-items: end; text-align: right; max-width: 72%; font-size: 15px; --install-accent: var(--sand); --install-ink: #10202b; --install-muted: var(--ink-soft); }
+.site-settings .setting-app .install-app { justify-items: end; text-align: end; max-width: 72%; font-size: 15px; --install-accent: var(--sand); --install-ink: #10202b; --install-muted: var(--ink-soft); }
 .site-settings .setting-debug { border-bottom: 0; }
 /* The DEBUG button looks like the terminal it opens (debug/): black, green, monospace, a soft glow. */
 .site-settings .debug-btn { font: 700 14px/1 ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: .12em; padding: 11px 16px; border-radius: 8px; background: #000; color: #39ff14; text-decoration: none; text-shadow: 0 0 6px rgba(57, 255, 20, .6); border: 1px solid #1f6f12; }
@@ -176,3 +176,15 @@ footer p { margin: 4px 0; }
 .page-terminal .debug-terminal { margin: 8px 0 32px; }
 .page-terminal .debug-noscript { color: #39ff14; font-family: ui-monospace, Consolas, monospace; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* Language row in Settings, and the AI-translation banner on translated pages (tools/i18n.py, lang.js). */
+.site-settings select { font: inherit; font-size: 15px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--rule); background: var(--paper-2); color: var(--ink); max-width: 60%; min-height: 40px; }
+.site-settings .setting-link { margin: 0; padding: 4px 0 12px; border-bottom: 1px solid var(--rule); font-size: 14px; text-align: end; color: var(--ink-soft); }
+.i18n-banner { background: var(--paper-2); color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 10px; text-align: center; font-size: 14px; line-height: 1.45; padding: 7px 14px; margin: 0 0 18px; }
+.i18n-banner a { color: var(--ink); font-weight: 700; margin-inline-start: 6px; white-space: nowrap; }
+/* System fonts for scripts the default fonts don't cover well (no font downloads). From Deovandski-repo-template. */
+html[lang^="zh"] body { font-family: system-ui, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+html[lang="ja"] body { font-family: system-ui, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", "Meiryo", sans-serif; }
+html[lang="ko"] body { font-family: system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; }
+html[lang="ar"] body { font-family: system-ui, "Segoe UI", "Geeza Pro", "Noto Sans Arabic", "Tahoma", sans-serif; }
+html[lang^="zh"] body, html[lang="ja"] body, html[lang="ko"] body { line-height: 1.75; }

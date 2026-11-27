@@ -25,7 +25,7 @@ func _step(delta: float, fingers: Dictionary) -> float:
 		running = not running
 		if running:
 			phase_end = time + rng.randf_range(num("run_min", 1.5), num("run_max_time", 2.5))
-			pop(center(), "RUN!", RED)
+			pop(center(), tr("RUN!"), RED)
 			sfx("tock")
 		else:
 			phase_end = time + rng.randf_range(num("reel_min", 3.0), num("reel_max", 5.0))
@@ -42,24 +42,24 @@ func _step(delta: float, fingers: Dictionary) -> float:
 	if tension >= 1.0:
 		tension = 0.0
 		judge(0.0)
-		pop(center(), "SNAP!", RED)
+		pop(center(), tr("SNAP!"), RED)
 		sfx("miss")
 		return -num("snap", 0.25)
 	if running:
-		cue = "Ease off!" if spin > limit else "Let it run..."
+		cue = tr("Ease off!") if spin > limit else tr("Let it run...")
 		judge(1.0 if spin <= limit else 0.0, delta)
 		change += num("drain", 0.04) * 0.25 * delta if spin <= limit else 0.0
 	else:
 		if spin >= low and spin <= high:
-			cue = "Reeling"
+			cue = tr("Reeling")
 			judge(1.0, delta)
 			change += num("fill", 0.09) * delta
 		elif spin < low:
-			cue = "Spin clockwise" if spin >= -0.1 else "Other way!"
+			cue = tr("Spin clockwise") if spin >= -0.1 else tr("Other way!")
 			judge(0.0, delta)
 			change -= num("drain", 0.04) * delta
 		else:
-			cue = "Too fast!"
+			cue = tr("Too fast!")
 			judge(0.5, delta)
 	return change
 

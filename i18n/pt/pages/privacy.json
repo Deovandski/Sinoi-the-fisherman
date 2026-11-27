@@ -1,0 +1,78 @@
+{
+ "10bd24be98fd": {
+  "en": "When you <strong>export</strong> a save, the game writes a JSON file to the place you choose (or your downloads, or your clipboard). When you <strong>import</strong> one, it reads only the file you pick.",
+  "t": "Quando você <strong>exporta</strong> um save, o jogo grava um arquivo JSON no lugar que você escolher (ou nos seus downloads, ou na área de transferência). Quando você <strong>importa</strong> um, ele lê só o arquivo que você escolher."
+ },
+ "1fc13386a3b2": {
+  "en": "Privacy for Sinoi the Fisherman: no accounts, cookies, analytics, ads or tracking. Saves and the offline game files stay on your device.",
+  "t": "Privacidade do Sinoi the Fisherman: sem contas, cookies, análises, anúncios ou rastreamento. Os saves e os arquivos do jogo para uso off-line ficam no seu aparelho."
+ },
+ "2622bbdfda0c": {
+  "en": "<strong>Languages.</strong> The site opens in your browser's language when a translation is ready. If you pick a language in Settings, your browser remembers that choice on your device (local storage). It's never sent anywhere; clearing this site's data forgets it.",
+  "t": "<strong>Idiomas.</strong> O site abre no idioma do seu navegador quando há uma tradução pronta. Se você escolher um idioma em Configurações, o navegador lembra essa escolha no seu aparelho (armazenamento local). Ela nunca é enviada a lugar nenhum; limpar os dados deste site a apaga."
+ },
+ "27a6464214a3": {
+  "en": "The site is hosted on GitHub Pages, so <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> sees your IP address when it sends you the pages. The site sets no cookies and runs no analytics.",
+  "t": "O site é hospedado no GitHub Pages, então o <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> vê o seu endereço IP quando envia as páginas. O site não usa cookies nem roda análises."
+ },
+ "2cffb6430f15": {
+  "en": "Privacy — Sinoi the Fisherman",
+  "t": "Privacidade — Sinoi the Fisherman"
+ },
+ "32e71b945680": {
+  "en": "The Android app asks for no permissions.",
+  "t": "O app Android não pede nenhuma permissão."
+ },
+ "36f800782dd2": {
+  "en": "This website",
+  "t": "Este site"
+ },
+ "485a60609d0c": {
+  "en": "Your save is stored only on your device: in the app's private storage on Android, or in this site's browser storage (IndexedDB) on the web.",
+  "t": "Seu save fica guardado só no seu aparelho: no armazenamento privado do app no Android, ou no armazenamento do navegador deste site (IndexedDB) na web."
+ },
+ "56452b6b8068": {
+  "en": "Nothing is sent to us or anyone else. The game works offline.",
+  "t": "Nada é enviado para nós nem para ninguém. O jogo funciona off-line."
+ },
+ "678d413c2f7f": {
+  "en": "<strong>Installed web app:</strong> if you install the browser version or play it once, your browser keeps a copy of the game's files (the engine, game data, icons and an offline page, about 40 MB) so it can start with no signal. They're stored only on your device, never sent anywhere, and contain no personal data. The app only checks this website for a newer version of those files. Uninstalling the app or clearing this site's data removes them, along with the browser save.",
+  "t": "<strong>App web instalado:</strong> se você instalar a versão para navegador ou jogar uma vez, o navegador guarda uma cópia dos arquivos do jogo (o motor, os dados do jogo, os ícones e uma página off-line, cerca de 40 MB) para poder abrir sem sinal. Eles ficam só no seu aparelho, nunca são enviados a lugar nenhum e não contêm dados pessoais. O app só consulta este site para ver se há uma versão mais nova desses arquivos. Desinstalar o app ou limpar os dados deste site os remove, junto com o save do navegador."
+ },
+ "7eb60d1025d6": {
+  "en": "Open an <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">issue on GitHub</a>.",
+  "t": "Abra uma <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">issue no GitHub</a>."
+ },
+ "9a1fc1731f62": {
+  "en": "Questions",
+  "t": "Dúvidas"
+ },
+ "aae5e58a3b87": {
+  "en": "The game (Android app and browser version)",
+  "t": "O jogo (app Android e versão para navegador)"
+ },
+ "d5b091197de2": {
+  "en": "Sinoi the Fisherman collects no personal data. There are no accounts, no cookies, no analytics, no ads and no tracking, in the app or on this website.",
+  "t": "O Sinoi the Fisherman não coleta nenhum dado pessoal. Não há contas, cookies, análises, anúncios nem rastreamento, nem no app nem neste site."
+ },
+ "da68b612ec36": {
+  "en": "Google Play",
+  "t": "Google Play"
+ },
+ "e520a6fc74fd": {
+  "en": "Last updated November 26, 2026.",
+  "t": "Última atualização: 26 de novembro de 2026."
+ },
+ "e8f09db77287": {
+  "en": "Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.",
+  "t": "Os links para a Amazon e o GitHub abrem no seu navegador; esses sites têm suas próprias políticas de privacidade."
+ },
+ "ed8240833c19": {
+  "en": "If you install the app from Google Play, Google handles the download and may collect data under its own policies. The app itself adds nothing.",
+  "t": "Se você instalar o app pelo Google Play, o Google cuida do download e pode coletar dados de acordo com as próprias políticas. O app em si não acrescenta nada."
+ },
+ "f9f98ec16f76": {
+  "en": "<strong>Stats for nerds.</strong> The debug page (Settings › DEBUG, <code>debug/</code>) shows what your browser tells the page about itself: browser and device, screen, storage use, connection, page timings. It reads this only to show it to you on that page. Nothing is saved and nothing is sent anywhere; the page only asks this website for its build file (<code>stats.json</code>) and times three small requests to it.",
+  "t": "<strong>Estatísticas para nerds.</strong> A página de depuração (Configurações › DEBUG, <code>debug/</code>) mostra o que o seu navegador conta à página sobre si mesmo: navegador e aparelho, tela, uso de armazenamento, conexão, tempos de carregamento. Ela lê isso só para mostrar a você naquela página. Nada é salvo e nada é enviado a lugar nenhum; a página só pede a este site o arquivo da build (<code>stats.json</code>) e cronometra três pequenas requisições a ele."
+ }
+}

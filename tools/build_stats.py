@@ -8,6 +8,7 @@ The page reads this file so the browser never has to work these out:
     site   pages, files and size of what gets deployed
     game   name and version (game/project.godot), Godot version and renderer, the web
            export under play/ (size, files, export date, cache version), save format, content
+    i18n   how much of each website translation is done (tools/i18n.py, by words)
 Commit, branch, pull request and repository are left out when the repo is private
 (GitHub Actions says so in its event file); a local build reads them from git.
 Ported from Deovandski/Deovandski-repo-template tools/stats.ts. stats.json is not
@@ -115,6 +116,7 @@ def tally(folder: pathlib.Path):
 
 
 def site_facts(site: pathlib.Path):
+    """Pages, files and size. The translated copies (site/<lang>/) count once built."""
     sitemap = (site / "sitemap.xml").read_text(encoding="utf-8") if (site / "sitemap.xml").exists() else ""
     locs = re.findall(r"<loc>([^<]+)</loc>", sitemap)
     files, size, by_type = tally(site)
@@ -162,7 +164,9 @@ def main() -> None:
     site = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / "site")
     if not (site / "index.html").exists():
         sys.exit(f"{site} has no index.html: pass the site folder.")
-    stats = {"code": code_facts(), "site": site_facts(site), "game": game_facts(site)}
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import i18n  # tools/i18n.py (needs lxml)
+    stats = {"code": code_facts(), "site": site_facts(site), "game": game_facts(site), "i18n": i18n.language_stats(site)}
     (site / "stats.json").write_text(json.dumps(stats, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     c, s, g = stats["code"], stats["site"], stats["game"]
     print(f"stats.json: {c['builtBy']}"

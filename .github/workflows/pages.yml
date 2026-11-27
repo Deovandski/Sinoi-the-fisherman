@@ -8,9 +8,9 @@ name: Website and web build
 on:
   push:
     branches: [main]
-    paths: ["game/**", "site/**", "tools/**", ".github/workflows/pages.yml"]
+    paths: ["game/**", "site/**", "tools/**", "i18n/**", ".github/workflows/pages.yml"]
   pull_request:
-    paths: ["game/**", "site/**", "tools/**", ".github/workflows/pages.yml"]
+    paths: ["game/**", "site/**", "tools/**", "i18n/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -63,8 +63,11 @@ jobs:
           ~/godot/godot --headless --path game -s res://tests/test_fight_modes.gd
           ~/godot/godot --headless --path game -s res://tests/test_fish_fights.gd
 
-      - name: Shared site pieces match their one source
-        run: python3 tools/sync_site.py --check
+      - name: Shared site pieces match their one source; game strings match messages.pot
+        run: |
+          pip install --quiet lxml
+          python3 tools/sync_site.py --check
+          python3 tools/game_pot.py --check
 
       - name: Export web build (installable PWA at /play/)
         run: |
@@ -92,6 +95,12 @@ jobs:
           done
           grep -o "CACHE_VERSION = '[^']*'" site/play/index.service.worker.js
           ls -la site/play
+
+      - name: Translated pages (site/<lang>/, from i18n/)
+        run: |
+          python3 tools/i18n.py build site
+          python3 tools/i18n.py status
+          for c in zh ja pt es ar ko; do test -s "site/$c/index.html" || { echo "::warning::no $c pages"; }; done
 
       - name: Build stats.json (Stats for nerds, site/debug/)
         run: |

@@ -36,13 +36,13 @@ func _step(delta: float, fingers: Dictionary) -> float:
 	var change := 0.0
 	match state:
 		State.APPROACH:
-			cue = "Press when the ring closes"
+			cue = tr("Press when the ring closes")
 			if time > press_at + num("ok", 0.25):
-				change -= _miss("Missed", spot)
+				change -= _miss(tr("Missed"), spot)
 				_next_spot()
 		State.HOLD:
 			var done_at := _hold_start + hold_for
-			cue = "LIFT!" if time >= done_at - num("perfect", 0.12) else "Hold..."
+			cue = tr("LIFT!") if time >= done_at - num("perfect", 0.12) else tr("Hold...")
 			if not fingers.has(_finger):
 				return 0.0
 			var inside: bool = fingers[_finger].distance_to(spot) <= num("radius", 7.0) + num("slack", 4.0)
@@ -54,13 +54,13 @@ func _step(delta: float, fingers: Dictionary) -> float:
 			else:
 				_outside += delta
 				judge(0.0, delta * 0.5)
-				cue = "Back in the spot!"
+				cue = tr("Back in the spot!")
 				if _outside > num("leave_limit", 0.3):
-					change -= _miss("Slipped", spot, num("slip", 0.12))
+					change -= _miss(tr("Slipped"), spot, num("slip", 0.12))
 					_next_spot()
 					return change
 			if time > done_at + num("ok", 0.25):
-				change -= _miss("Too late", spot, num("timing_miss", 0.12) * 0.8)
+				change -= _miss(tr("Too late"), spot, num("timing_miss", 0.12) * 0.8)
 				_next_spot()
 		State.GAP:
 			cue = ""
@@ -77,18 +77,18 @@ func touch(index: int, at: Vector2, pressed: bool) -> float:
 			return 0.0
 		var dist := at.distance_to(spot)
 		if dist > r + slack:
-			pop(at, "Off spot", RED)
+			pop(at, tr("Off spot"), RED)
 			judge(0.0, 0.25)
 			return -num("stray", 0.02)
 		var error := time - press_at
 		if error < -num("ok", 0.25):
-			var cost := _miss("Too early", spot)
+			var cost := _miss(tr("Too early"), spot)
 			_next_spot()
 			return -cost
 		var timing := 1.0 if absf(error) <= num("perfect", 0.12) else 0.5
 		var aim := 1.0 if dist <= r * 0.5 else (0.75 if dist <= r else 0.45)
 		judge(timing * aim)
-		pop(spot, "Perfect" if timing == 1.0 and aim == 1.0 else ("Good" if timing == 1.0 else "OK"), GREEN if timing == 1.0 else GOLD)
+		pop(spot, tr("Perfect") if timing == 1.0 and aim == 1.0 else (tr("Good") if timing == 1.0 else tr("OK")), GREEN if timing == 1.0 else GOLD)
 		sfx("hit")
 		state = State.HOLD
 		_finger = index
@@ -103,12 +103,12 @@ func touch(index: int, at: Vector2, pressed: bool) -> float:
 		return 0.0
 	var release_error := time - (_hold_start + hold_for)
 	if release_error < -num("perfect", 0.12):
-		var cost := _miss("Too soon", spot)
+		var cost := _miss(tr("Too soon"), spot)
 		_next_spot()
 		return -cost
 	var quality := 1.0 if absf(release_error) <= num("perfect", 0.12) else 0.5
 	judge(quality)
-	pop(spot, "Clean lift" if quality == 1.0 else "Lift OK", GREEN if quality == 1.0 else GOLD)
+	pop(spot, tr("Clean lift") if quality == 1.0 else tr("Lift OK"), GREEN if quality == 1.0 else GOLD)
 	sfx("hit")
 	_next_spot()
 	return num("release_gain", 0.07) * quality

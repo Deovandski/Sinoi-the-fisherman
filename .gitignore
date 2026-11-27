@@ -21,6 +21,13 @@ site/manifest.webmanifest
 site/llms-full.txt
 # Build facts for the Stats for nerds page (tools/build_stats.py), written per build
 site/stats.json
+# Translated pages, written at deploy time by tools/i18n.py build (the translations live in i18n/)
+site/zh/
+site/ja/
+site/pt/
+site/es/
+site/ar/
+site/ko/
 *.apk
 *.aab
 *.idsig
@@ -73,3 +80,6 @@ Desktop.ini
 
 # Local scratch
 .claude-access-test.txt
+
+# Python bytecode
+__pycache__/

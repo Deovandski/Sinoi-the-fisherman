@@ -24,18 +24,18 @@ func _step(_delta: float, _fingers: Dictionary) -> float:
 		_done = true
 		if decoy:
 			judge(1.0)
-			pop(center(), "Good wait", GREEN)
+			pop(center(), tr("Good wait"), GREEN)
 			change += num("gain", 0.1) * 0.5
 		else:
-			change -= _miss("Too slow")
+			change -= _miss(tr("Too slow"))
 	if _done and time > go_at + num("late", 0.38) + 0.35:
 		_new_cue(rng.randf_range(0.2, 0.5))
 	if decoy:
-		cue = "X: don't flick!"
+		cue = tr("X: don't flick!")
 	elif time < _shown_at:
 		cue = ""
 	else:
-		cue = "Flick on the ring"
+		cue = tr("Flick on the ring")
 	return change
 
 
@@ -59,16 +59,16 @@ func _flick(move: Vector2) -> float:
 		return 0.0
 	_done = true
 	if decoy:
-		return -_miss("It was an X!")
+		return -_miss(tr("It was an X!"))
 	var error := time - go_at
 	if error < -num("late", 0.38):
-		return -_miss("Too early")
+		return -_miss(tr("Too early"))
 	var allowed := deg_to_rad(30.0) if _cardinal(cue_dir) else deg_to_rad(22.0)
 	if absf(move.angle_to(cue_dir)) > allowed:
-		return -_miss("Wrong way")
+		return -_miss(tr("Wrong way"))
 	var grade := 1.0 if absf(error) <= num("perfect", 0.1) else (0.6 if absf(error) <= num("good", 0.22) else 0.3)
 	judge(grade)
-	pop(center(), ["Hooked!", "Good", "Late" if error > 0.0 else "Early"][0 if grade == 1.0 else (1 if grade == 0.6 else 2)], GREEN if grade == 1.0 else GOLD)
+	pop(center(), [tr("Hooked!"), tr("Good"), tr("Late") if error > 0.0 else tr("Early")][0 if grade == 1.0 else (1 if grade == 0.6 else 2)], GREEN if grade == 1.0 else GOLD)
 	sfx("hit")
 	return num("gain", 0.1) * grade
 

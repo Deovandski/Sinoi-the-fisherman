@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Hand-written. Add a <url> when a page is added to site/ (see docs/BUILDING.md). -->
+<!-- Hand-written. Add a <url> when a page is added to site/ (see docs/BUILDING.md).
+     The /<lang>/ pages are the translations tools/i18n.py writes at deploy time (one pair per language in tools/i18n.py LANGUAGES). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/</loc></url>
   <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/play/</loc></url>
   <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/privacy.html</loc></url>
   <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/llms.txt</loc></url>
   <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/llms-full.txt</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/zh/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/zh/privacy.html</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/ja/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/ja/privacy.html</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/pt/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/pt/privacy.html</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/es/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/es/privacy.html</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/ar/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/ar/privacy.html</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/ko/</loc></url>
+  <url><loc>https://deovandski.github.io/Sinoi-the-fisherman/ko/privacy.html</loc></url>
 </urlset>

@@ -8,8 +8,6 @@ signal changed(level: int)
 
 const MAX := 10
 const FONT_SIZE := 7
-const LEFT_LABEL := "Easy"
-const RIGHT_LABEL := "Hard"
 
 var level := 5
 var _dragging := false
@@ -50,8 +48,8 @@ func _move_to(x: float) -> void:
 ## Track's left and right x.
 func _track() -> Vector2:
 	var font := ThemeDB.fallback_font
-	var left := font.get_string_size(LEFT_LABEL, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x + 8.0
-	var right := font.get_string_size(RIGHT_LABEL + " 10", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x + 8.0
+	var left := font.get_string_size(tr("Easy"), HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x + 8.0
+	var right := font.get_string_size(tr("Hard") + " 10", HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x + 8.0
 	return Vector2(left, size.x - right)
 
 
@@ -60,10 +58,10 @@ func _draw() -> void:
 	var cy := size.y / 2.0
 	var track := _track()
 	var baseline := cy + FONT_SIZE / 2.0 - 1.0
-	draw_string(font, Vector2(2, baseline), LEFT_LABEL, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("06d6a0"))
+	draw_string(font, Vector2(2, baseline), tr("Easy"), HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("06d6a0"))
 	var t := float(level) / MAX
 	var color := Color("06d6a0").lerp(Color("ffd166"), minf(t * 2.0, 1.0)).lerp(Color("ef476f"), maxf(t * 2.0 - 1.0, 0.0))
-	draw_string(font, Vector2(track.y + 6.0, baseline), RIGHT_LABEL, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("ef476f"))
+	draw_string(font, Vector2(track.y + 6.0, baseline), tr("Hard"), HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, Color("ef476f"))
 	var value := str(level)
 	var value_width := font.get_string_size(value, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x
 	draw_string(font, Vector2(size.x - 2.0 - value_width, baseline), value, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, color)

@@ -1,0 +1,78 @@
+{
+ "10bd24be98fd": {
+  "en": "When you <strong>export</strong> a save, the game writes a JSON file to the place you choose (or your downloads, or your clipboard). When you <strong>import</strong> one, it reads only the file you pick.",
+  "t": "セーブを<strong>エクスポート</strong>すると、ゲームはあなたが選んだ場所（またはダウンロードフォルダかクリップボード）に JSON ファイルを書き出します。<strong>インポート</strong>するときは、あなたが選んだファイルだけを読み込みます。"
+ },
+ "1fc13386a3b2": {
+  "en": "Privacy for Sinoi the Fisherman: no accounts, cookies, analytics, ads or tracking. Saves and the offline game files stay on your device.",
+  "t": "Sinoi the Fisherman のプライバシー：アカウント、Cookie、アナリティクス、広告、トラッキングは一切ありません。セーブとオフライン用のゲームファイルは端末内にとどまります。"
+ },
+ "2622bbdfda0c": {
+  "en": "<strong>Languages.</strong> The site opens in your browser's language when a translation is ready. If you pick a language in Settings, your browser remembers that choice on your device (local storage). It's never sent anywhere; clearing this site's data forgets it.",
+  "t": "<strong>言語。</strong>翻訳が用意されている場合、サイトはブラウザの言語で開きます。設定で言語を選ぶと、その選択はブラウザが端末内（ローカルストレージ）に記憶します。どこにも送信されることはなく、このサイトのデータを消去すると忘れられます。"
+ },
+ "27a6464214a3": {
+  "en": "The site is hosted on GitHub Pages, so <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> sees your IP address when it sends you the pages. The site sets no cookies and runs no analytics.",
+  "t": "このサイトは GitHub Pages でホストされているため、ページを送信する際に <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> があなたの IP アドレスを知ることになります。このサイトは Cookie を使わず、アナリティクスも実行しません。"
+ },
+ "2cffb6430f15": {
+  "en": "Privacy — Sinoi the Fisherman",
+  "t": "プライバシー — Sinoi the Fisherman"
+ },
+ "32e71b945680": {
+  "en": "The Android app asks for no permissions.",
+  "t": "Android アプリは権限を一切要求しません。"
+ },
+ "36f800782dd2": {
+  "en": "This website",
+  "t": "このウェブサイト"
+ },
+ "485a60609d0c": {
+  "en": "Your save is stored only on your device: in the app's private storage on Android, or in this site's browser storage (IndexedDB) on the web.",
+  "t": "セーブはあなたの端末にのみ保存されます。Android ではアプリ専用のストレージに、Web ではこのサイトのブラウザストレージ（IndexedDB）に保存されます。"
+ },
+ "56452b6b8068": {
+  "en": "Nothing is sent to us or anyone else. The game works offline.",
+  "t": "私たちにも、ほかの誰にも、何も送信されません。ゲームはオフラインで動きます。"
+ },
+ "678d413c2f7f": {
+  "en": "<strong>Installed web app:</strong> if you install the browser version or play it once, your browser keeps a copy of the game's files (the engine, game data, icons and an offline page, about 40 MB) so it can start with no signal. They're stored only on your device, never sent anywhere, and contain no personal data. The app only checks this website for a newer version of those files. Uninstalling the app or clearing this site's data removes them, along with the browser save.",
+  "t": "<strong>インストールした Web アプリ：</strong>ブラウザ版をインストールするか一度プレイすると、電波がなくても起動できるよう、ブラウザがゲームのファイル（エンジン、ゲームデータ、アイコン、オフライン用ページ、約 40 MB）のコピーを保持します。これらは端末内にのみ保存され、どこにも送信されず、個人データも含みません。アプリがこのウェブサイトに確認するのは、それらのファイルの新しいバージョンがあるかどうかだけです。アプリをアンインストールするか、このサイトのデータを消去すると、ブラウザのセーブとともに削除されます。"
+ },
+ "7eb60d1025d6": {
+  "en": "Open an <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">issue on GitHub</a>.",
+  "t": "<a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">GitHub で issue</a> を作成してください。"
+ },
+ "9a1fc1731f62": {
+  "en": "Questions",
+  "t": "お問い合わせ"
+ },
+ "aae5e58a3b87": {
+  "en": "The game (Android app and browser version)",
+  "t": "ゲーム（Android アプリとブラウザ版）"
+ },
+ "d5b091197de2": {
+  "en": "Sinoi the Fisherman collects no personal data. There are no accounts, no cookies, no analytics, no ads and no tracking, in the app or on this website.",
+  "t": "Sinoi the Fisherman は個人データを一切収集しません。アプリにもこのウェブサイトにも、アカウント、Cookie、アナリティクス、広告、トラッキングはありません。"
+ },
+ "da68b612ec36": {
+  "en": "Google Play",
+  "t": "Google Play"
+ },
+ "e520a6fc74fd": {
+  "en": "Last updated November 26, 2026.",
+  "t": "最終更新日：2026年11月26日。"
+ },
+ "e8f09db77287": {
+  "en": "Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.",
+  "t": "Amazon や GitHub へのリンクはブラウザで開きます。それらのサイトには独自のプライバシーポリシーがあります。"
+ },
+ "ed8240833c19": {
+  "en": "If you install the app from Google Play, Google handles the download and may collect data under its own policies. The app itself adds nothing.",
+  "t": "Google Play からアプリをインストールする場合、ダウンロードは Google が扱い、Google 独自のポリシーに基づいてデータを収集することがあります。アプリ自体が追加するものはありません。"
+ },
+ "f9f98ec16f76": {
+  "en": "<strong>Stats for nerds.</strong> The debug page (Settings › DEBUG, <code>debug/</code>) shows what your browser tells the page about itself: browser and device, screen, storage use, connection, page timings. It reads this only to show it to you on that page. Nothing is saved and nothing is sent anywhere; the page only asks this website for its build file (<code>stats.json</code>) and times three small requests to it.",
+  "t": "<strong>詳細統計情報。</strong>デバッグページ（設定 › DEBUG、<code>debug/</code>）は、ブラウザがページに伝える自身の情報を表示します：ブラウザと端末、画面、ストレージの使用量、接続、ページの読み込み時間。これらはそのページであなたに見せるためだけに読み取ります。何も保存されず、どこにも送信されません。ページがこのウェブサイトに求めるのはビルド情報のファイル（<code>stats.json</code>）だけで、それへの小さなリクエストを3回送って時間を計ります。"
+ }
+}
