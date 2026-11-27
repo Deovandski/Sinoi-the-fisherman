@@ -104,7 +104,8 @@ jobs:
           PY
           test -f site/debug/index.html || { echo "::error::missing site/debug/index.html"; exit 1; }
           grep -q 'name="robots" content="noindex' site/debug/index.html || { echo "::error::debug page must be noindex"; exit 1; }
-          if grep -q "debug/" site/sitemap.xml site/llms.txt site/llms-full.txt; then echo "::error::the debug page must stay out of sitemap.xml and llms*.txt"; exit 1; fi
+          # Listed nowhere: no link or URL to it (the privacy text may still mention it by name).
+          if grep -q "Sinoi-the-fisherman/debug" site/sitemap.xml site/llms.txt site/llms-full.txt; then echo "::error::the debug page must stay out of sitemap.xml and llms*.txt"; exit 1; fi
 
       - name: Report deployed size
         run: |
