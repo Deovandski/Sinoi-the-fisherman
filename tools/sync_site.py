@@ -7,9 +7,17 @@
 Each piece sits between markers in the page:
     <!-- one-source:NAME -->  ...  <!-- /one-source:NAME -->
 and is rebuilt from:
-    footer   tools/site_parts/footer.html (every page)
-    support  game/data/credits.json, the support text and links the game's
-             title screen shows too (landing page)
+    header       tools/site_parts/header.html (every page): the top bar, the
+                 gear and the Settings dialog (App row, Stats for nerds row)
+    footer       tools/site_parts/footer.html (every page)
+    install-app  tools/site_parts/install-app.html: the Install app button,
+                 also in the Settings App row (landing page)
+    support      game/data/credits.json, the support text and links the game's
+                 title screen shows too (landing page)
+Pieces are written without indentation; each one is indented like its
+opening marker. In a piece, {root} is the way back to the site root from that
+page ("./" or "../") and {home} the landing page before a #link ("" on the
+landing page itself, so its links stay in-page).
 See CLAUDE.md, "One source".
 """
 import html
@@ -20,44 +28,68 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
-PAGES = ["index.html", "privacy.html"]
+# Every page with shared pieces, and its {root}: the way back to site/.
+PAGES = {"index.html": "./", "privacy.html": "./", "debug/index.html": "../"}
+PARTS = ROOT / "tools/site_parts"
+
+
+def part(name: str) -> str:
+    return (PARTS / name).read_text(encoding="utf-8").rstrip("\n")
+
+
+def indent(text: str, by: str) -> str:
+    return "\n".join(by + line if line.strip() else line for line in text.split("\n"))
 
 
 def credits() -> dict:
     return json.loads((ROOT / "game/data/credits.json").read_text(encoding="utf-8"))
 
 
+def piece_header() -> str:
+    text = part("header.html")
+    for line in text.split("\n"):
+        if line.strip() == "{install_app}":
+            return text.replace(line, indent(part("install-app.html"), line[: len(line) - len(line.lstrip())]))
+    return text
+
+
 def piece_footer() -> str:
-    return (ROOT / "tools/site_parts/footer.html").read_text(encoding="utf-8").rstrip("\n")
+    return part("footer.html")
+
+
+def piece_install_app() -> str:
+    return part("install-app.html")
 
 
 def piece_support() -> str:
     c = credits()
     links = c["links"]
     return "\n".join([
-        '    <div class="support">',
-        f'      <p>{html.escape(c["support_text"], quote=False)}</p>',
-        '      <div class="actions">',
-        f'        <a class="btn" href="{html.escape(links["amazon"])}">eBooks on Amazon</a>',
-        f'        <a class="btn" href="{html.escape(links["world_lore"])}">Host a West March campaign</a>',
-        "      </div>",
-        "    </div>",
+        '<div class="support">',
+        f'  <p>{html.escape(c["support_text"], quote=False)}</p>',
+        '  <div class="actions">',
+        f'    <a class="btn" href="{html.escape(links["amazon"])}">eBooks on Amazon</a>',
+        f'    <a class="btn" href="{html.escape(links["world_lore"])}">Host a West March campaign</a>',
+        "  </div>",
+        "</div>",
     ])
 
 
-PIECES = {"footer": piece_footer, "support": piece_support}
+PIECES = {"header": piece_header, "footer": piece_footer, "install-app": piece_install_app, "support": piece_support}
 
 
 def sync(text: str, page: str) -> tuple[str, list[str]]:
     changed = []
+    root = PAGES[page]
+    home = "" if page == "index.html" else root
     for name, build in PIECES.items():
-        pattern = re.compile(r"(<!-- one-source:%s .*?-->\n)(.*?)(\n[ \t]*<!-- /one-source:%s -->)" % (name, name), re.S)
+        pattern = re.compile(r"^([ \t]*)(<!-- one-source:%s .*?-->\n)(.*?)(\n[ \t]*<!-- /one-source:%s -->)" % (re.escape(name), re.escape(name)), re.S | re.M)
         match = pattern.search(text)
         if not match:
             continue
-        wanted = build()
-        if match.group(2) != wanted:
-            text = text[:match.start(2)] + wanted + text[match.end(2):]
+        wanted = indent(build().replace("{root}", root).replace("{home}", home), match.group(1))
+        if match.group(3) != wanted:
+            text = text[:match.start(3)] + wanted + text[match.end(3):]
             changed.append(f"{page}: {name}")
     return text, changed
 

@@ -8,9 +8,9 @@ name: Website and web build
 on:
   push:
     branches: [main]
-    paths: ["game/**", "site/**", ".github/workflows/pages.yml"]
+    paths: ["game/**", "site/**", "tools/**", ".github/workflows/pages.yml"]
   pull_request:
-    paths: ["game/**", "site/**", ".github/workflows/pages.yml"]
+    paths: ["game/**", "site/**", "tools/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -92,6 +92,19 @@ jobs:
           done
           grep -o "CACHE_VERSION = '[^']*'" site/play/index.service.worker.js
           ls -la site/play
+
+      - name: Build stats.json (Stats for nerds, site/debug/)
+        run: |
+          python3 tools/build_stats.py site
+          python3 - <<'PY'
+          import json
+          s = json.load(open("site/stats.json"))
+          assert s["game"]["web"], "stats.json has no web build"
+          assert s["game"]["version"] and s["game"]["godot"], "stats.json is missing the game or Godot version"
+          PY
+          test -f site/debug/index.html || { echo "::error::missing site/debug/index.html"; exit 1; }
+          grep -q 'name="robots" content="noindex' site/debug/index.html || { echo "::error::debug page must be noindex"; exit 1; }
+          if grep -q "debug/" site/sitemap.xml site/llms.txt site/llms-full.txt; then echo "::error::the debug page must stay out of sitemap.xml and llms*.txt"; exit 1; fi
 
       - name: Report deployed size
         run: |

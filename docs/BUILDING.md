@@ -48,11 +48,12 @@ cd site && python3 -m http.server 8000                             # open http:/
 
 - The landing page's **Install app** button is `site/install-app.js` + `site/install-app.css`, ported from Deovandski/Deovandski's `InstallApp.astro` (issue #20). It shows the button only when the browser offers to install the site right now (`beforeinstallprompt`), and otherwise a hint: open the page in Chrome (Android, where links opened from WhatsApp, Instagram or Gmail have no install option), Share → Add to Home Screen (iPhone/iPad), or which browsers can install it. Inside the installed app it says so.
 - It works on the landing page because the site manifest's scope is the whole site (`./`, same id as the game's), so installing from `/` installs the same app that opens into the game.
+- It's on the landing page (`#install`) and in Settings › App on every page; both come from `tools/site_parts/install-app.html`.
 - Its words live in the page (the button and a hidden strings block), so translating the page translates it. Load `install-app.js` in `<head>` without `defer`, so it catches an early install offer.
 
 ### Shared pieces (one source)
 
-- The landing page's support block and every page's footer are rebuilt from one source by `python3 tools/sync_site.py`: the support text and links from `game/data/credits.json` (the same file the game's title screen reads), the footer from `tools/site_parts/footer.html`. The pieces sit between `<!-- one-source:NAME -->` markers; don't edit them in the page. CI fails if they're out of date (`--check`).
+- The landing page's support block, every page's header (top bar, gear, Settings dialog) and footer, and the Install app block are rebuilt from one source by `python3 tools/sync_site.py`: the support text and links from `game/data/credits.json` (the same file the game's title screen reads), the rest from `tools/site_parts/`. A new page gets the header and footer by adding empty markers and listing it in `PAGES` with its way back to the site root. The pieces sit between `<!-- one-source:NAME -->` markers; don't edit them in the page. CI fails if they're out of date (`--check`).
 
 ### Pages for AI readers and search engines
 
@@ -60,6 +61,11 @@ cd site && python3 -m http.server 8000                             # open http:/
 - `site/llms-full.txt` is **generated** at deploy time by `tools/build_llms_full.py` from the pages listed in its `PAGES` list (text only: no navigation, scripts or photo viewer). Add new pages to that list. Locally: `python3 tools/build_llms_full.py site` after the web export.
 - Every page's head carries `<link rel="canonical">`, `<link rel="alternate" type="text/markdown" href="llms.txt">` and the sitemap link; the Play page gets them from the Web preset's `html/head_include`, and `tools/web_postexport.py` adds its meta description and replaces Godot's bare `<noscript>` line with a description and a link home.
 - A project site's own `robots.txt` is ignored (crawlers only read the domain root), so the sitemap has to be submitted by hand: Bing Webmaster Tools and Google Search Console.
+
+### Settings and Stats for nerds
+
+- The gear (top right) opens Settings (`site/settings.js`): an App row (Install app) and Stats for nerds, whose **DEBUG** button opens `site/debug/`. The × or Esc closes it, and so does a tap on the backdrop.
+- The debug page reads `site/stats.json`, written by `python3 tools/build_stats.py site` after the web export (CI does it; locally run it yourself, or the page says stats.json is missing). See "Stats for nerds" in CLAUDE.md for how to add a line.
 
 ### Testing the PWA
 

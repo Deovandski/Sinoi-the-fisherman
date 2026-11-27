@@ -25,18 +25,48 @@
 </head>
 <body>
   <div class="wrap">
+    <!-- one-source:header (tools/sync_site.py; edit tools/site_parts/header.html) -->
     <header class="top">
-      <a class="brand" href="./"><img src="icon.png" alt="">Sinoi the Fisherman</a>
+      <a class="brand" href="./"><img src="./icon.png" alt="">Sinoi the Fisherman</a>
       <nav>
-        <a href="play/">Play</a>
+        <a href="./play/">Play</a>
         <a href="#about">About</a>
         <a href="#install">Install</a>
         <a href="#saves">Saves</a>
         <a href="#docs">Docs</a>
-        <a href="privacy.html">Privacy</a>
+        <a href="./privacy.html">Privacy</a>
         <a href="https://github.com/Deovandski/Sinoi-the-fisherman">GitHub</a>
       </nav>
+      <!-- The gear opens Settings (settings.js). Gear.astro in Deovandski/Deovandski-repo-template. -->
+      <button class="gear" id="gear" type="button" aria-haspopup="dialog" aria-controls="site-settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.5 7.5 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0-.5.4l-.4 2.7c-.6.2-1.2.6-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.8 1.7 1l.4 2.6c0 .3.2.5.5.5h4c.3 0 .5-.2.5-.4l.4-2.7c.6-.2 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 13ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg></button>
     </header>
+    <!-- Settings: the × (top right) or Esc closes it. SettingsDialog.astro in Deovandski/Deovandski-repo-template. -->
+    <dialog id="site-settings" class="site-settings" aria-labelledby="site-settings-title">
+      <form method="dialog">
+        <div class="settings-head">
+          <h2 id="site-settings-title">Settings</h2>
+          <button class="settings-close" value="close" aria-label="Close" title="Close"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg></button>
+        </div>
+        <div class="setting setting-app"><span>App</span>
+          <div class="install-app" data-install-app>
+            <span class="install-app__strings" hidden>
+              <span data-k="installed">You’re using the installed app.</span>
+              <span data-k="done">Installed! Open it from your home screen or app list.</span>
+              <span data-k="android">No install button? Open this page in Chrome (⋮ → Open in Chrome), then ⋮ → Install app.</span>
+              <span data-k="ios">On iPhone or iPad: tap Share, then Add to Home Screen.</span>
+              <span data-k="other">To install it, open this page in Chrome, Edge or Samsung Internet. On iPhone or iPad: Share, then Add to Home Screen.</span>
+            </span>
+            <button type="button" class="install-app__btn" hidden>
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M11 3h2v9.6l3.3-3.3 1.4 1.4L12 16.4l-5.7-5.7 1.4-1.4 3.3 3.3V3Zm-6 15h14v2H5v-2Z"/></svg>
+              <span>Install app</span>
+            </button>
+            <p class="install-app__note" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="setting setting-debug"><span>Stats for nerds</span><a class="debug-btn" href="./debug/" translate="no">DEBUG</a></div>
+      </form>
+    </dialog>
+    <!-- /one-source:header -->
 
     <div class="hero">
       <span class="badge">Pre-production · production starts Q1 2027</span>
@@ -77,7 +107,8 @@
     <section id="install">
       <h2>Install it as an app</h2>
       <p class="lede">No app store needed: the browser version installs like an app, opens straight into the game, and works with no signal after the first load. Good for players who'd rather not sideload an APK.</p>
-      <!-- Install app button (install-app.js): shows when the browser can install the game right now, otherwise how to get there. -->
+      <!-- Install app button (install-app.js): shows when the browser can install the game right now, otherwise how to get there. Also in Settings › App. -->
+      <!-- one-source:install-app (tools/sync_site.py; edit tools/site_parts/install-app.html) -->
       <div class="install-app" data-install-app>
         <span class="install-app__strings" hidden>
           <span data-k="installed">You’re using the installed app.</span>
@@ -92,6 +123,7 @@
         </button>
         <p class="install-app__note" aria-live="polite"></p>
       </div>
+      <!-- /one-source:install-app -->
       <div class="grid">
         <div class="card"><h3>Android (Chrome)</h3><p>Tap <em>Install app</em> above, or open <a href="play/">the game</a>, then the browser menu (⋮) → <em>Install app</em> or <em>Add to Home screen</em>.</p></div>
         <div class="card"><h3>iPhone and iPad (Safari)</h3><p>Open <a href="play/">the game</a>, tap <em>Share</em> → <em>Add to Home Screen</em>.</p></div>
@@ -134,7 +166,7 @@
 
     <!-- one-source:footer (tools/sync_site.py; edit tools/site_parts/footer.html) -->
     <footer>
-      <p>No cookies, no analytics, no ads. <a href="privacy.html">Privacy</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/LICENSE">License</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/AI-DISCLOSURE.md">AI disclosure</a> · <a href="llms.txt">llms.txt</a> · <a href="llms-full.txt">llms-full.txt</a></p>
+      <p>No cookies, no analytics, no ads. <a href="./privacy.html">Privacy</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/LICENSE">License</a> · <a href="https://github.com/Deovandski/Sinoi-the-fisherman/blob/main/AI-DISCLOSURE.md">AI disclosure</a> · <a href="./llms.txt">llms.txt</a> · <a href="./llms-full.txt">llms-full.txt</a></p>
       <p>Game code © Deovandski Skibinski Junior, MIT license. #HusbandOutWorld, its world and characters © Deovandski Skibinski Junior. A Husband Out of This World and #HusbandOutWorld are trademarks of Deovandski Skibinski Junior.</p>
     </footer>
     <!-- /one-source:footer -->
@@ -149,5 +181,6 @@
     <button type="button" class="pv-next" aria-label="Next picture" hidden>›</button>
   </dialog>
   <script src="photo-viewer.js" defer></script>
+  <script src="settings.js" defer></script>
 </body>
 </html>
