@@ -8,9 +8,9 @@ name: Website and web build
 on:
   push:
     branches: [main]
-    paths: ["game/**", "site/**", "tools/**", "i18n/**", ".github/workflows/pages.yml"]
+    paths: ["game/**", "site/**", "tools/**", "i18n/**", "PRIVACY.md", ".github/workflows/pages.yml"]
   pull_request:
-    paths: ["game/**", "site/**", "tools/**", "i18n/**", ".github/workflows/pages.yml"]
+    paths: ["game/**", "site/**", "tools/**", "i18n/**", "PRIVACY.md", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:

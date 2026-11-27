@@ -31,6 +31,10 @@
   "en": "Your save is stored only on your device: in the app's private storage on Android, or in this site's browser storage (IndexedDB) on the web.",
   "t": "Tu partida se guarda solo en tu dispositivo: en el almacenamiento privado de la app en Android, o en el almacenamiento del navegador de esta web (IndexedDB) en la web."
  },
+ "4b5505f9b1e1": {
+  "en": "Last updated November 26, 2026. Copyright (c) 2026, Deovandski Skibinski Junior.",
+  "t": "Última actualización: 26 de noviembre de 2026. Copyright (c) 2026, Deovandski Skibinski Junior."
+ },
  "56452b6b8068": {
   "en": "Nothing is sent to us or anyone else. The game works offline.",
   "t": "No se envía nada ni a nosotros ni a nadie. El juego funciona sin conexión."
@@ -58,10 +62,6 @@
  "da68b612ec36": {
   "en": "Google Play",
   "t": "Google Play"
- },
- "e520a6fc74fd": {
-  "en": "Last updated November 26, 2026.",
-  "t": "Última actualización: 26 de noviembre de 2026."
  },
  "e8f09db77287": {
   "en": "Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.",

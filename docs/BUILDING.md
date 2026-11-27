@@ -53,7 +53,7 @@ cd site && python3 -m http.server 8000                             # open http:/
 
 ### Shared pieces (one source)
 
-- The landing page's support block, every page's header (top bar, gear, Settings dialog) and footer, and the Install app block are rebuilt from one source by `python3 tools/sync_site.py`: the support text and links from `game/data/credits.json` (the same file the game's title screen reads), the rest from `tools/site_parts/`. A new page gets the header and footer by adding empty markers and listing it in `PAGES` with its way back to the site root. The pieces sit between `<!-- one-source:NAME -->` markers; don't edit them in the page. CI fails if they're out of date (`--check`).
+- The landing page's support block, every page's header (top bar, gear, Settings dialog) and footer, and the Install app block are rebuilt from one source by `python3 tools/sync_site.py`: the support text and links from `game/data/credits.json` (the same file the game's title screen reads), the privacy page's text from `PRIVACY.md`, the rest from `tools/site_parts/`. A new page gets the header and footer by adding empty markers and listing it in `PAGES` with its way back to the site root. The pieces sit between `<!-- one-source:NAME -->` markers; don't edit them in the page. CI fails if they're out of date (`--check`).
 
 ### Pages for AI readers and search engines
 

@@ -31,6 +31,10 @@
   "en": "Your save is stored only on your device: in the app's private storage on Android, or in this site's browser storage (IndexedDB) on the web.",
   "t": "세이브는 오직 기기에만 저장됩니다. Android에서는 앱 전용 저장소에, 웹에서는 이 사이트의 브라우저 저장소(IndexedDB)에 저장됩니다."
  },
+ "4b5505f9b1e1": {
+  "en": "Last updated November 26, 2026. Copyright (c) 2026, Deovandski Skibinski Junior.",
+  "t": "마지막 업데이트: 2026년 11월 26일. Copyright (c) 2026, Deovandski Skibinski Junior."
+ },
  "56452b6b8068": {
   "en": "Nothing is sent to us or anyone else. The game works offline.",
   "t": "우리에게도 다른 누구에게도 아무것도 보내지 않습니다. 게임은 오프라인에서도 작동합니다."
@@ -58,10 +62,6 @@
  "da68b612ec36": {
   "en": "Google Play",
   "t": "Google Play"
- },
- "e520a6fc74fd": {
-  "en": "Last updated November 26, 2026.",
-  "t": "마지막 업데이트: 2026년 11월 26일."
  },
  "e8f09db77287": {
   "en": "Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.",
