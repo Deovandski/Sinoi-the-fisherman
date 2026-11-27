@@ -1,6 +1,7 @@
 class_name ResultsText
 extends RefCounted
 ## The plain-text results testers copy and send back from the test screens.
+## Stays in English on purpose (no tr()): it's a report for the developer.
 
 
 static func header(screen: String, motion_sensor: bool) -> String:

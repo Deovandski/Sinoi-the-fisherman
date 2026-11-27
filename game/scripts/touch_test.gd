@@ -44,7 +44,7 @@ func _ready() -> void:
 
 	var names := PackedStringArray()
 	for e in _entries:
-		names.append(e.name)
+		names.append(tr(e.name))
 	_picker = UiParts.picker(names, _select)
 	_picker.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	_picker.offset_left = 2
@@ -78,9 +78,9 @@ func _select(index: int) -> void:
 		_sessions[e.id][level] = FightSession.new()
 	_session().progress = FightSession.START
 	_slider.set_level(level)
-	var fingers := "1 finger" if int(e.fingers) == 1 else "%d fingers" % int(e.fingers)
+	var fingers := tr_n("%d finger", "%d fingers", int(e.fingers)) % int(e.fingers)
 	_stage.play(FightCatalog.create(e.id, _stage.pad_side(), {}, level / float(DifficultySlider.MAX)),
-		{"title": e.name, "body": e.hint, "footer": "Difficulty %d/10 - %s" % [level, fingers]})
+		{"title": tr(e.name), "body": tr(e.hint), "footer": tr("Difficulty %d/10 - %s") % [level, fingers]})
 	_refresh_meter()
 
 
@@ -109,11 +109,11 @@ func _on_ticked(delta: float, judgement: Vector2) -> void:
 func _on_changed(amount: float) -> void:
 	match _session().add(amount):
 		1:
-			_stage.show_banner("Caught! %.1f s" % _session().last_catch_time)
+			_stage.show_banner(tr("Caught! %.1f s") % _session().last_catch_time)
 			_stage.play_sound("catch")
 			_store_results()
 		-1:
-			_stage.show_banner("It got away")
+			_stage.show_banner(tr("It got away"))
 			_stage.play_sound("miss")
 			_store_results()
 	_refresh_meter()
@@ -128,7 +128,7 @@ func _process(_delta: float) -> void:
 	if _sessions.is_empty():
 		return
 	var s := _session()
-	var line := "Caught %d  Lost %d" % [s.catches, s.escapes]
+	var line := tr("Caught %d  Lost %d") % [s.catches, s.escapes]
 	if s.catches > 0:
 		line += "  %.1fs" % s.average_catch_time()
 	if s.judged > 0.0:
@@ -185,4 +185,4 @@ func _copy_results() -> void:
 	if lines.size() == 2:
 		lines.append("(no modes played yet)")
 	ResultsText.copy(lines)
-	_stage.show_banner("Results copied")
+	_stage.show_banner(tr("Results copied"))

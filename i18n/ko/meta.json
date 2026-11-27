@@ -1,0 +1,8 @@
+{
+ "_about": "The language's name (in its own script), <html lang>, direction, and the AI-translation banner tools/i18n.py puts under the top bar of every page. Banner wording from HusbandOutWorld content/i18n/ko/meta.json (the author asked for: AI-Translated to <language> from Original works by Deovandski and Mitsukiven/Feiourm), so his sites say the same thing.",
+ "name": "한국어",
+ "html_lang": "ko",
+ "dir": "ltr",
+ "banner": "Deovandski와 Mitsukiven/Feiourm의 원작을 AI가 한국어로 번역했습니다. 언어는 오른쪽 위 설정(⚙)에서 바꿀 수 있습니다.",
+ "english": "English"
+}

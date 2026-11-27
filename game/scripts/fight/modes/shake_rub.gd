@@ -47,7 +47,7 @@ func _step(delta: float, fingers: Dictionary) -> float:
 		sfx("tock")
 	_read_rub(delta, fingers)
 	level = _sensor_energy / num("shake_threshold", 7.0) if has_sensor else _rub_energy / num("rub_speed", 200.0)
-	var word := "SHAKE!" if has_sensor else "RUB!"
+	var word := tr("SHAKE!") if has_sensor else tr("RUB!")
 	if shaking:
 		cue = word
 		if level >= 1.0:
@@ -55,10 +55,10 @@ func _step(delta: float, fingers: Dictionary) -> float:
 			return num("fill", 0.13) * delta
 		judge(level, delta)
 		return -num("drain", 0.05) * delta
-	cue = "STILL..."
+	cue = tr("STILL...")
 	if level >= 1.0:
 		judge(0.0, delta)
-		cue = "Too much!"
+		cue = tr("Too much!")
 		return -num("too_much", 0.25) * delta
 	judge(1.0 if level < 0.4 else 0.5, delta)
 	return num("still_fill", 0.05) * delta if level < 0.4 else 0.0

@@ -48,11 +48,11 @@ func _step(delta: float, fingers: Dictionary) -> float:
 	inner.sounds.clear()
 	match state:
 		Pads.WARN_UP:
-			cue = "Bottom box going out!"
+			cue = tr("Bottom box going out!")
 		Pads.TOP_ONLY:
 			cue = "Play in the TOP box" if inner.cue == "" else inner.cue
 		Pads.BACK_DOWN:
-			cue = "Back to the bottom box!"
+			cue = tr("Back to the bottom box!")
 		_:
 			cue = inner.cue
 	return change

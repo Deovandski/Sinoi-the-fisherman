@@ -1,0 +1,78 @@
+{
+ "10bd24be98fd": {
+  "en": "When you <strong>export</strong> a save, the game writes a JSON file to the place you choose (or your downloads, or your clipboard). When you <strong>import</strong> one, it reads only the file you pick.",
+  "t": "세이브를 <strong>내보내면</strong> 게임은 사용자가 고른 곳(또는 다운로드 폴더나 클립보드)에 JSON 파일을 씁니다. <strong>가져올</strong> 때는 사용자가 고른 파일만 읽습니다."
+ },
+ "1fc13386a3b2": {
+  "en": "Privacy for Sinoi the Fisherman: no accounts, cookies, analytics, ads or tracking. Saves and the offline game files stay on your device.",
+  "t": "Sinoi the Fisherman의 개인정보: 계정, 쿠키, 분석, 광고, 추적이 없습니다. 세이브와 오프라인 게임 파일은 기기에만 남습니다."
+ },
+ "2622bbdfda0c": {
+  "en": "<strong>Languages.</strong> The site opens in your browser's language when a translation is ready. If you pick a language in Settings, your browser remembers that choice on your device (local storage). It's never sent anywhere; clearing this site's data forgets it.",
+  "t": "<strong>언어.</strong> 번역이 준비되어 있으면 사이트는 브라우저의 언어로 열립니다. 설정에서 언어를 고르면 브라우저가 그 선택을 기기에 기억합니다(로컬 저장소). 어디로도 보내지지 않으며, 이 사이트의 데이터를 지우면 잊힙니다."
+ },
+ "27a6464214a3": {
+  "en": "The site is hosted on GitHub Pages, so <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a> sees your IP address when it sends you the pages. The site sets no cookies and runs no analytics.",
+  "t": "이 사이트는 GitHub Pages에서 호스팅되므로, 페이지를 보낼 때 <a href=\"https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement\">GitHub</a>가 IP 주소를 보게 됩니다. 이 사이트는 쿠키를 설정하지 않고 분석도 실행하지 않습니다."
+ },
+ "2cffb6430f15": {
+  "en": "Privacy — Sinoi the Fisherman",
+  "t": "개인정보 — Sinoi the Fisherman"
+ },
+ "32e71b945680": {
+  "en": "The Android app asks for no permissions.",
+  "t": "Android 앱은 어떤 권한도 요청하지 않습니다."
+ },
+ "36f800782dd2": {
+  "en": "This website",
+  "t": "이 웹사이트"
+ },
+ "485a60609d0c": {
+  "en": "Your save is stored only on your device: in the app's private storage on Android, or in this site's browser storage (IndexedDB) on the web.",
+  "t": "세이브는 오직 기기에만 저장됩니다. Android에서는 앱 전용 저장소에, 웹에서는 이 사이트의 브라우저 저장소(IndexedDB)에 저장됩니다."
+ },
+ "56452b6b8068": {
+  "en": "Nothing is sent to us or anyone else. The game works offline.",
+  "t": "우리에게도 다른 누구에게도 아무것도 보내지 않습니다. 게임은 오프라인에서도 작동합니다."
+ },
+ "678d413c2f7f": {
+  "en": "<strong>Installed web app:</strong> if you install the browser version or play it once, your browser keeps a copy of the game's files (the engine, game data, icons and an offline page, about 40 MB) so it can start with no signal. They're stored only on your device, never sent anywhere, and contain no personal data. The app only checks this website for a newer version of those files. Uninstalling the app or clearing this site's data removes them, along with the browser save.",
+  "t": "<strong>설치한 웹 앱:</strong> 브라우저 버전을 설치하거나 한 번 플레이하면, 신호가 없어도 시작할 수 있도록 브라우저가 게임 파일(엔진, 게임 데이터, 아이콘, 오프라인 페이지, 약 40 MB)의 사본을 보관합니다. 이 파일들은 기기에만 저장되고, 어디로도 보내지지 않으며, 개인 데이터를 담고 있지 않습니다. 앱이 이 웹사이트에 확인하는 것은 그 파일들의 새 버전이 있는지뿐입니다. 앱을 제거하거나 이 사이트의 데이터를 지우면 브라우저 세이브와 함께 삭제됩니다."
+ },
+ "7eb60d1025d6": {
+  "en": "Open an <a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">issue on GitHub</a>.",
+  "t": "<a href=\"https://github.com/Deovandski/Sinoi-the-fisherman/issues\">GitHub에 이슈</a>를 열어 주세요."
+ },
+ "9a1fc1731f62": {
+  "en": "Questions",
+  "t": "문의"
+ },
+ "aae5e58a3b87": {
+  "en": "The game (Android app and browser version)",
+  "t": "게임(Android 앱과 브라우저 버전)"
+ },
+ "d5b091197de2": {
+  "en": "Sinoi the Fisherman collects no personal data. There are no accounts, no cookies, no analytics, no ads and no tracking, in the app or on this website.",
+  "t": "Sinoi the Fisherman은 개인 데이터를 전혀 수집하지 않습니다. 앱에도 이 웹사이트에도 계정, 쿠키, 분석, 광고, 추적이 없습니다."
+ },
+ "da68b612ec36": {
+  "en": "Google Play",
+  "t": "Google Play"
+ },
+ "e520a6fc74fd": {
+  "en": "Last updated November 26, 2026.",
+  "t": "마지막 업데이트: 2026년 11월 26일."
+ },
+ "e8f09db77287": {
+  "en": "Links to Amazon and GitHub open in your browser; those sites have their own privacy policies.",
+  "t": "Amazon과 GitHub 링크는 브라우저에서 열리며, 그 사이트들에는 각자의 개인정보 처리방침이 있습니다."
+ },
+ "ed8240833c19": {
+  "en": "If you install the app from Google Play, Google handles the download and may collect data under its own policies. The app itself adds nothing.",
+  "t": "Google Play에서 앱을 설치하면 다운로드는 Google이 처리하며, Google은 자체 정책에 따라 데이터를 수집할 수 있습니다. 앱 자체는 아무것도 더하지 않습니다."
+ },
+ "f9f98ec16f76": {
+  "en": "<strong>Stats for nerds.</strong> The debug page (Settings › DEBUG, <code>debug/</code>) shows what your browser tells the page about itself: browser and device, screen, storage use, connection, page timings. It reads this only to show it to you on that page. Nothing is saved and nothing is sent anywhere; the page only asks this website for its build file (<code>stats.json</code>) and times three small requests to it.",
+  "t": "<strong>전문가용 통계.</strong> 디버그 페이지(설정 › DEBUG, <code>debug/</code>)는 브라우저가 페이지에 알려 주는 자기 정보를 보여 줍니다: 브라우저와 기기, 화면, 저장 공간 사용량, 연결, 페이지 로딩 시간. 이 정보는 그 페이지에서 보여 주기 위해서만 읽습니다. 아무것도 저장하거나 보내지 않으며, 페이지는 이 웹사이트에 빌드 파일(<code>stats.json</code>)만 요청하고 그 파일에 작은 요청을 세 번 보내 시간을 잽니다."
+ }
+}

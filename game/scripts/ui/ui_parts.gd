@@ -41,10 +41,10 @@ static func status_row(parent: Control, y: float, on_copy: Callable) -> Label:
 	row.offset_bottom = y + 13
 	row.add_theme_constant_override("separation", 6)
 	parent.add_child(row)
-	row.add_child(small_button("< Back", func(): parent.get_tree().change_scene_to_file("res://scenes/main.tscn")))
+	row.add_child(small_button(TranslationServer.translate("< Back"), func(): parent.get_tree().change_scene_to_file("res://scenes/main.tscn")))
 	var stats := small_label()
 	stats.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	stats.clip_text = true
 	row.add_child(stats)
-	row.add_child(small_button("Copy", on_copy))
+	row.add_child(small_button(TranslationServer.translate("Copy"), on_copy))
 	return stats

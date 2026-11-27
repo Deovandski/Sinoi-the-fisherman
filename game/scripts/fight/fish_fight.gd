@@ -151,5 +151,5 @@ func sections_summary() -> String:
 	for s in fish.get("sections", []):
 		var mode := FightCatalog.entry(str(s.mode))
 		var r: Array = s.get("difficulty", [0.5, 0.5])
-		parts.append("%s %d-%d" % [mode.get("name", s.mode), roundi(float(r[0]) * 10.0), roundi(float(r[1]) * 10.0)])
+		parts.append("%s %d-%d" % [tr(mode.get("name", s.mode)), roundi(float(r[0]) * 10.0), roundi(float(r[1]) * 10.0)])
 	return ", ".join(parts)

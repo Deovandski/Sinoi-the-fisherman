@@ -34,10 +34,10 @@ func _step(delta: float, fingers: Dictionary) -> float:
 			cue = ""
 			return num("fill", 0.1) * delta
 		1:
-			cue = "Both squares!"
+			cue = tr("Both squares!")
 			return -num("one_drain", 0.03) * delta
 		_:
-			cue = "Index + middle finger" if fingers.is_empty() else "Find the squares"
+			cue = tr("Index + middle finger") if fingers.is_empty() else tr("Find the squares")
 			return -num("drain", 0.1) * delta
 
 

@@ -24,7 +24,7 @@ This repo is **Sinoi the Fisherman**: an open-source, active, touch-first pixel-
 
 Anything shown in two places (the same text, widget or game on two pages, or in the game and on the website) comes from one source, never a pasted copy. If a copy really has to stay, say why in the PR and get Deo's OK.
 - Credits, support text, links and the one-line description: `game/data/credits.json`. The game reads it; `tools/web_postexport.py` uses it for the play page; `tools/sync_site.py` writes the landing page's support block.
-- Website header (top bar, gear and Settings dialog), footer and the Install app block: `tools/site_parts/` (`header.html`, `footer.html`, `install-app.html`), written into every page in `PAGES` of `tools/sync_site.py`. In a piece, `{root}` is the way back to the site root (`./` or `../`) and `{home}` the landing page before a `#link`. Edit pieces between `<!-- one-source:NAME -->` markers only through their source, then run `python3 tools/sync_site.py` (CI runs `--check`).
+- Website header (top bar, gear and Settings dialog with the language list), footer and the Install app block: `tools/site_parts/` (`header.html`, `footer.html`, `install-app.html`), written into every page in `PAGES` of `tools/sync_site.py`. In a piece, `{root}` is the way back to the site root (`./` or `../`) and `{home}` the landing page before a `#link`. Edit pieces between `<!-- one-source:NAME -->` markers only through their source, then run `python3 tools/sync_site.py` (CI runs `--check`).
 - Fish, modes and currency: `game/data/*.json`. `site/llms-full.txt` is generated from the pages. `site/llms.txt` and `site/sitemap.xml` stay hand-written and change with the pages.
 - One copy of the game: the website's `/play/` is the only web build.
 
@@ -57,13 +57,24 @@ On the website (`site/`, not the game), every picture opens bigger when pressed,
 
 A new page in `site/` also needs: an entry in `site/sitemap.xml` and `site/llms.txt` (both hand-written), an entry in `PAGES` in `tools/build_llms_full.py`, and in its head a `<meta name="description">`, `<link rel="canonical">`, `<link rel="alternate" type="text/markdown" href="llms.txt">` and the sitemap link. See `docs/BUILDING.md`.
 
+## Translations
+
+The website is translated into Chinese (Simplified), Japanese, Portuguese (Brazil), Spanish (Spain), Arabic and Korean, ahead of time, in `i18n/<lang>/`. The game's strings are ready for translation (`game/i18n/messages.pot`); its `.po` files come later (#2). English is the source of both.
+- **Edit English only.** Never hold back an English change for translations: changed text shows in English on the translated pages (marked `lang="en"`) until the next batch. Don't hand-edit the stores to keep up with an English edit unless asked.
+- **Game strings go through `tr()`.** Every player-visible string in `game/scripts/` is a literal inside `tr("…")` (format after: `tr("Caught %d") % n`), `tr_n("%d fish", "%d fish", n)` for counts, or `TranslationServer.translate("…")` in static functions. Data the game shows (fish names, regions, lore, mode names and hints, quality and ball names) is passed through `tr()` where it's shown, and `tools/game_pot.py` reads it from `game/data/`. After changing strings run `python3 tools/game_pot.py` (CI runs `--check`). The test reports testers copy (`ui/results_text.gd`) stay English. No text baked into art; leave UI room for text about 30% longer than English; all text uses the project's default font, so CJK and Arabic fallbacks can be added in one place.
+- **Website text** needs nothing special: every element with text in `site/index.html`, `site/privacy.html` and `site/debug/index.html` is a segment, keyed by a hash of its English. `translate="no"` keeps something in English (language names, the debug terminal, code). A new page that should be translated goes in `PAGES` of `tools/i18n.py`.
+- **When asked to translate:** for each language run `python3 tools/i18n.py todo --lang <lang> > work.json`, fill each `"t"`, then `python3 tools/i18n.py apply work.json`. Then `python3 tools/i18n.py prune` and `python3 tools/sync_site.py` (it updates which languages each page offers) and commit `i18n/` and `site/`. `python3 tools/i18n.py status` shows what's left. CI builds `site/<lang>/` at deploy (`tools/i18n.py build site`, not committed) and never blocks on missing translations.
+- **Translation rules:** names, places, coins and canon fish are written by sound in zh/ja/ko/ar and kept as in English in pt/es, as `i18n/<lang>/glossary.json` spells them (world names come from HusbandOutWorld's glossaries; the series wins). "Sinoi the Fisherman", the series title and real names stay in English (`keep_as_is`). The currency "balls" uses each language's own word for ball (issue #2). Keep every HTML tag, link (`~/…` is the site root), number, `{placeholder}` and `%d`/`%s` exactly; translate only visible text. Game buttons the pages mention (*Export save*) stay in English until the game is translated.
+- **Languages on the site:** the Settings menu has the language list (names from `i18n/<lang>/meta.json`), `site/lang.js` opens the visitor's browser language on a first visit and remembers a choice made in Settings (localStorage, in `PRIVACY.md`), and every translated page has the AI-translation banner from `meta.json` with a link back to English. A language is offered (auto-select, `hreflang`) once a page is 90% translated. Check layout changes in Arabic too: it runs right to left, so use `margin-inline-start` and friends, not left/right.
+- **Adding a language:** `i18n/<code>/meta.json` and `glossary.json` (copy the series' spellings from HusbandOutWorld), add the code to `LANGUAGES` in `tools/i18n.py`, `site/sitemap.xml`, `site/llms.txt` and `.gitignore`, then translate.
+
 ## Stats for nerds (debug page)
 
 Settings (the gear, top right of every page) › **DEBUG** opens `site/debug/`: a terminal that types out build, game, browser, network and page-speed facts. Nothing is saved or sent; it only asks the site for `stats.json` (privacy paragraph in `PRIVACY.md` and `site/privacy.html`).
 - Where things live: the page `site/debug/index.html`; its script `site/debug/debug.js`; the terminal `site/terminal-screen.js` + `.css` (reusable); build facts `site/stats.json`, written by `python3 tools/build_stats.py site` in CI after the export (not committed). Ported from Deovandski-repo-template (#19 there).
 - **To add a line:** add `<div class="term-row"><span class="term-k">Label</span><span class="term-v" data-v="key">...</span></div>` under its `== SECTION ==` heading in `site/debug/index.html`, then `set('key', text)` in `site/debug/debug.js`. If it's a build fact, add it to `tools/build_stats.py` and read it in `fromStats()`. Every value must fill in: show `n/a` when the browser won't say, never leave `...`.
 - Kept out of search on purpose: `noindex, nofollow`, and **not** in `sitemap.xml`, `llms.txt` or `build_llms_full.py` (the exception to "Website pages for AI readers"; CI checks it). Commit, branch, PR and repo are left out of `stats.json` when the repo is private.
-- The site has no translations, so the Languages section says English only. Words the script writes live in the page's hidden `.debug-words` block.
+- The Languages section shows how much of each translation is done (from `tools/i18n.py`, via `stats.json`). Words the script writes live in the page's hidden `.debug-words` block.
 
 ## Commands
 
@@ -76,7 +87,9 @@ mkdir -p site/play && godot --headless --path game --export-release "Web" ../sit
 python3 tools/build_llms_full.py site                                   # after the export
 python3 tools/build_stats.py site                                       # after the export: stats.json for the debug page
 python3 tools/check_fresh_deploy.py site                                # fake deploy: fresh page/script, offline (needs playwright + Chrome)
-python3 tools/sync_site.py                                              # after editing credits.json or tools/site_parts/
+python3 tools/sync_site.py                                              # after editing credits.json, tools/site_parts/ or i18n/
+python3 tools/game_pot.py                                               # after changing game strings (tr()) or shown data
+python3 tools/i18n.py status                                            # translations: what's left (todo / apply / prune / build)
 ```
 
 CI: `.github/workflows/pages.yml` (tests + web export as an installable PWA + Pages), `.github/workflows/android.yml` (debug APK artifact).

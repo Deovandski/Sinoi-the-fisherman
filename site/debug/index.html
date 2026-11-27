@@ -3,6 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Languages: which translations are ready (lang.js reads it), and language links for search engines. -->
+  <!-- one-source:languages (tools/sync_site.py; from tools/i18n.py and i18n/) -->
+  <meta name="site-langs" content="zh ja pt es ar ko">
+  <!-- /one-source:languages -->
+  <!-- First and not deferred: opens a translated page before this one paints (lang.js). -->
+  <script src="../lang.js"></script>
   <title>Stats for nerds — Sinoi the Fisherman</title>
   <meta name="description" content="Build, game, device, network and page-speed details for the Sinoi the Fisherman website, typed out like an old computer terminal.">
   <!-- Not for search engines or AI readers: kept out of sitemap.xml, llms.txt and llms-full.txt too ("Stats for nerds" in CLAUDE.md). -->
@@ -36,13 +42,25 @@
       <!-- The gear opens Settings (settings.js). Gear.astro in Deovandski/Deovandski-repo-template. -->
       <button class="gear" id="gear" type="button" aria-haspopup="dialog" aria-controls="site-settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.5 7.5 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0-.5.4l-.4 2.7c-.6.2-1.2.6-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.8 1.7 1l.4 2.6c0 .3.2.5.5.5h4c.3 0 .5-.2.5-.4l.4-2.7c.6-.2 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 13ZM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg></button>
     </header>
-    <!-- Settings: the × (top right) or Esc closes it. SettingsDialog.astro in Deovandski/Deovandski-repo-template. -->
+    <!-- Settings: the × (top right) or Esc closes it. Language names come from i18n/<lang>/meta.json. SettingsDialog.astro in Deovandski/Deovandski-repo-template. -->
     <dialog id="site-settings" class="site-settings" aria-labelledby="site-settings-title">
       <form method="dialog">
         <div class="settings-head">
           <h2 id="site-settings-title">Settings</h2>
           <button class="settings-close" value="close" aria-label="Close" title="Close"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6L6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5Z"/></svg></button>
         </div>
+        <label class="setting"><span>Language</span>
+          <select data-setting="lang" translate="no">
+            <option value="en" lang="en">English</option>
+            <option value="zh" lang="zh-Hans">中文（简体）</option>
+            <option value="ja" lang="ja">日本語</option>
+            <option value="pt" lang="pt-BR">Português (Brasil)</option>
+            <option value="es" lang="es-ES">Español (España)</option>
+            <option value="ar" lang="ar">العربية</option>
+            <option value="ko" lang="ko">한국어</option>
+          </select>
+        </label>
+        <p class="setting-link"><a href="https://github.com/Deovandski/Sinoi-the-fisherman/issues/2">Want a language added?</a></p>
         <div class="setting setting-app"><span>App</span>
           <div class="install-app" data-install-app>
             <span class="install-app__strings" hidden>
@@ -167,7 +185,8 @@
         <div class="term-gap"></div>
         <div class="term-h">== LANGUAGES =================</div>
         <div class="term-row"><span class="term-k">Page language</span><span class="term-v" data-v="pageLang">...</span></div>
-        <div class="term-row"><span class="term-k">Translations</span><span class="term-v">none: English only. The site isn't translated yet.</span></div>
+        <div class="term-dim" data-v="i18nSummary">...</div>
+        <div data-langs-list hidden></div>
         <div class="term-gap"></div>
         <div class="term-hi">READY.</div>
         <span class="terminal__cursor" aria-hidden="true"></span>
@@ -183,6 +202,7 @@
         <span data-k="controlled">active, controlling this page</span><span data-k="notControlled">active</span>
         <span data-k="noWorker">not supported</span><span data-k="reduce">reduced</span><span data-k="full">full</span>
         <span data-k="noGame">no web build here (run the export)</span>
+        <span data-k="ready">pages ready</span><span data-k="current">← this page</span>
       </div>
     </main>
     <!-- one-source:footer (tools/sync_site.py; edit tools/site_parts/footer.html) -->

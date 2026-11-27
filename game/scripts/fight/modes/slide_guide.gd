@@ -21,7 +21,7 @@ func _step(delta: float, fingers: Dictionary) -> float:
 		if p.distance_to(target()) <= num("radius", 12.0):
 			on = true
 	judge(1.0 if on else 0.0, delta)
-	cue = "" if on or fingers.is_empty() else "Back on the ring!"
+	cue = "" if on or fingers.is_empty() else tr("Back on the ring!")
 	return (num("fill", 0.12) if on else -num("drain", 0.1)) * delta
 
 

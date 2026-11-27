@@ -64,14 +64,14 @@ func _step(delta: float, fingers: Dictionary) -> float:
 	for n in notes:
 		if n.state == "wait" and now > n.t + num("ok", 0.18):
 			n.state = "done"
-			change -= _miss(n.pos, "Miss")
+			change -= _miss(n.pos, tr("Miss"))
 		elif n.state == "held":
 			change += _follow(n, now, delta, fingers)
 	notes = notes.filter(func(n): return not (n.state == "done" and now > n.t + n.dur + 0.4))
 	cue = ""
 	for n in notes:
 		if n.state == "held":
-			cue = "Follow the ball"
+			cue = tr("Follow the ball")
 	return change
 
 
@@ -85,7 +85,7 @@ func _follow(n: Dictionary, now: float, delta: float, fingers: Dictionary) -> fl
 		n.off += delta
 		if n.off > 0.15:
 			n.state = "done"
-			return -_miss(ball, "Break", num("break", 0.06))
+			return -_miss(ball, tr("Break"), num("break", 0.06))
 	else:
 		n.off = 0.0
 	# Ticks every half beat while following.
@@ -97,7 +97,7 @@ func _follow(n: Dictionary, now: float, delta: float, fingers: Dictionary) -> fl
 	if u >= 1.0:
 		n.state = "done"
 		judge(1.0)
-		pop(ball, "OK", GREEN)
+		pop(ball, tr("OK"), GREEN)
 		sfx("hit")
 		change += num("gain", 0.05) * 0.6
 	return change
@@ -111,9 +111,9 @@ func touch(index: int, at: Vector2, pressed: bool) -> float:
 				n.state = "done"
 				var u: float = (now - n.t) / n.dur
 				if u < 0.85:
-					return -_miss(_path(n, clampf(u, 0.0, 1.0)), "Break", num("break", 0.06))
+					return -_miss(_path(n, clampf(u, 0.0, 1.0)), tr("Break"), num("break", 0.06))
 				judge(1.0)
-				pop(n.end, "OK", GREEN)
+				pop(n.end, tr("OK"), GREEN)
 				return num("gain", 0.05) * 0.6
 		return 0.0
 	var reach := num("radius", 10.0) + 4.0
@@ -125,15 +125,15 @@ func touch(index: int, at: Vector2, pressed: bool) -> float:
 		var error: float = now - n.t
 		if error < -num("ok", 0.18):
 			n.state = "done"
-			return -_miss(n.pos, "Early")
+			return -_miss(n.pos, tr("Early"))
 		var grade := 1.0
-		var label := "Perfect"
+		var label := tr("Perfect")
 		if absf(error) > num("good", 0.12):
 			grade = 0.33
-			label = "OK"
+			label = tr("OK")
 		elif absf(error) > num("perfect", 0.06):
 			grade = 0.66
-			label = "Good"
+			label = tr("Good")
 		judge(grade)
 		pop(n.pos, label, GREEN if grade == 1.0 else GOLD)
 		sfx("hit")

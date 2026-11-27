@@ -80,12 +80,12 @@ func _step(delta: float, _fingers: Dictionary) -> float:
 		"steady", "rhythm":
 			change += _beat_sounds_and_misses(since)
 			if phase == "steady":
-				cue = "Tap on the beat"
+				cue = tr("Tap on the beat")
 			else:
-				cue = "Listen..." if since < _beat * 4.0 else "Your turn: repeat it"
+				cue = tr("Listen...") if since < _beat * 4.0 else tr("Your turn: repeat it")
 		"faster":
 			var r := rate(1.0)
-			cue = "Faster! %d/s" % int(fast_rate)
+			cue = tr("Faster! %d/s") % int(fast_rate)
 			if since > 0.0:
 				if r >= fast_rate:
 					judge(1.0, delta)
@@ -97,10 +97,10 @@ func _step(delta: float, _fingers: Dictionary) -> float:
 			var r := rate(2.0)
 			var low := num("slow_low", 1.4)
 			var high := num("slow_high", 2.6)
-			cue = "Slow and steady"
+			cue = tr("Slow and steady")
 			if since > 0.0:
 				if r > high:
-					cue = "Slower!"
+					cue = tr("Slower!")
 					judge(0.0, delta)
 					change -= num("rate_drain", 0.06) * delta * 1.5
 				elif r < low:
@@ -143,7 +143,7 @@ func touch(_index: int, at: Vector2, pressed: bool) -> float:
 	if time < origin() or phase == "faster" or phase == "slower":
 		return 0.0
 	if phase == "rhythm" and time < origin() + _beat * 4.0 - num("good", 0.14):
-		return -_miss(at, "Wait, listen")
+		return -_miss(at, tr("Wait, listen"))
 	var best := INF
 	var best_t := 0.0
 	for t in expected_near(time):
@@ -155,7 +155,7 @@ func touch(_index: int, at: Vector2, pressed: bool) -> float:
 	_hit_slots[_key(best_t)] = true
 	var grade := 1.0 if absf(best) <= num("perfect", 0.07) else 0.6
 	judge(grade)
-	pop(at, "Perfect" if grade == 1.0 else "Good", GREEN if grade == 1.0 else GOLD)
+	pop(at, tr("Perfect") if grade == 1.0 else tr("Good"), GREEN if grade == 1.0 else GOLD)
 	sfx("hit")
 	return num("hit", 0.035) * grade
 
@@ -224,7 +224,7 @@ func _draw_rate_gauge(canvas: CanvasItem) -> void:
 	var now := rate(1.0 if phase == "faster" else 2.0)
 	var x := bar.position.x + bar.size.x * clampf(now / top, 0.0, 1.0)
 	canvas.draw_rect(Rect2(x - 1, bar.position.y - 2, 2, bar.size.y + 4), WHITE)
-	text(canvas, Vector2(side / 2.0, side - 20), "%.1f taps/s" % now, WHITE)
+	text(canvas, Vector2(side / 2.0, side - 20), tr("%.1f taps/s") % now, WHITE)
 
 
 func _draw_rhythm(canvas: CanvasItem) -> void:

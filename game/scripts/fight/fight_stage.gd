@@ -317,7 +317,7 @@ func _draw_overlay() -> void:
 		FightMode.text(_overlay, Vector2(card.get_center().x, card.position.y + 10.0), str(_intro.get("title", "")), Color("ffd166"), 10)
 		_overlay.draw_multiline_string(font, card.position + Vector2(6, 26), str(_intro.get("body", "")), HORIZONTAL_ALIGNMENT_CENTER, card.size.x - 12.0, 7, -1, Color("eef6fa"))
 		FightMode.text(_overlay, Vector2(card.get_center().x, card.end.y - 22.0), str(_intro.get("footer", "")), Color("9fc3d6"))
-		var start := "Touch the bottom box to start" if not mode.uses_motion() else "Starting in %d..." % ceili(_intro_left)
+		var start := tr("Touch the bottom box to start") if not mode.uses_motion() else tr("Starting in %d...") % ceili(_intro_left)
 		FightMode.text(_overlay, Vector2(card.get_center().x, card.end.y - 10.0), start, Color("f3e3b3"))
 	elif _banner_left > 0.0:
 		# First line large, any further lines (after "\n") smaller.

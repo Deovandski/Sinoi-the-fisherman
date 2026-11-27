@@ -5,12 +5,14 @@
  * this browser tells the page. Nothing is saved or sent anywhere: the only requests are stats.json itself (once,
  * plus three timed HEAD requests for "Ping"). A browser that doesn't share something shows "n/a".
  * After the typing ends, a few values keep updating (clock, uptime, frame rate, JS heap, viewport, online).
+ * Languages: how much of each translation is done (tools/i18n.py, counted by words), and this page's language.
  * To add a line: a .term-row with data-v="key" in index.html, then set('key', …) below ("Stats for nerds" in CLAUDE.md).
  */
 (function () {
   'use strict';
   var root = document.documentElement;
-  var STATS = new URL('../stats.json', location.href).href;
+  // stats.json sits at the site root, one folder up from this script (also from a translated copy of the page).
+  var STATS = new URL('../stats.json', (document.currentScript && document.currentScript.src) || location.href).href;
   var term = document.querySelector('.debug-terminal');
   function word(k) {
     var el = document.querySelector('.debug-words [data-k="' + k + '"]');
@@ -30,6 +32,11 @@
   function when(iso) { return iso ? new Date(iso).toLocaleString('en-CA', { hour12: false }).replace(',', '') : NA; }
   function yesNo(b) { return word(b ? 'yes' : 'no'); }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function bar(pct, width) {
+    width = width || 12;
+    var full = Math.round((pct / 100) * width);
+    return '[' + '█'.repeat(full) + '░'.repeat(width - full) + ']';
+  }
 
   /** Put text (or a link) in a value. */
   function set(key, text, href) {
@@ -58,7 +65,7 @@
     if (!stats) {
       ['repo', 'visibility', 'build', 'builtAt', 'branch', 'commit', 'commitDate', 'pr', 'run', 'tools',
         'siteUrl', 'pages', 'deployed', 'types', 'game', 'engine', 'renderer', 'webBuild', 'exported',
-        'cacheVersion', 'saveFormat', 'content'].forEach(function (k) { set(k, k === 'repo' ? word('noStats') : NA); });
+        'cacheVersion', 'saveFormat', 'content', 'i18nSummary'].forEach(function (k) { set(k, k === 'repo' ? word('noStats') : NA); });
       return;
     }
     var code = stats.code, site = stats.site, game = stats.game;
@@ -91,6 +98,31 @@
       set('exported', when(web.exportedAt));
       set('cacheVersion', web.cacheVersion || NA);
     } else ['webBuild', 'exported', 'cacheVersion'].forEach(function (k) { set(k, word('noGame')); });
+
+    var i18n = stats.i18n;
+    if (!i18n) { set('i18nSummary', NA); return; }
+    var e = i18n.english;
+    set('i18nSummary', 'English: ' + plural(e.pages, 'page', 'pages') + ' · ' + e.segments + ' segments · ' +
+      e.words.toLocaleString('en') + ' words · offered at ' + Math.round(i18n.indexCoverage * 100) + '%');
+    var marker = term.querySelector('[data-langs-list]');
+    var here = document.documentElement.getAttribute('data-lang') || 'en';
+    i18n.languages.forEach(function (l) {
+      var row = document.createElement('div');
+      row.className = 'term-row';
+      var k = document.createElement('span');
+      k.className = 'term-k';
+      k.textContent = l.code + ' ' + l.name;
+      var v = document.createElement('span');
+      v.className = 'term-v';
+      var b = document.createElement('span');
+      b.className = 'term-bar';
+      b.textContent = bar(l.percent) + ' ' + l.percent.toFixed(1).padStart(5) + '%';
+      v.append(b, ' ' + l.segments + '/' + e.segments + ' seg · ' + l.pagesReady + '/' + e.pages + ' ' + word('ready'));
+      if (l.percent < 50) b.classList.add('term-dim');
+      if (l.code === here) { row.classList.add('term-hi'); v.append(' ' + word('current')); }
+      row.append(k, v);
+      marker.before(row);
+    });
   }
 
   // ---------------------------------------------------------------- this page and the browser
